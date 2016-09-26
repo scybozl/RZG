@@ -9,7 +9,7 @@ import subprocess
 
 nEvPerFile = 5000
 nRuns = 400
-newMerge = False 
+newMerge = True 
 newControl = True
 ControlIndex = "LO"
 
@@ -180,7 +180,7 @@ for orders in options[0].split("\t"):
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
-		  if strn.find("   r   ")==-1 or strn.fin("   qw   ")==-1: break
+		  if strn.find("   r   ")==-1 or strn.find("   qw   ")==-1: break
                   #if sum(1 for line in strn)<402: break
                   time.sleep(5)
 		  print "."
