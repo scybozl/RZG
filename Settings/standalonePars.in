@@ -1,0 +1,46 @@
+## Minimal cuts
+
+cd /Herwig/Cuts
+set QCDCuts:ScaleMin 1
+set QCDCuts:X1Min 1e-06
+set QCDCuts:X2Min 1e-06
+set QCDCuts:MHatMin 0
+
+set JetKtCut:MinKT 0
+set MassCut:MinM 0
+set PhotonKtCut:MinKT 0
+
+set /Herwig/EventHandlers/LHCHandler:CollisionCuts Off
+
+## Particle properties
+
+cd /Herwig/Particles
+set u:NominalMass 0.0*GeV
+set d:NominalMass 0.0*GeV
+set s:NominalMass 0.0*GeV
+set c:NominalMass 0.0*GeV
+set b:NominalMass 0.0*GeV
+
+set e+:NominalMass 0.0*GeV
+set mu-:NominalMass 0.0*GeV
+
+set t:NominalMass 172.5*GeV
+set t:Width 1.4426*GeV
+set W+:NominalMass 80.399*GeV
+set W+:Width 2.09974*GeV
+set Z0:NominalMass 91.1876*GeV
+set Z0:Width 2.50966*GeV
+
+set h0:NominalMass 125.0*GeV
+set h0:Width 4.07e-03*GeV
+
+## No warning about final hadronized states
+
+cd /Herwig/Analysis
+set Basics:CheckQuark No
+
+## Choice of EW scheme
+
+set /Herwig/Model:EW/Scheme GMuScheme
+set /Herwig/Model:EW/FermiConstant 1.16637e-05
+set /Herwig/Model:EW/RecalculateEW On
