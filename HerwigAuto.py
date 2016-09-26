@@ -10,7 +10,8 @@ import subprocess
 nEvPerFile = 5000
 nRuns = 400
 newMerge = False 
-newControl = False
+newControl = True
+ControlIndex = "LO"
 
 fUser = os.getenv("USER")
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
@@ -156,7 +157,7 @@ for orders in options[0].split("\t"):
 
 		## If no control (number of runs, right number of events...)
 		## is needed, just control if one of the final yoda files exists.
-		if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False: break
+		if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or (newControl == True and order == ControlIndex): break
 		if order=="LO":
                           InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
                 elif order=="NLO":
@@ -179,7 +180,7 @@ for orders in options[0].split("\t"):
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
-		  if strn.find("   r   ")==-1: break
+		  if strn.find("   r   ")==-1 or strn.fin("   qw   ")==-1: break
                   #if sum(1 for line in strn)<402: break
                   time.sleep(5)
 		  print "."
