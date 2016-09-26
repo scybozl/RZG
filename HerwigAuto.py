@@ -9,6 +9,8 @@ import subprocess
 
 nEvPerFile = 5000
 nRuns = 400
+newMerge = True
+
 
 fUser = os.getenv("USER")
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
@@ -112,51 +114,77 @@ def SubmitHerwigJob(nEvents, seed, InputFileNameGen, index):
     else:
         return False
 
-#initRun()
-#for i in range(100):
+
+## Options file for systematic generation: the user should set the settings required for the different runs there
+
 optionsFile = open("options.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
 
+
+## Loop through all possible combinations
+
+## LO, NLO
 for orders in options[0].split("\t"):
 
   order = orders
+  ## CM energy
   for e,energies in enumerate(options[1].split("\t")):
 
     Ecm=energies
+    ## Renormalization and factorization scale choices
     for scales in options[2].split("\t"):
 
         scale=scales
+	## PDF choices (only indicate the PDF name, the order is chosen
+	## automatically as the order of the process!)
         for pdfs in options[3].split("\t"):
 
           pdf=pdfs
+	  ## Shower (default or dipole)
           for showers in options[4].split("\t"):
 
                 shower=showers
+		## Name tag for the run
 		settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower
 		if order=="LO":
                           InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
                 elif order=="NLO":
                           InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
+
+		## To choose the Rivet routine according to the cm-energy, look into the
+		## options file at the right placee
 		index=3*e+6
 
+		## IF some yoda files were generated a second time, re-run the yoda merging
 		flag=False
+		print "Now processing "+settings+"...\n"
+
+		## Submit the job to Herwig
 		for i in range(nRuns):
 			spec='%03.0f' % (i,)
 			sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 			if not os.path.exists(sampledPars+spec):
 			  os.system("mkdir -p "+sampledPars+spec)
 			os.system("cp "+InputFolder+"Herwig_"+settings+".in "+sampledPars)
+			if (i+1)%100==0: print "Submitting run #"+i+"\n"
 			SubmitHerwigJob(nEvPerFile, i, "tT_matchbox_"+settings+".run", index)
+
+		## As long as there are jobs in the queue, wait
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
                   if strn=='': break
                   time.sleep(10)
-		
+		  print "."
+		print "\n"
+
+		## Yoda-merge the files from the different runs	
 		for norms in options[index+1].split("\t"):
-		  if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda") or flag==True:
+		  if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda") or flag==True or newMerge==True:
+			print "Yoda-merging "+settings+" at xs="+norms+" pb\n"
 			os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda")
-		if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda") or flag==True:
+		if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda") or flag==True or newMerge==True:i
+			print "Yoda-merging "+settings+" at generated cross-section\n"
 			os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
