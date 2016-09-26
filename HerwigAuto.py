@@ -9,8 +9,8 @@ import subprocess
 
 nEvPerFile = 5000
 nRuns = 400
-newMerge = True
-
+newMerge = False 
+newControl = False
 
 fUser = os.getenv("USER")
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
@@ -148,14 +148,19 @@ for orders in options[0].split("\t"):
                 shower=showers
 		## Name tag for the run
 		settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower
-		if order=="LO":
-                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
-                elif order=="NLO":
-                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
+		sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 		## To choose the Rivet routine according to the cm-energy, look into the
 		## options file at the right placee
 		index=3*e+6
+
+		## If no control (number of runs, right number of events...)
+		## is needed, just control if one of the final yoda files exists.
+		if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False: break
+		if order=="LO":
+                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
+                elif order=="NLO":
+                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
 
 		## IF some yoda files were generated a second time, re-run the yoda merging
 		flag=False
@@ -164,18 +169,17 @@ for orders in options[0].split("\t"):
 		## Submit the job to Herwig
 		for i in range(nRuns):
 			spec='%03.0f' % (i,)
-			sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 			if not os.path.exists(sampledPars+spec):
 			  os.system("mkdir -p "+sampledPars+spec)
 			os.system("cp "+InputFolder+"Herwig_"+settings+".in "+sampledPars)
 			if (i+1)%100==0: print "Processing run #"+str(i)
 			SubmitHerwigJob(nEvPerFile, i, "tT_matchbox_"+settings+".run", index)
 
-		## As long as there are jobs in the queue, wait
+		## As long as there are processed jobs in the queue, wait
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
-		  if strn=='': break
+		  if strn.find("   r   ")==-1: break
                   #if sum(1 for line in strn)<402: break
                   time.sleep(5)
 		  print "."
