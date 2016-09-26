@@ -168,23 +168,24 @@ for orders in options[0].split("\t"):
 			if not os.path.exists(sampledPars+spec):
 			  os.system("mkdir -p "+sampledPars+spec)
 			os.system("cp "+InputFolder+"Herwig_"+settings+".in "+sampledPars)
-			if (i+1)%100==0: print "Submitting run #"+i+"\n"
+			if (i+1)%100==0: print "Processing run #"+str(i)
 			SubmitHerwigJob(nEvPerFile, i, "tT_matchbox_"+settings+".run", index)
 
 		## As long as there are jobs in the queue, wait
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
-                  if strn=='': break
-                  time.sleep(10)
+		  if strn=='': break
+                  #if sum(1 for line in strn)<402: break
+                  time.sleep(5)
 		  print "."
 		print "\n"
 
 		## Yoda-merge the files from the different runs	
 		for norms in options[index+1].split("\t"):
 		  if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda") or flag==True or newMerge==True:
-			print "Yoda-merging "+settings+" at xs="+norms+" pb\n"
+			print "Yoda-merging "+settings+" at xs="+norms+" pb"
 			os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda")
-		if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda") or flag==True or newMerge==True:i
-			print "Yoda-merging "+settings+" at generated cross-section\n"
-			os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
+		if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda") or flag==True or newMerge==True:
+		  print "Yoda-merging "+settings+" at generated cross-section"
+		  os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
