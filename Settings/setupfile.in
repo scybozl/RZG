@@ -1,7 +1,0 @@
-#set /Herwig/EventHandlers/EventHandler:LuminosityFunction:Energy 8000*GeV
-#set /Herwig/Generators/EventGenerator:MaxErrors 10000000
-#set /Herwig/Particles/t:NominalMass 172.5*GeV
-#set /Herwig/Particles/t:HardProcessMass 172.5*GeV
-set /Herwig/MatrixElements/Matchbox/Factory:ScaleChoice /Herwig/MatrixElements/Matchbox/Scales/TopPairMassScale
-#set /Herwig/EventHandlers/LHCHandler:HadronizationHandler NULL
-#set /Herwig/EventHandlers/LHCHandler:CascadeHandler NULL

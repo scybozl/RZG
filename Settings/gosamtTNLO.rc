@@ -36,7 +36,7 @@ model=smdiag
 #                                                                    #
 ######################################################################
 model.options= mH=125.0, mW=80.399, wW=2.09974, mZ=91.1876, wZ=2.50966,\
-			GF=0.0000116637, mT=172.0, wT=1.3167 
+			GF=0.0000116637, mT=172.5, wT=1.3167 
 
 ### zero (comma separated list) ######################################
 #    A list of symbols that should be treated as identically         #
