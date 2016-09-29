@@ -152,15 +152,23 @@ namespace Rivet {
       }
  
 
-      GenParticle WPlus;
-      GenParticle WMinus;
-      bool found = false;
+      vector<const GenParticle*> WPlus;
+      vector<const GenParticle*> WMinus;
       foreach (const GenParticle* p, Rivet::particles(event.genEvent())) {
            //cout << p->pdg_id() << " ";
-          if (p->pdg_id() == 24){ WPlus = *p; found = true;}
-	  if (p->pdg_id() == -24){ WMinus = *p; found = true;}
+          if (p->pdg_id() == 24){ WPlus.push_back(p);}
+	  if (p->pdg_id() == -24){ WMinus.push_back(p);}
            //const GenVertex* pv = p->production_vertex();
       }
+
+      vector<const GenParticle*> leptonsP;
+      for (HepMC::GenVertex::particle_iterator iter = WPlus[0]->end_vertex()->particles_begin(HepMC::descendants); iter != WPlus[0]->end_vertex()->particles_end(HepMC::descendants); ++iter) {
+	if ((*iter)->pdg_id()==-11 || (*iter)->pdg_id()==-13) {leptonsP.push_back(*iter);}
+     }
+      vector<const GenParticle*> leptonsM;
+      for (HepMC::GenVertex::particle_iterator iter = WMinus[0]->end_vertex()->particles_begin(HepMC::descendants); iter != WMinus[0]->end_vertex()->particles_end(HepMC::descendants); ++iter) {
+        if ((*iter)->pdg_id()==11 || (*iter)->pdg_id()==13) {leptonsM.push_back(*iter);}
+     }
 
       // Get the MET by taking the vector sum of all neutrinos
       /// @todo Use MissingMomentum instead?
@@ -279,7 +287,9 @@ namespace Rivet {
 		//_histPhiemu->fill(deltaPhi(elecFS[0], muonFS[0]), weight);
 		//_histPhiemu->fill(mapAngle0To2Pi(elecFS[0].momentum().phi() - muonFS[0].momentum().phi()), weight);
 		//_histdeltaRl->fill(deltaR(elecFS[0], muonFS[0]), weight);
-	_histmWjB->fill(0.5*(((Particle(WPlus).momentum()+b_jets[0]->momentum()).mass())+((Particle(WMinus).momentum()+b_bar_jets[0]->momentum()).mass())), weight);	
+	_histmWjB->fill(0.5*(((Particle(WPlus[0]).momentum()+b_jets[0]->momentum()).mass())+((Particle(WMinus[0]).momentum()+b_bar_jets[0]->momentum()).mass())), weight);
+	_histmljB->fill(0.5*(((Particle(leptonsP[0]).momentum()+b_jets[0]->momentum()).mass())+((Particle(leptonsM[0]).momentum()+b_bar_jets[0]->momentum()).mass())), weight);
+	
      }
 	_histPtMiss->fill(MET, weight);
 	//_histHT->fill(HT, weight);
@@ -316,6 +326,7 @@ namespace Rivet {
 	scale(_histHT, norm);
 	scale(_histMlb, norm);
 	scale(_histmWjB, norm);
+	scale(_histmljB, norm);
       //const double norm = crossSection()/sumOfWeights();
       //typedef map<unsigned int, Histo1DPtr>::value_type IDtoHisto1DPtr; ///< @todo Remove when C++11 allowed
       //foreach (IDtoHisto1DPtr ihpair, _hMap) scale(ihpair.second, norm); ///< @todo Use normalize(ihpair.second, crossSection())
