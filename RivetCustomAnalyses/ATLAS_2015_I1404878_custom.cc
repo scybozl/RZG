@@ -167,11 +167,7 @@ namespace Rivet {
         //// Count the number of b-tags
         foreach (const Jet& jet, all_jets){
           bool b_tagged = false;                                      
-          //Particles bTags = jet.bTags();                              
-          //foreach ( Particle b, bTags ) {                             
-          //  b_tagged |= b.pT() > 5*GeV;                                 
-          //}
-	  if (jet.containsBottom()) b_tagged=true;                                                           
+	  if (jet.containsBottom()) b_tagged = true;
           if ( b_tagged && bjets.size() < 2  )  bjets += jet;
           else lightjets += jet;
         }

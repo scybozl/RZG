@@ -82,14 +82,17 @@ namespace Rivet {
 	_histdeltaRl = bookHisto1D("deltaRl", 20, 0, 5);
 	_histPtMiss = bookHisto1D("PtMiss", 25, 0, 400);
 	_histHT = bookHisto1D("HT", 20, 0, 1200);
-	_histMlb = bookHisto1D("Mlb", 25, 0, 200);
+	_histMlb = bookHisto1D("Mlb", 50, 0, 350);
 
-	_histmWjB = bookHisto1D("mWjB", 20, 150, 200);
-	_histmljB = bookHisto1D("mljB", 15, 0, 350);
+	_histmWjB = bookHisto1D("mWjB", 40, 150, 200);
+	_histmljB = bookHisto1D("mljB", 50, 0, 350);
 	_histmjB  = bookHisto1D("mjB", 20, 5, 50);
 	_histdeltaR = bookHisto1D("deltaR", 100, 0, 2);
 	_histxB   = bookHisto1D("xB", 20, 0, 1);
 	_histpTbDec = bookHisto1D("pTbDec", 15, 0, 30);
+
+	_histmlb = bookHisto1D("mlb", 50, 0, 350);
+	_histmLeptonsjB = bookHisto1D("mLeptonsjB", 50, 0, 350);
     }
 
 
@@ -122,18 +125,27 @@ namespace Rivet {
       vector<GenParticle const *> allParticles = particles(event.genEvent());
       double maxpTHad = 0;
       double maxpTHadBar = 0;
+      bool foundB=false;
+      bool foundBbar=false;
       for (size_t i = 0; i < allParticles.size(); i++) {
         const GenParticle* p = allParticles[i];
         if (!PID::isHadron(p->pdg_id()) || !PID::hasBottom(p->pdg_id())) continue;
         //if (p->momentum().perp() < 5*GeV) continue;
-	if (p->pdg_id()>0 && Particle(*p).pT()>maxpTHad){
+	if (Particle(*p).hasAncestor(5) && Particle(*p).pT()>maxpTHad){
 	  B_hadrons = *p;
 	  maxpTHad = Particle(*p).pT();
+	  foundB=true;
 	}
-	if (p->pdg_id()<0 && Particle(*p).pT()>maxpTHadBar){
+	if (Particle(*p).hasAncestor(-5) && Particle(*p).pT()>maxpTHadBar){
 	  B_bbar_hadrons = *p;
 	  maxpTHadBar = Particle(*p).pT();
+	  foundBbar=true;
 	}
+
+	if(foundB) B_hadrons.print();
+	if(foundBbar) B_bbar_hadrons.print();
+
+	cout << B_hadrons.size() << B_bar_hadrons.size();
 
 //	cout << (p->pdg_id()>0 && Particle(*p).pT()>maxpTHad) << "\n";
 //	cout << i << ": " << Particle(*p).pT() << "\n";
@@ -170,6 +182,35 @@ namespace Rivet {
         if ((*iter)->pdg_id()==11 || (*iter)->pdg_id()==13) {leptonsM.push_back(*iter);}
      }
 
+      vector<const GenParticle*> bs;
+      for (HepMC::GenVertex::particle_iterator iter = WPlus[0]->production_vertex()->particles_begin(HepMC::descendants); iter != WPlus[0]->production_vertex()->particles_end(HepMC::descendants); ++iter) {
+        if ((*iter)->pdg_id()==5) {bs.push_back(*iter);}
+     }
+      vector<const GenParticle*> bbars;
+      for (HepMC::GenVertex::particle_iterator iter = WMinus[0]->production_vertex()->particles_begin(HepMC::descendants); iter != WMinus[0]->production_vertex()->particles_end(HepMC::descendants); ++iter) {
+        if ((*iter)->pdg_id()==-5) {bbars.push_back(*iter);}
+     }
+
+      // Get b hadrons with pT > 5 GeV
+      //       /// @todo This is a hack -- replace with UnstableFinalState
+      vector<GenParticle const *> B_hadrons_old;
+      for (size_t i = 0; i < allParticles.size(); i++) {
+         const GenParticle* p2 = allParticles[i];
+         if (!PID::isHadron(p2->pdg_id()) || !PID::hasBottom(p2->pdg_id())) continue;
+                                //if (p->momentum().perp() < 5*GeV) continue;
+         B_hadrons_old.push_back(p2);
+      }
+      //
+      // For each of the good jets, check whether any are b-jets (via dR matching)
+      vector<const Jet*> b_jets_old;
+      foreach (const Jet* j, central_jets) {
+        bool isbJet = false;
+        foreach (const GenParticle* b, B_hadrons_old) {
+          if (deltaR(j->momentum(), FourMomentum(b->momentum())) < 0.4) isbJet = true;
+        }
+        if (isbJet) b_jets_old.push_back(j);
+      }
+
       // Get the MET by taking the vector sum of all neutrinos
       /// @todo Use MissingMomentum instead?
       double MET = 0;
@@ -179,10 +220,10 @@ namespace Rivet {
       }
       MET = p_MET.pT();
 
-/*
+
       // Get the electrons and muons if there aren't any in the final state
       //(event.genEvent())->print();
-      if (elecFS.empty() || muonFS.empty()) {
+      if(elecFS.empty() || muonFS.empty()) {
          foreach (const GenParticle* p, Rivet::particles(event.genEvent())) {
 	   //cout << p->pdg_id() << " ";
            if (p->pdg_id() != -11 && p->pdg_id() != 13) continue;
@@ -210,7 +251,14 @@ namespace Rivet {
 	}
       }
       }
-*/
+
+      WPlus[0]->print();
+      WMinus[0]->print();
+      if(!leptonsP.empty()) leptonsP[0]->print();
+      if(!leptonsM.empty()) leptonsM[0]->print();
+
+	cout <<"\n\n";
+
       // Finally, the same again with the emu channel
       //if (elecFS.size() == 1 && muonFS.size() == 1) {
         // With the desired charge signs
@@ -287,20 +335,28 @@ namespace Rivet {
 		//_histPhiemu->fill(deltaPhi(elecFS[0], muonFS[0]), weight);
 		//_histPhiemu->fill(mapAngle0To2Pi(elecFS[0].momentum().phi() - muonFS[0].momentum().phi()), weight);
 		//_histdeltaRl->fill(deltaR(elecFS[0], muonFS[0]), weight);
-	_histmWjB->fill(0.5*(((Particle(WPlus[0]).momentum()+b_jets[0]->momentum()).mass())+((Particle(WMinus[0]).momentum()+b_bar_jets[0]->momentum()).mass())), weight);
-	_histmljB->fill(0.5*(((Particle(leptonsP[0]).momentum()+b_jets[0]->momentum()).mass())+((Particle(leptonsM[0]).momentum()+b_bar_jets[0]->momentum()).mass())), weight);
-	
+	_histmWjB->fill(((Particle(WPlus[0]).momentum()+b_jets[0]->momentum()).mass() + (Particle(WMinus[0]).momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
+	_histmjB->fill((b_jets[0]->momentum().mass() + b_bar_jets[0]->momentum().mass())/2, weight);
+	if(!leptonsP.empty() && !leptonsM.empty()) {
+		 _histmljB->fill(((Particle(leptonsP[0]).momentum()+b_jets[0]->momentum()).mass() + (Particle(leptonsM[0]).momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
+}	
      }
 	_histPtMiss->fill(MET, weight);
 	//_histHT->fill(HT, weight);
 	//if(passed_Mlb == true) {
-	//	if((elecFS[0].momentum() + b_jets[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets[1]->momentum()).mass()
-	//	> (elecFS[0].momentum() + b_jets[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets[0]->momentum()).mass()) {
-	//		_histMlb->fill(((elecFS[0].momentum() + b_jets[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets[0]->momentum()).mass())/2, weight);
-	//	}
-	//	else _histMlb->fill(((elecFS[0].momentum() + b_jets[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets[1]->momentum()).mass())/2, weight);
-	//}
-
+        if(b_jets_old.size() >= 2 && !elecFS.empty() && !muonFS.empty()) {
+		if((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass()
+		> (elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass()) {
+		_histMlb->fill(((elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass())/2, weight);
+		}
+		else _histMlb->fill(((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass())/2, weight);
+	}
+	if(b_jets.size()>=1 && b_bar_jets.size()>=1 && !elecFS.empty() && !muonFS.empty()){
+	  _histmLeptonsjB->fill(((elecFS[0].momentum()+b_jets[0]->momentum()).mass() + (muonFS[0].momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
+	}
+	if(bs.size()>=1 && bbars.size()>=1 && !elecFS.empty() && !muonFS.empty()){
+	   _histmlb->fill(((elecFS[0].momentum()+Particle(bs[0]).momentum()).mass() + (muonFS[0].momentum()+Particle(bbars[0]).momentum()).mass())/2, weight);
+	}
       
     }
 
@@ -327,6 +383,9 @@ namespace Rivet {
 	scale(_histMlb, norm);
 	scale(_histmWjB, norm);
 	scale(_histmljB, norm);
+	scale(_histmjB, norm);
+	scale(_histmLeptonsjB, norm);
+        scale(_histmlb, norm);
       //const double norm = crossSection()/sumOfWeights();
       //typedef map<unsigned int, Histo1DPtr>::value_type IDtoHisto1DPtr; ///< @todo Remove when C++11 allowed
       //foreach (IDtoHisto1DPtr ihpair, _hMap) scale(ihpair.second, norm); ///< @todo Use normalize(ihpair.second, crossSection())
@@ -347,6 +406,9 @@ namespace Rivet {
 	Histo1DPtr _histPtMiss;
 	Histo1DPtr _histHT;
 	Histo1DPtr _histMlb;
+
+	Histo1DPtr _histmlb;
+        Histo1DPtr _histmLeptonsjB;
 
 	Histo1DPtr _histmWjB;
         Histo1DPtr _histmljB;
