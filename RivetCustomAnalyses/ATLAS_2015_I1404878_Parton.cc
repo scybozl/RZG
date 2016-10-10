@@ -60,7 +60,6 @@ namespace Rivet {
     void analyze(const Event& event) {
 
 
-   
       const double weight = event.weight();
 
       // Vectors to hold any status=3 (anti-)top quarks (Pythia 6)
@@ -208,12 +207,12 @@ namespace Rivet {
 	  tophad = top->momentum();
 	}
 
-	//	if  (!(isTopLep && isAntiTopLep)) 
+	//if  (!(isTopLep && isAntiTopLep)) 
 	if (1 == 1)
 	{
 	
 	  
-	  //std::cout<<"Top = "<<isTopLep<<" Antitop = "<<isAntiTopLep<<std::endl;
+	  std::cout<<"Top = "<<isTopLep<<" Antitop = "<<isAntiTopLep<<std::endl;
 
 	  FourMomentum ttbar = top->momentum() + antitop->momentum();
 	  Vector3 z_versor(0,0,1);
@@ -229,9 +228,11 @@ namespace Rivet {
 	  _h_ttbar_pt->fill(ttbar_pt, weight);
 
 	  double ttbar_rap = ttbar.absrap();
+	  if(!isnan(ttbar_rap)){
+	
 	  _h_ttbar_rap_norm->fill(ttbar_rap, weight);
 	  _h_ttbar_rap->fill(ttbar_rap, weight);
-	  
+	  } 
 
 	  double absPout = fabs(vtophad.dot((vtoplep.cross(z_versor))/(vtoplep.cross(z_versor).mod())));
 	  _h_ttbar_ptout->fill(absPout);
@@ -246,30 +247,32 @@ namespace Rivet {
 	  _h_ttbar_ht_norm->fill(HT);
 
 	  double rapboost = 0.5 * (fabs(tophad.rapidity() + toplep.rapidity()));
+	  if(!isnan(rapboost)){
 	  _h_ttbar_rapboost->fill(rapboost);
 	  _h_ttbar_rapboost_norm->fill(rapboost);
-
+	  }
 
 	  double ystar = (tophad.pt() > toplep.pt()) ? 0.5 * (tophad.rap()-toplep.rap()) : 0.5*(toplep.rap()-tophad.rap()); 
 	  double chi_ttbar = exp(2 * fabs(ystar));
+	  if(!isnan(chi_ttbar)){
 	  _h_ttbar_chi->fill(chi_ttbar);
 	  _h_ttbar_chi_norm->fill(chi_ttbar);
-      
+          }
 
 	  // fill only the hadronically decay top quark
 	  _h_top_pt->fill(tophad.pt(), weight);
 	  _h_top_pt_norm->fill(tophad.pt(), weight);
-	  _h_top_rap->fill(tophad.absrap(), weight);
-	  _h_top_rap_norm->fill(tophad.absrap(), weight);
+	  if(!isnan(tophad.absrap())) _h_top_rap->fill(tophad.absrap(), weight);
+	  if(!isnan(tophad.absrap())) _h_top_rap_norm->fill(tophad.absrap(), weight);
 
 	} else {
-	  // std::cout<<"=================="<<std::endl;
-	  // foreach (const GenParticle* p, Rivet::particles(event.genEvent())) {
-	  //   if(p->status()==3) {
-	  //     std::cout<<p->pdg_id()<<std::endl;
-	  //   }
-	  // }
-	  // vetoEvent;
+	   std::cout<<"=================="<<std::endl;
+	   foreach (const GenParticle* p, Rivet::particles(event.genEvent())) {
+	     if(p->status()==3) {
+	       std::cout<<p->pdg_id()<<std::endl;
+	     }
+	   }
+	   vetoEvent;
 	}
       } else {
 	MSG_ERROR("Did not find both top and anti-top!");
@@ -355,7 +358,6 @@ namespace Rivet {
     Histo1DPtr _h_ttbar_chi;
     Histo1DPtr _h_ttbar_chi_norm;
   };
-
 
 
   // The hook for the plugin system
