@@ -9,9 +9,10 @@ import subprocess
 
 nEvPerFile = 5000
 nRuns = 400
-newMerge = True 
+newMerge = False 
 newControl = True
 ControlIndex = "LO"
+EnergyIndex = "7000"
 
 fUser = os.getenv("USER")
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
@@ -107,7 +108,7 @@ def SubmitHerwigJob(nEvents, seed, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -e /dev/null -o /dev/null "+ submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)
         
         return True
@@ -157,7 +158,8 @@ for orders in options[0].split("\t"):
 
 		## If no control (number of runs, right number of events...)
 		## is needed, just control if one of the final yoda files exists.
-		if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or (newControl == True and order == ControlIndex): break
+		breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
+		if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 		if order=="LO":
                           InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
                 elif order=="NLO":
@@ -180,7 +182,7 @@ for orders in options[0].split("\t"):
 		while True:
                   os.system('qstat -u lscyboz > file')
                   strn=open('file', 'r').read()
-		  if strn.find("   r   ")==-1 or strn.find("   qw   ")==-1: break
+		  if strn=='': break
                   #if sum(1 for line in strn)<402: break
                   time.sleep(5)
 		  print "."

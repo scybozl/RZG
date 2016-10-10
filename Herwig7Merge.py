@@ -11,11 +11,11 @@ nEvPerFile = 5000
 nRuns = 400
 
 fUser = os.getenv("USER")
-sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/mcMerge/"
-InputFileNameGen = "tT_matchbox_NLO.run"
+sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Pozzorini/"
+InputFileNameGen = "Pozzorini.run"
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
-SetupFileNameGen    = "setupfile.in"
+SetupFileNameGen    = "setupfile_noshower.in"
 
 def SubDirPath (d):
     return filter(os.path.isdir, [os.path.join(d,f) for f in os.listdir(d)])
@@ -80,7 +80,8 @@ def SubmitHerwigJob(nEvents, seed):
 	codeLines2.append("echo 'set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"' >> "+OutputFolder+SetupFileNameGen)
 
 	codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("rivet -a ATLAS_2015_I1404878_custom "+tmp+OutputFile+" -H "+OutputYoda+" -x 251.659") 
+	codeLines2.append("rivet -a bB4l_comparison "+tmp+OutputFile+" -H "+OutputYoda+" -x 251.659") 
+	codeLines2.append("rivet -a bB4l_comparison "+tmp+OutputFile+" -H "+OutputYoda.split(".yoda")[0]+"_unnorm.yoda")
 
 #        codeLines2.append("cp "+tmpFolder+OutputFile+" "+OutputFileFinal)
 #	codeLines2.append("cp "+tmpFolder+SetupFileNameGen+" "+OutputFolder)
@@ -95,7 +96,7 @@ def SubmitHerwigJob(nEvents, seed):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -e /dev/null -o /dev/null "+ submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)
         
         return True
