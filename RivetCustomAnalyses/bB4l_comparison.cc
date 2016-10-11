@@ -145,7 +145,6 @@ namespace Rivet {
 	if(foundB) B_hadrons.print();
 	if(foundBbar) B_bbar_hadrons.print();
 
-	cout << B_hadrons.size() << B_bar_hadrons.size();
 
 //	cout << (p->pdg_id()>0 && Particle(*p).pT()>maxpTHad) << "\n";
 //	cout << i << ": " << Particle(*p).pT() << "\n";
