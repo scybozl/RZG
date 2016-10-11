@@ -4,11 +4,26 @@
 import os, time
 import sys
 import fileinput
-from glob import glob
+import glob
 import subprocess
 
 fUser = os.getenv("USER")
-sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/mc/"
+nEvPerFile = 20000
+nRuns = 500
+newMerge = False
+newControl = True
+ControlIndex = ""
+EnergyIndex = ""
+
+fUser = os.getenv("USER")
+SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
+SetupFileNameGen    = "setupfile.in"
+WorkFolder        = "/afs/ipp-garching.mpg.de/home/l/lscyboz/"
+
+pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/mc/"
+
+flag=False
+
 
 def SubDirPath (d):
     return filter(os.path.isdir, [os.path.join(d,f) for f in os.listdir(d)])
@@ -32,72 +47,100 @@ def initRun():
     os.system("./initRun.sh")
     
 
-def SubmitHerwigJob(nEvents, seed, alphaSMZ, lambdaQCD, Qmin, pT0min, b):
-
-    InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
-    InputFileNameGen = "tT_matchbox_LO.run"
-    SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
-    SetupFileNameGen    = "setupfile.in"
+def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
     specStr          = '%03.0f' % (seed,)
 #    tmpFolder        = sampledPars+specStr+"/"
     OutputFile       = "seed_"+specStr+".hepmc"
     OutputFolder     = sampledPars+specStr+"/"
-    OutputYoda        = OutputFolder+"seed_"+specStr+".yoda"
+    OutputYoda        = OutputFolder+"seed_"+specStr+"_"
+    tmp              = "/tmp/lscyboz/"+settings+"_"+specStr+"/"
 
 #    os.system("mkdir -p "+OutputFolder)
 
     OutputFileFinal  = OutputFolder+OutputFile
 
-    submitFileNameSH = os.getcwd()+"/Submit_"+specStr+".sh"
+    submitFileNameSH = WorkFolder+"Submit_"+settings+"_"+specStr+".sh"
 
-    if not os.path.exists(OutputYoda):
+    flag = False
+    redo = False
+    for norms in options[index+1].split("\t"):
+      if os.path.exists(OutputYoda+norms+".yoda"):
+        f=open(OutputYoda+norms+".yoda",'r')
+        for i, line in enumerate(f):
+          if "END YODA_COUNTER" in line:
+                number=i
+        f=open(OutputYoda+norms+".yoda",'r')
+        string=f.readlines()[number-1]
+        nE=float(string.split("\t")[2].split("\n")[0])
+        if nE!=nEvents:
+          redo = True
+      else: redo = True
+    os.chdir(OutputFolder)
+    if len(glob.glob('*.yoda')) <= len(options[index+1].split("\t")):
+        redo = True
+
+    if not os.path.exists(OutputYoda+options[index+1].split("\t")[0]+".yoda") or redo==True:
+
+        flag=True
 
         submitfile2 = open(submitFileNameSH, "w")
         printSetupLinesInSubmitFileRivet(submitfile2)
 
         codeLines2 = []
-#	codeLines2.append("mkdir -p "+tmpFolder)
-	codeLines2.append("cd "+InputFolder)
-	codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
-	codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Analysis/HepMCFile:Filename "+OutputFileFinal+"' >> "+OutputFolder+SetupFileNameGen)
+#       codeLines2.append("mkdir -p "+tmpFolder)
+        codeLines2.append("cd "+InputFolder)
+        codeLines2.append("mkdir -p "+tmp)
+        codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
+        codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo 'set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"' >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:LambdaQCD "+lambdaQCD+"' >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:Qmin "+Qmin+"' >> "+OutputFolder+SetupFileNameGen)
-#	codeLines2.append("echo 'set /Herwig/UnderlyingEvent/MPIHandler:pTmin0 "+pT0min+"' >> "+OutputFolder+SetupFileNameGen)
-#	codeLines2.append("echo 'set /Herwig/UnderlyingEvent/MPIHandler:Power "+b+"' >> "+OutputFolder+SetupFileNameGen)
-	
-	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+pT0min+"' >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClPowLight "+b+"' >> "+OutputFolder+SetupFileNameGen)
 
-	codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("rivet -a ATLAS_2014_I1304688_custom -a ATLAS_2012_I1094568 -a ATLAS_2013_I1243871 "+OutputFileFinal+" -H "+OutputYoda) 
+	if(InputFileNameGen.find("dipole")!=-1):
+	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
+
+        codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
+
+        analyses=""
+        for routines in options[index].split("\t"):
+                analyses += " -a "+routines
+        for norms in options[index+1].split("\t"):
+                codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+norms+".yoda -x "+norms)
+        codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+"unnorm.yoda")
 
 #        codeLines2.append("cp "+tmpFolder+OutputFile+" "+OutputFileFinal)
-#	codeLines2.append("cp "+tmpFolder+SetupFileNameGen+" "+OutputFolder)
+#       codeLines2.append("cp "+tmpFolder+SetupFileNameGen+" "+OutputFolder)
 #        codeLines2.append("rm -rf "+tmpFolder)
 
         for codeLine in codeLines2:
             submitfile2.write(codeLine+" \n")
 
         submitfile2.write("rm "+ submitFileNameSH + " \n")
-	submitfile2.write("rm "+ OutputFileFinal + " \n")
+        submitfile2.write("rm -r "+ tmp + " \n")
         submitfile2.close()
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -l h_rt=08:00:00 -m as -M scyboz@mpp.mpg.de " + submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)
-        
+
         return True
 
     else:
         return False
 
+
+## Options file for systematic generation: the user should set the settings required for the different runs there
+
+optionsFile = open("options2.in", 'r')
+options = optionsFile.read().split("\n")
+os.system("source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh")
+os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
+
+
 #initRun()
 #for i in range(100):
-for subdir in SubDirPath(sampledPars):
+for subdir in SubDirPath(pars):
 	params=open(subdir+"/used_params",'r')
 	for line in params:
 		if 'alphaSMZ' in line:
@@ -110,5 +153,77 @@ for subdir in SubDirPath(sampledPars):
 		  pT0min=line.split()[1]
 		if 'Clpow' in line:
 		  b=line.split()[1]
-	i=int(subdir.split("mc/")[1])
-	SubmitHerwigJob(2000, i, alphaSMZ, lambdaQCD, Qmin, pT0min, b)
+	
+	## Loop through all possible combinations
+
+	## LO, NLO
+	for orders in options[0].split("\t"):
+
+	  order = orders
+	  ## CM energy
+	  for e,energies in enumerate(options[1].split("\t")):
+
+	    Ecm=energies
+	    ## Renormalization and factorization scale choices
+	    for scales in options[2].split("\t"):
+
+	        scale=scales
+	        ## PDF choices (only indicate the PDF name, the order is chosen
+	        ## automatically as the order of the process!)
+	        for pdfs in options[3].split("\t"):
+
+	          pdf=pdfs
+	          ## Shower (default or dipole)
+	          for showers in options[4].split("\t"):
+
+	                shower=showers
+	                ## Name tag for the run
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower
+	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
+
+	                ## To choose the Rivet routine according to the cm-energy, look into the
+	                ## options file at the right placee
+	                index=3*e+6
+
+	                ## If no control (number of runs, right number of events...)
+	                ## is needed, just control if one of the final yoda files exists.
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
+	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
+	                if order=="LO":
+	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
+	                elif order=="NLO":
+	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
+
+	                ## IF some yoda files were generated a second time, re-run the yoda merging
+	                flag=False
+	                print "Now processing "+settings+"...\n"
+
+	                ## Submit the job to Herwig
+	                for i in range(nRuns):
+	                        spec='%03.0f' % (i,)
+	                        if not os.path.exists(sampledPars+spec):
+	                          os.system("mkdir -p "+sampledPars+spec)
+	                        os.system("cp "+InputFolder+"Herwig_"+settings+".in "+sampledPars)
+	                        if (i+1)%100==0: print "Processing run #"+str(i)
+	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings+".run", index)
+
+			## As long as there are processed jobs in the queue, wait
+	                while True:
+	                  os.system('qstat -u lscyboz > file')
+	                  strn=open('file', 'r').read()
+	                  if strn=='': break
+	                  #if sum(1 for line in strn)<402: break
+	                  time.sleep(5)
+	                  print "."
+	                print "\n"
+
+	                ## Yoda-merge the files from the different runs 
+	                for norms in options[index+1].split("\t"):
+	                  if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda") or flag==True or newMerge==True:
+	                        print "Yoda-merging "+settings+" at xs="+norms+" pb"
+	                        os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_"+norms+".yoda")
+	                if not os.path.exists(sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda") or flag==True or newMerge==True:
+	                  print "Yoda-merging "+settings+" at generated cross-section"
+	                  os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
+
+			os.system("cp "+sampledPars+"MC_Herwig_"+settings+"*.yoda "+subdir)
