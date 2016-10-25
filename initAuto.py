@@ -61,7 +61,9 @@ def createInputFile(order, Ecm, scale, PDF, shower):
 	elif line.find("set myPDFset:PDFName")!=-1:
     	  fileLO.write("set myPDFset:PDFName "+PDF+"lo68cl\n")
 	elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
-	  if order=="LO" and shower=="default": fileLO.write("read Matchbox/LO-DefaultShower.in\n")
+	  if order=="LO" and shower=="default": 
+		fileLO.write("read Matchbox/LO-DefaultShower.in\n")
+	  	fileLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
 	  elif order=="LO" and shower=="dipole": fileLO.write("read Matchbox/LO-DipoleShower.in\n")
 	  else: print "Wrong shower setting\n"
 	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
@@ -89,7 +91,9 @@ def createInputFile(order, Ecm, scale, PDF, shower):
         elif line.find("set myPDFset:PDFName")!=-1:
           fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
         elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
-          if order=="NLO" and shower=="default": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+          if order=="NLO" and shower=="default": 
+		fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
           elif order=="NLO" and shower=="dipole": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
           else: print "Wrong shower setting\n"
 	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
@@ -134,7 +138,7 @@ def SubmitHerwigJob(inputfile):
     else:
       return False
 
-optionsFile = open("options.in", 'r')
+optionsFile = open("options2.in", 'r')
 options = optionsFile.read().split("\n")
 
 os.system("cp "+GoSamLO+" "+WorkFolder+"GenericLO/")
