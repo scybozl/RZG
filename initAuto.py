@@ -7,17 +7,17 @@ import fileinput
 from glob import glob
 import subprocess
 
-nEvPerFile = 5000
-nRuns = 400
-
 fUser = os.getenv("USER")
 sampledPars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/mcMerge/"
 InputFileNameGen 	= "tT_matchbox_NLO.run"
 SettingsFolder    	= "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 GenericInputFileLO 	= "tT_matchbox_LO.in"
 GenericInputFileNLO 	= "tT_matchbox_NLO.in"
-InputFolder		="/afs/ipp-garching.mpg.de/home/l/lscyboz/Generic/"
+WorkFolder		="/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 SetupFileNameGen    	= "setupfile.in"
+
+GoSamLO			= SettingsFolder+"gosamtT.rc"
+GoSamNLO		= SettingsFolder+"gosamtTNLO.rc"
 
 def SubDirPath (d):
     return filter(os.path.isdir, [os.path.join(d,f) for f in os.listdir(d)])
@@ -42,99 +42,122 @@ def initRun():
     
 def createInputFile(order, Ecm, scale, PDF, shower):
 
-    inputFileName=SettingsFolder+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+".in"
 
     if order=="LO":
 
+      inputFileName=WorkFolder+"GenericLO/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+".in"
       GenericfileLO=open(SettingsFolder+GenericInputFileLO,'r')
       fileLO=open(inputFileName,'w')
+
       for line in GenericfileLO:
     	if line.find("set EventHandler:LuminosityFunction")!=-1:
-	  fileLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"\n")
+	  fileLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"*GeV"+"\n")
 	elif line.find("set Factory:ScaleChoice")!=-1:
 	  if scale!="TopPairMassScale" and scale!="TopPairMTScale":
 	    fileLO.write("set Factory:ScaleChoice Scales/FixedScale\n")
-	    fileLO.write("set Scales/FixedScale:FixedScale "+scale+"\n")
+	    fileLO.write("set Scales/FixedScale:FixedScale "+scale+"*GeV"+"\n")
 	  else:
 	    fileLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
 	elif line.find("set myPDFset:PDFName")!=-1:
-    	  fileLO.write("set myPDFset:PDFName "+PDF+"\n")
+    	  fileLO.write("set myPDFset:PDFName "+PDF+"lo68cl\n")
 	elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
 	  if order=="LO" and shower=="default": fileLO.write("read Matchbox/LO-DefaultShower.in\n")
 	  elif order=="LO" and shower=="dipole": fileLO.write("read Matchbox/LO-DipoleShower.in\n")
-	  elif order=="NLO" and shower=="default": fileLO.write("read Matchbox/MCAtNLO-DefaultShower.in")
-	  elif oder=="NLO" and shower=="dipole": fileLO.write("read Matchbox/MCAtNLO-DipoleShower.in")
+	  else: print "Wrong shower setting\n"
+	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
+	  if shower=="default": fileLO.write("read Matchbox/FiveFlavourScheme.in\n")
+	  elif shower=="dipole": fileLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
 	  else: print "Wrong shower setting\n"
 	elif line.find("saverun")!=-1: fileLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+" EventGenerator")
 	else: fileLO.write(line)	
 
+    if order=="NLO":
 
+      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+".in"
+      GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
+      fileNLO=open(inputFileName,'w')
+      
+      for line in GenericfileNLO:
+        if line.find("set EventHandler:LuminosityFunction")!=-1:
+          fileNLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"*GeV"+"\n")
+        elif line.find("set Factory:ScaleChoice")!=-1:
+          if scale!="TopPairMassScale" and scale!="TopPairMTScale":
+            fileNLO.write("set Factory:ScaleChoice Scales/FixedScale\n")
+            fileNLO.write("set Scales/FixedScale:FixedScale "+scale+"*GeV"+"\n")
+          else:
+            fileNLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
+        elif line.find("set myPDFset:PDFName")!=-1:
+          fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
+        elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
+          if order=="NLO" and shower=="default": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+          elif order=="NLO" and shower=="dipole": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
+          else: print "Wrong shower setting\n"
+	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
+          if shower=="default": fileNLO.write("read Matchbox/FiveFlavourScheme.in\n")
+          elif shower=="dipole": fileNLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
+          else: print "Wrong shower setting\n"
+        elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+" EventGenerator")
+        else: fileNLO.write(line)
 
-def SubmitHerwigJob(nEvents, seed):
+def SubmitHerwigJob(inputfile):
 
+    outputfile	     = inputfile.split(".in")[0]+".run"
 
-    specStr          = '%03.0f' % (seed,)
-#    tmpFolder        = sampledPars+specStr+"/"
-    OutputFile       = "seed_"+specStr+".hepmc"
-    OutputFolder     = sampledPars+specStr+"/"
-    OutputYoda        = OutputFolder+"seed_"+specStr+".yoda"
-    tmp		     = "/tmp/lscyboz/"+specStr+"/"
+    submitFileNameSH = os.getcwd()+"/Submit_"+inputfile+".sh"
 
-#    os.system("mkdir -p "+OutputFolder)
-
-    OutputFileFinal  = OutputFolder+OutputFile
-
-    submitFileNameSH = os.getcwd()+"/Submit_"+specStr+".sh"
-    redo = False
-    if os.path.exists(OutputYoda):
-	f=open(OutputYoda,'r')
-	for i, line in enumerate(f):
-	  if "END YODA_COUNTER" in line:
-		number=i
-	f=open(OutputYoda,'r')
-	string=f.readlines()[number-1]
-	nE=float(string.split("\t")[2].split("\n")[0])
-	if nE!=nEvents:
-	  redo = True
-
-    if not os.path.exists(OutputYoda) or redo==True:
+    if not os.path.exists(outputfile):
 
         submitfile2 = open(submitFileNameSH, "w")
         printSetupLinesInSubmitFileRivet(submitfile2)
 
+        if outputfile.find("_LO")!=-1: InputFolder=WorkFolder+"GenericLO/"
+        elif outputfile.find("_NLO")!=-1: InputFolder=WorkFolder+"Generic/"
+
         codeLines2 = []
 #	codeLines2.append("mkdir -p "+tmpFolder)
-	codeLines2.append("cd "+InputFolder)
-	codeLines2.append("mkdir -p "+tmp)
-	codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
-	codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("cd "+InputFolder)
 
-	codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("rivet -a ATLAS_2015_I1404878_custom "+tmp+OutputFile+" -H "+OutputYoda+" -x 251.659") 
-
-#        codeLines2.append("cp "+tmpFolder+OutputFile+" "+OutputFileFinal)
-#	codeLines2.append("cp "+tmpFolder+SetupFileNameGen+" "+OutputFolder)
-#        codeLines2.append("rm -rf "+tmpFolder)
+        codeLines2.append("Herwig read "+InputFolder+inputfile)
 
         for codeLine in codeLines2:
-            submitfile2.write(codeLine+" \n")
+          submitfile2.write(codeLine+" \n")
 
         submitfile2.write("rm "+ submitFileNameSH + " \n")
-	submitfile2.write("rm -r "+ tmp + " \n")
         submitfile2.close()
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
         cmd = "qsub -e /dev/null -o /dev/null "+ submitFileNameSH
-        os.system(cmd)
-        
+        os.system(cmd)       
         return True
 
     else:
-        return False
+      return False
 
-createInputFile("LO","7000*GeV","86*GeV","MMHT2014lo68cl","dipole")
+optionsFile = open("options.in", 'r')
+options = optionsFile.read().split("\n")
+
+os.system("cp "+GoSamLO+" "+WorkFolder+"GenericLO/")
+os.system("cp "+GoSamNLO+" "+WorkFolder+"Generic/")
+
+for orders in options[0].split("\t"):
+
+  order = orders
+  for energies in options[1].split("\t"):
+
+    Ecm=energies
+    for scales in options[2].split("\t"):
+
+	scale=scales
+	for pdfs in options[3].split("\t"):
+
+	  pdf=pdfs
+	  for showers in options[4].split("\t"):
+
+		shower=showers
+		createInputFile(order, Ecm, scale, pdf, shower)
+		SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+".in")
+
 #initRun()
 #for i in range(100):
 #for i in range(nRuns):
