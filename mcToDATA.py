@@ -17,7 +17,6 @@ for files in os.listdir(d+"/000"):
   os.chdir(parent+"mc")
 
   os.system("mkdir "+parent+"ref/")
-  os.system("cp "+
 
   for i in range(10):
 	
