@@ -23,7 +23,9 @@ for files in os.listdir(d+"/000"):
 
 	files2="MC_Herwig_NLO_8000_"+files1.split("7000_")[1]
 
+	dest=root+parent+"mc/00"+str(i)
+
 	os.system("mkdir 00"+str(i))
-	os.system("cp "+d+"/00"+str(i)+"/"+files1+"177.yoda "+root+parent+"mc/00"+str(i))
-	os.system("cp "+d+"/00"+str(i)+"/"+files2+"253.yoda "+root+parent+"mc/00"+str(i))
-	os.system("yodamerge *177.yoda *253.yoda -o out.yoda")
+	os.system("cp "+d+"/00"+str(i)+"/"+files1+"177.yoda "+dest)
+	os.system("cp "+d+"/00"+str(i)+"/"+files2+"253.yoda "+dest)
+	os.system("yodamerge "+dest+"/*177.yoda "+dest+"/*253.yoda -o "+dest+"/out.yoda")
