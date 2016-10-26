@@ -1,10 +1,9 @@
 import os
-sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/mc/"
+sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/mc/"
 
 def SubDirPath (d):
     return filter(os.path.isdir, [os.path.join(d,f) for f in os.listdir(d)])
 
 
 for subdir in SubDirPath(sampledPars):
-	  if os.path.exists(subdir+"/seed_"+subdir.split("mc/")[1]+".yoda"):
-		os.system("./yoda2aida "+subdir+"/seed_"+subdir.split("mc/")[1]+".yoda "+subdir+"/out"+".aida")
+    os.system("./yoda2aida "+subdir+"/out.yoda "+subdir+"/out.aida")
