@@ -1,7 +1,7 @@
 import os
 
-d="/home/iwsatlas1/scyboz/Work/11.10.16_MCPROD_TUNING_RZG/mc"
-root="/home/iwsatlas1/scyboz/Work/11.10.16_MCPROD_TUNING_RZG/"
+d="/afs/ipp-garching.mpg.de/home/l/lscyboz/mc"
+root="/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 
 for files in os.listdir(d+"/000"):
 
@@ -15,6 +15,9 @@ for files in os.listdir(d+"/000"):
   os.chdir(root)
   os.system("mkdir -p "+parent+"mc/")
   os.chdir(parent+"mc")
+
+  os.system("mkdir "+parent+"ref/")
+  os.system("cp "+
 
   for i in range(10):
 	
