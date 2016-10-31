@@ -1,0 +1,24 @@
+# BEGIN PLOT
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/pt_lepton
+Legend=1
+LogY=1
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/pt_lepton
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/pt_lepton
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+0.000000e+00	4.000000e+01	8.610176e+03	0.000000e+00	0.000000e+00
+4.000000e+01	8.000000e+01	1.374837e+04	0.000000e+00	0.000000e+00
+8.000000e+01	1.200000e+02	5.327695e+03	0.000000e+00	0.000000e+00
+1.200000e+02	1.600000e+02	2.249281e+03	0.000000e+00	0.000000e+00
+1.600000e+02	2.000000e+02	1.108192e+03	0.000000e+00	0.000000e+00
+2.000000e+02	2.400000e+02	6.019092e+02	0.000000e+00	0.000000e+00
+2.400000e+02	2.800000e+02	3.654128e+02	0.000000e+00	0.000000e+00
+2.800000e+02	3.200000e+02	2.312318e+02	0.000000e+00	0.000000e+00
+3.200000e+02	3.600000e+02	1.579651e+02	0.000000e+00	0.000000e+00
+3.600000e+02	4.000000e+02	1.130297e+02	0.000000e+00	0.000000e+00
+# END HISTO1D
+

@@ -1,0 +1,32 @@
+# BEGIN PLOT
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d01-x03-y01
+YMax=5.5
+Title=t$\bar{\mathrm t}$ cross-section vs. jet multiplicity for jets above $60~\mathrm{GeV}$
+LogY=1
+RatioPlotYMax=1.9
+RatioPlotYLabel=Expected/Data
+LegendXPos=0.39
+XLabel=$\mathrm{n}_{\mathrm{jets}} ( \mathrm{jet~p}_\mathrm{T} > 60~\mathrm{GeV} )$
+XMax=6.5
+YLabel=$\mathrm{d}\sigma/\mathrm{dn}_{\mathrm{jets}}$ [pb]
+XMin=2.5
+YMin=0.0035
+Legend=1
+RatioPlotYMin=0.1
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d01-x03-y01
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d01-x03-y01
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+-5.000000e-01	5.000000e-01	0.000000e+00	0.000000e+00	0.000000e+00
+5.000000e-01	1.500000e+00	0.000000e+00	0.000000e+00	0.000000e+00
+1.500000e+00	2.500000e+00	0.000000e+00	0.000000e+00	0.000000e+00
+2.500000e+00	3.500000e+00	2.168948e+00	0.000000e+00	0.000000e+00
+3.500000e+00	4.500000e+00	5.294104e-01	0.000000e+00	0.000000e+00
+4.500000e+00	5.500000e+00	8.823957e-02	0.000000e+00	0.000000e+00
+5.500000e+00	6.500000e+00	1.172362e-02	0.000000e+00	0.000000e+00
+# END HISTO1D
+

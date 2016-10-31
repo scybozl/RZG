@@ -1,0 +1,37 @@
+# BEGIN PLOT
+DrawOnly=Envel-100.000000-/ATLAS_2015_I1404878_custom/h_selected_events  /REF/ATLAS_2015_I1404878_custom/h_selected_events
+RatioPlot=1
+RatioPlotReference=/REF/ATLAS_2015_I1404878_custom/h_selected_events
+Legend=1
+LogY=1
+# END PLOT
+
+# BEGIN HISTOGRAM /REF/ATLAS_2015_I1404878_custom/h_selected_events
+AidaPath=/REF/ATLAS_2015_I1404878_custom/h_selected_events
+Title=ATLAS data
+PolyMarker=*
+ErrorBars=1
+## Area: 2.821388e+07
+## Num bins: 5
+## xlow  	xhigh   	val    	errminus	errplus
+0.000000e+00	1.000000e+00	1.000000e+07	4.472136e+05	4.472136e+05
+1.000000e+00	2.000000e+00	2.847773e+06	1.273642e+05	1.273642e+05
+2.000000e+00	3.000000e+00	6.624005e+06	2.962388e+05	2.962388e+05
+3.000000e+00	4.000000e+00	7.497239e+06	3.352897e+05	3.352897e+05
+4.000000e+00	5.000000e+00	1.244863e+06	5.568194e+04	5.568194e+04
+# END HISTOGRAM
+
+
+# BEGIN HISTOGRAM Envel-100.000000-/ATLAS_2015_I1404878_custom/h_selected_events
+Title=Envelope (CL 100.0 \%)
+ErrorBands=1
+ErrorBandColor=blue!40!
+ErrorBandOpacity=0.45
+LineStyle=none
+## xlow  	xhigh   	val    	errminus	errplus
+0.000000e+00	1.000000e+00	1.000000e+07	0.000000e+00	0.000000e+00
+1.000000e+00	2.000000e+00	2.848316e+06	2.261500e+03	2.261500e+03
+2.000000e+00	3.000000e+00	6.624640e+06	1.792500e+03	1.792500e+03
+3.000000e+00	4.000000e+00	7.497214e+06	1.186000e+03	1.186000e+03
+4.000000e+00	5.000000e+00	1.245506e+06	1.475500e+03	1.475500e+03
+# END HISTOGRAM

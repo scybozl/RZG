@@ -1,0 +1,27 @@
+# BEGIN PLOT
+DataTitle=\shortstack[l]{ATLAS Data, \\ arXiv:1511.04716} 
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_Parton/d31-x01-y01
+Title=Rapidity of parton-level top quarks
+GofLegend=0
+LogY=1
+RatioPlotYLabel=Output_rivet/Parton_level
+LegendXPos=0.45
+XLabel=$|y_{t}|$
+YLabel=$d\sigma / d|y_{t}|$
+LegendYPos=0.90
+Legend=1
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_Parton/d31-x01-y01
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_Parton/d31-x01-y01
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+0.000000e+00	4.000000e-01	1.717887e+02	0.000000e+00	0.000000e+00
+4.000000e-01	8.000000e-01	1.559018e+02	0.000000e+00	0.000000e+00
+8.000000e-01	1.200000e+00	1.252757e+02	0.000000e+00	0.000000e+00
+1.200000e+00	1.600000e+00	8.941534e+01	0.000000e+00	0.000000e+00
+1.600000e+00	2.500000e+00	3.679558e+01	0.000000e+00	0.000000e+00
+# END HISTO1D
+

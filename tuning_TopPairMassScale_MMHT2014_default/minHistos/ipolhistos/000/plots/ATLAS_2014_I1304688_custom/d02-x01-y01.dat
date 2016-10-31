@@ -1,0 +1,32 @@
+# BEGIN PLOT
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d02-x01-y01
+YMax=0.35
+Title=t$\bar{\mathrm t}$ cross-section vs. $1^\mathrm{st}$ jet $\mathrm{p}_\mathrm{T}$
+LogX=1
+LogY=1
+RatioPlotYMax=1.9
+RatioPlotYLabel=Expected/Data
+LegendXPos=0.39
+XLabel=$1^\mathrm{st}$ jet $\mathrm{p}_\mathrm{T}$ [GeV]
+YLabel=$\mathrm{d}\sigma/\mathrm{dp}_{\mathrm T}$ [pb/GeV]
+YMin=0.000075
+Legend=1
+RatioPlotYMin=0.1
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d02-x01-y01
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2014_I1304688_custom/d02-x01-y01
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+5.000000e+01	7.000000e+01	8.623605e-02	0.000000e+00	0.000000e+00
+7.000000e+01	9.000000e+01	1.333160e-01	0.000000e+00	0.000000e+00
+9.000000e+01	1.200000e+02	1.006772e-01	0.000000e+00	0.000000e+00
+1.200000e+02	1.550000e+02	5.100028e-02	0.000000e+00	0.000000e+00
+1.550000e+02	1.950000e+02	2.141358e-02	0.000000e+00	0.000000e+00
+1.950000e+02	2.350000e+02	8.665328e-03	0.000000e+00	0.000000e+00
+2.350000e+02	2.800000e+02	3.988613e-03	0.000000e+00	0.000000e+00
+2.800000e+02	1.030000e+03	2.265408e-04	0.000000e+00	0.000000e+00
+# END HISTO1D
+

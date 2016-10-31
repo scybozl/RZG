@@ -1,0 +1,34 @@
+# BEGIN PLOT
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d01-x01-y01
+Title=combined lepton channels
+LogY=1
+RatioPlotYMax=1.2
+RatioPlotYLabel=Output_rivet/Particle_level
+LegendXPos=0.6
+XLabel=$m_{t\bar{t}}$ [GeV]
+YLabelSep=8.0
+YLabel=$\dfrac{\text{d}\sigma^\text{fid}}{\text{d}m_{t\bar{t}}}$ [$\dfrac{\text{pb}}{\text{GeV}}$]
+Legend=1
+RatioPlotYMin=0.8
+LeftMargin=1.9
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d01-x01-y01
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d01-x01-y01
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+2.250000e+02	3.450000e+02	1.685277e-02	0.000000e+00	0.000000e+00
+3.450000e+02	4.200000e+02	1.046751e-01	0.000000e+00	0.000000e+00
+4.200000e+02	5.000000e+02	9.961473e-02	0.000000e+00	0.000000e+00
+5.000000e+02	5.900000e+02	6.575530e-02	0.000000e+00	0.000000e+00
+5.900000e+02	6.850000e+02	3.895599e-02	0.000000e+00	0.000000e+00
+6.850000e+02	7.900000e+02	2.070042e-02	0.000000e+00	0.000000e+00
+7.900000e+02	9.100000e+02	1.190076e-02	0.000000e+00	0.000000e+00
+9.100000e+02	1.040000e+03	5.980957e-03	0.000000e+00	0.000000e+00
+1.040000e+03	1.175000e+03	2.959644e-03	0.000000e+00	0.000000e+00
+1.175000e+03	1.320000e+03	1.653750e-03	0.000000e+00	0.000000e+00
+1.320000e+03	3.000000e+03	1.659875e-04	0.000000e+00	0.000000e+00
+# END HISTO1D
+

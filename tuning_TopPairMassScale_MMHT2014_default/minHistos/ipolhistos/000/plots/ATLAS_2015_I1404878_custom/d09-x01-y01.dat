@@ -1,0 +1,41 @@
+# BEGIN PLOT
+DrawOnly=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d09-x01-y01
+Title=combined lepton channels
+LogY=1
+RatioPlotYMax=1.2
+RatioPlotYLabel=Output_rivet/Particle_level
+LegendXPos=0.6
+XLabel=$|y_{t,\text{had}}|$
+YLabelSep=8.0
+YLabel=$\dfrac{\text{d}\sigma^\text{fid}}{\text{d}|y_{t,\text{had}}|}$ [pb]
+Legend=1
+RatioPlotYMin=0.8
+LeftMargin=1.9
+# END PLOT
+
+# BEGIN HISTO1D /afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d09-x01-y01
+LineColor={[HTML]{EE3311}}
+LineStyle=solid
+Path=/afs/ipp-garching.mpg.de/home/l/lscyboz/tuning_TopPairMassScale_MMHT2014_default/minHistos/ipolhistos/000/histo-000.yoda//ATLAS_2015_I1404878_custom/d09-x01-y01
+Title=histo-000
+# xlow	 xhigh	 val	 errminus	 errplus
+0.000000e+00	1.000000e-01	2.692001e+01	0.000000e+00	0.000000e+00
+1.000000e-01	2.000000e-01	2.686125e+01	0.000000e+00	0.000000e+00
+2.000000e-01	3.000000e-01	2.739533e+01	0.000000e+00	0.000000e+00
+3.000000e-01	4.000000e-01	2.619956e+01	0.000000e+00	0.000000e+00
+4.000000e-01	5.000000e-01	2.492165e+01	0.000000e+00	0.000000e+00
+5.000000e-01	6.000000e-01	2.439124e+01	0.000000e+00	0.000000e+00
+6.000000e-01	7.000000e-01	2.214191e+01	0.000000e+00	0.000000e+00
+7.000000e-01	8.000000e-01	2.143744e+01	0.000000e+00	0.000000e+00
+8.000000e-01	9.000000e-01	2.052555e+01	0.000000e+00	0.000000e+00
+9.000000e-01	1.000000e+00	1.816457e+01	0.000000e+00	0.000000e+00
+1.000000e+00	1.100000e+00	1.617625e+01	0.000000e+00	0.000000e+00
+1.100000e+00	1.200000e+00	1.436553e+01	0.000000e+00	0.000000e+00
+1.200000e+00	1.300000e+00	1.285116e+01	0.000000e+00	0.000000e+00
+1.300000e+00	1.400000e+00	1.087145e+01	0.000000e+00	0.000000e+00
+1.400000e+00	1.500000e+00	9.148196e+00	0.000000e+00	0.000000e+00
+1.500000e+00	1.700000e+00	6.673591e+00	0.000000e+00	0.000000e+00
+1.700000e+00	1.900000e+00	3.848844e+00	0.000000e+00	0.000000e+00
+1.900000e+00	2.500000e+00	6.980287e-01	0.000000e+00	0.000000e+00
+# END HISTO1D
+
