@@ -121,7 +121,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub "+ submitFileNameSH
+        cmd = "qsub -o /dev/null -e /dev/null "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -176,18 +176,22 @@ for subdir in SubDirPath(pars):
 	          ## Shower (default or dipole)
 	          for showers in options[4].split("\t"):
 
-	                shower=showers
+	             shower=showers
+		     ## Matching (MCatNLO or POWHEG)
+		     for matchings in options[5].split("\t"):
+
+			matching=matchings
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
 	                ## options file at the right placee
-	                index=3*e+6
+	                index=3*e+7
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ != "1.327778e-01" and alphaSMZ != "1.350000e-01"))
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -203,17 +207,17 @@ for subdir in SubDirPath(pars):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
-	                        os.system("cp "+InputFolder+"Herwig_"+settings+".in "+sampledPars)
+	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
-	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings+".run", index)
+	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
 
 			## As long as there are processed jobs in the queue, wait
 	                while True:
 	                  os.system('qstat -u lscyboz > file')
 	                  strn=open('file', 'r').read()
-	                  if strn=='': break
+	                  if len(strn) <= 400: break
 	                  #if sum(1 for line in strn)<402: break
-	                  time.sleep(5)
+	                  time.sleep(15)
 	                  print "."
 	                print "\n"
 

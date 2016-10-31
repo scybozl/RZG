@@ -40,12 +40,12 @@ def initRun():
     os.system("chmod a+x initRun.sh")
     os.system("./initRun.sh")
     
-def createInputFile(order, Ecm, scale, PDF, shower):
+def createInputFile(order, Ecm, scale, PDF, shower, matching):
 
 
     if order=="LO":
 
-      inputFileName=WorkFolder+"GenericLO/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+".in"
+      inputFileName=WorkFolder+"GenericLO/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+".in"
       GenericfileLO=open(SettingsFolder+GenericInputFileLO,'r')
       fileLO=open(inputFileName,'w')
 
@@ -75,7 +75,7 @@ def createInputFile(order, Ecm, scale, PDF, shower):
 
     if order=="NLO":
 
-      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+".in"
+      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+".in"
       GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
       fileNLO=open(inputFileName,'w')
       
@@ -92,15 +92,18 @@ def createInputFile(order, Ecm, scale, PDF, shower):
           fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
         elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
           if order=="NLO" and shower=="default": 
-		fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+		if matching=="MCatNLO": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DefaultShower.in\n")
 		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
-          elif order=="NLO" and shower=="dipole": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
+          elif order=="NLO" and shower=="dipole":
+		if matching=="MCatNLO": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
+		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DipoleShower.in\n")
           else: print "Wrong shower setting\n"
 	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
           if shower=="default": fileNLO.write("read Matchbox/FiveFlavourScheme.in\n")
           elif shower=="dipole": fileNLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
           else: print "Wrong shower setting\n"
-        elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+" EventGenerator")
+        elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+" EventGenerator")
         else: fileNLO.write(line)
 
 def SubmitHerwigJob(inputfile):
@@ -158,9 +161,13 @@ for orders in options[0].split("\t"):
 	  pdf=pdfs
 	  for showers in options[4].split("\t"):
 
-		shower=showers
-		createInputFile(order, Ecm, scale, pdf, shower)
-		SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+".in")
+	     shower=showers
+	     for matchings in options[5].split("\t"):
+
+		matching=matchings
+
+		createInputFile(order, Ecm, scale, pdf, shower, matching)
+		SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+".in")
 
 #initRun()
 #for i in range(100):
