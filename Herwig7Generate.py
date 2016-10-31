@@ -10,7 +10,7 @@ import subprocess
 fUser = os.getenv("USER")
 nEvPerFile = 20000
 nRuns = 500
-newMerge = False
+newMerge = True
 newControl = True
 ControlIndex = ""
 EnergyIndex = ""
@@ -191,7 +191,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ != "1.327778e-01" and alphaSMZ != "1.350000e-01"))
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
