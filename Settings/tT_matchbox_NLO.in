@@ -159,8 +159,8 @@ cd /Herwig/Particles
 #set mu-:NominalMass 0.0*GeV
 #set mu-:HardProcessMass 0.0*GeV
 
-set t:NominalMass 172.5*GeV
-set t:HardProcessMass 172.5*GeV
+#set t:NominalMass 172.5*GeV
+#set t:HardProcessMass 172.5*GeV
 set t:Width 1.3167*GeV
 #set t:HardProcessWidth 0*GeV
 set W+:NominalMass 80.399*GeV
