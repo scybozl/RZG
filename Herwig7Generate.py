@@ -54,7 +54,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
     OutputFile       = "seed_"+specStr+".hepmc"
     OutputFolder     = sampledPars+specStr+"/"
     OutputYoda        = OutputFolder+"seed_"+specStr+"_"
-    tmp              = "/tmp/lscyboz/"+settings+"_"+specStr+"/"
+    tmp              = "$TMPDIR/lscyboz/"+settings+"_"+specStr+"/"
 
 #    os.system("mkdir -p "+OutputFolder)
 
@@ -93,7 +93,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         codeLines2.append("mkdir -p "+tmp)
         codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
-        codeLines2.append("echo 'set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
 	if(InputFileNameGen.find("dipole")!=-1):
