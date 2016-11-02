@@ -8,8 +8,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 20000
-nRuns = 500
+nEvPerFile = 10000
+nRuns = 1000
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -215,7 +215,7 @@ for subdir in SubDirPath(pars):
 	                while True:
 	                  os.system('qstat -u lscyboz > file')
 	                  strn=open('file', 'r').read()
-	                  if len(strn) <= 400: break
+	                  if len(strn) <= 500: break
 	                  #if sum(1 for line in strn)<402: break
 	                  time.sleep(15)
 	                  print "."
