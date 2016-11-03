@@ -8,8 +8,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 10000
-nRuns = 1000
+nEvPerFile = 20000
+nRuns = 500
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -180,14 +180,17 @@ for subdir in SubDirPath(pars):
 		     ## Matching (MCatNLO or POWHEG)
 		     for matchings in options[5].split("\t"):
 
-			matching=matchings
+		      matching=matchings
+		      for topmasses in options[6].split("\t"):
+			
+			topmass=topmasses
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
 	                ## options file at the right placee
-	                index=3*e+7
+	                index=3*e+8
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
