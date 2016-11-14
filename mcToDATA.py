@@ -1,6 +1,6 @@
 import os
 
-d="/afs/ipp-garching.mpg.de/home/l/lscyboz/mc_25.10.16"
+d="/afs/ipp-garching.mpg.de/home/l/lscyboz/mc_31.10.16"
 root="/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 rivet=d+"/ref/*.aida"
 
