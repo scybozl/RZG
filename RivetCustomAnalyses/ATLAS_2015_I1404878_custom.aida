@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aida SYSTEM "http://aida.freehep.org/schemas/3.0/aida.dtd">
+<aida>
+  <implementation version="1.0" package="YODA"/>
+  <dataPointSet name="d17-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d17-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="5.000000e-02" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.368580e+01" errorPlus="6.903950e+00" errorMinus="6.957464e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.311430e+01" errorPlus="6.836186e+00" errorMinus="6.874900e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.145440e+01" errorPlus="6.734072e+00" errorMinus="6.746644e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.012680e+01" errorPlus="6.493412e+00" errorMinus="6.504550e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.829980e+01" errorPlus="5.866715e+00" errorMinus="5.822610e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.552530e+01" errorPlus="5.346961e+00" errorMinus="5.357160e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.264700e+01" errorPlus="4.868689e+00" errorMinus="4.920719e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.995730e+01" errorPlus="4.260454e+00" errorMinus="4.244309e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.705750e+01" errorPlus="3.431859e+00" errorMinus="3.424366e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.364350e+01" errorPlus="2.837209e+00" errorMinus="2.887453e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.050000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.111390e+01" errorPlus="2.396115e+00" errorMinus="2.398777e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.150000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="8.725570e+00" errorPlus="1.678638e+00" errorMinus="1.738623e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.250000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="6.761050e+00" errorPlus="1.378144e+00" errorMinus="1.377403e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.350000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="4.966550e+00" errorPlus="1.006075e+00" errorMinus="1.024540e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.450000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.559080e+00" errorPlus="6.885703e-01" errorMinus="7.006089e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.750000e+00" errorPlus="2.500000e-01" errorMinus="2.500000e-01"/>
+      <measurement value="1.013350e+00" errorPlus="2.142018e-01" errorMinus="2.121696e-01"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d01-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d01-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="2.850000e+02" errorPlus="6.000000e+01" errorMinus="6.000000e+01"/>
+      <measurement value="1.685320e-02" errorPlus="6.507267e-03" errorMinus="6.501372e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.825000e+02" errorPlus="3.750000e+01" errorMinus="3.750000e+01"/>
+      <measurement value="9.637670e-02" errorPlus="2.347302e-02" errorMinus="2.365511e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.600000e+02" errorPlus="4.000000e+01" errorMinus="4.000000e+01"/>
+      <measurement value="9.005970e-02" errorPlus="1.788878e-02" errorMinus="1.788788e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.450000e+02" errorPlus="4.500000e+01" errorMinus="4.500000e+01"/>
+      <measurement value="5.923150e-02" errorPlus="1.149714e-02" errorMinus="1.150839e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.375000e+02" errorPlus="4.750000e+01" errorMinus="4.750000e+01"/>
+      <measurement value="3.497560e-02" errorPlus="6.831600e-03" errorMinus="6.820419e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.375000e+02" errorPlus="5.250000e+01" errorMinus="5.250000e+01"/>
+      <measurement value="1.939140e-02" errorPlus="3.760166e-03" errorMinus="3.760553e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.500000e+02" errorPlus="6.000000e+01" errorMinus="6.000000e+01"/>
+      <measurement value="9.903030e-03" errorPlus="1.888677e-03" errorMinus="1.899636e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.750000e+02" errorPlus="6.500000e+01" errorMinus="6.500000e+01"/>
+      <measurement value="4.931670e-03" errorPlus="9.413018e-04" errorMinus="9.384592e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.107500e+03" errorPlus="6.750000e+01" errorMinus="6.750000e+01"/>
+      <measurement value="2.402930e-03" errorPlus="5.176296e-04" errorMinus="5.240543e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.247500e+03" errorPlus="7.250000e+01" errorMinus="7.250000e+01"/>
+      <measurement value="1.091860e-03" errorPlus="2.223231e-04" errorMinus="2.186828e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.160000e+03" errorPlus="8.400000e+02" errorMinus="8.400000e+02"/>
+      <measurement value="1.051660e-04" errorPlus="2.456504e-05" errorMinus="2.368830e-05"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d11-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d11-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="2.000000e+01" errorPlus="2.000000e+01" errorMinus="2.000000e+01"/>
+      <measurement value="5.476850e-01" errorPlus="1.139698e-01" errorMinus="1.146269e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.000000e+01" errorPlus="2.000000e+01" errorMinus="2.000000e+01"/>
+      <measurement value="1.280040e-01" errorPlus="2.807384e-02" errorMinus="2.788834e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.000000e+02" errorPlus="2.000000e+01" errorMinus="2.000000e+01"/>
+      <measurement value="3.914690e-02" errorPlus="8.011116e-03" errorMinus="7.942762e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.450000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="1.349900e-02" errorPlus="2.761283e-03" errorMinus="2.701401e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.000000e+02" errorPlus="3.000000e+01" errorMinus="3.000000e+01"/>
+      <measurement value="4.213450e-03" errorPlus="8.993552e-04" errorMinus="8.971544e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.150000e+02" errorPlus="1.850000e+02" errorMinus="1.850000e+02"/>
+      <measurement value="3.103370e-04" errorPlus="6.145308e-05" errorMinus="6.058207e-05"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d07-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d07-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="1.250000e+01" errorPlus="1.250000e+01" errorMinus="1.250000e+01"/>
+      <measurement value="4.226720e-02" errorPlus="9.311114e-03" errorMinus="9.230233e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.750000e+01" errorPlus="1.250000e+01" errorMinus="1.250000e+01"/>
+      <measurement value="1.192880e-01" errorPlus="2.591064e-02" errorMinus="2.610726e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.250000e+01" errorPlus="1.250000e+01" errorMinus="1.250000e+01"/>
+      <measurement value="1.774390e-01" errorPlus="4.018257e-02" errorMinus="4.047870e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.000000e+01" errorPlus="1.500000e+01" errorMinus="1.500000e+01"/>
+      <measurement value="1.953350e-01" errorPlus="4.099198e-02" errorMinus="4.120088e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.200000e+02" errorPlus="1.500000e+01" errorMinus="1.500000e+01"/>
+      <measurement value="1.736560e-01" errorPlus="3.553918e-02" errorMinus="3.551662e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e+02" errorPlus="1.500000e+01" errorMinus="1.500000e+01"/>
+      <measurement value="1.192390e-01" errorPlus="2.439265e-02" errorMinus="2.435572e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.800000e+02" errorPlus="1.500000e+01" errorMinus="1.500000e+01"/>
+      <measurement value="7.619360e-02" errorPlus="1.484122e-02" errorMinus="1.512422e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.125000e+02" errorPlus="1.750000e+01" errorMinus="1.750000e+01"/>
+      <measurement value="4.796640e-02" errorPlus="9.766120e-03" errorMinus="9.769471e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.475000e+02" errorPlus="1.750000e+01" errorMinus="1.750000e+01"/>
+      <measurement value="2.892490e-02" errorPlus="6.202977e-03" errorMinus="6.095694e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.825000e+02" errorPlus="1.750000e+01" errorMinus="1.750000e+01"/>
+      <measurement value="1.713080e-02" errorPlus="3.517132e-03" errorMinus="3.536383e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.250000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="9.450500e-03" errorPlus="1.907953e-03" errorMinus="1.941335e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.750000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="4.936720e-03" errorPlus="1.043637e-03" errorMinus="1.021523e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.250000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="2.378980e-03" errorPlus="5.436028e-04" errorMinus="5.449892e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.750000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="9.900470e-04" errorPlus="2.327330e-04" errorMinus="2.318067e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.500000e+02" errorPlus="2.500000e+02" errorMinus="2.500000e+02"/>
+      <measurement value="1.166030e-04" errorPlus="2.911553e-05" errorMinus="2.966275e-05"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d15-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d15-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="4.500000e+01" errorPlus="4.500000e+01" errorMinus="4.500000e+01"/>
+      <measurement value="2.490670e-02" errorPlus="5.647813e-03" errorMinus="5.733871e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.150000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="7.721150e-02" errorPlus="1.808850e-02" errorMinus="1.808773e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.675000e+02" errorPlus="2.750000e+01" errorMinus="2.750000e+01"/>
+      <measurement value="1.023840e-01" errorPlus="2.270511e-02" errorMinus="2.291388e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.250000e+02" errorPlus="3.000000e+01" errorMinus="3.000000e+01"/>
+      <measurement value="1.004190e-01" errorPlus="2.105716e-02" errorMinus="2.115150e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.875000e+02" errorPlus="3.250000e+01" errorMinus="3.250000e+01"/>
+      <measurement value="7.213200e-02" errorPlus="1.466624e-02" errorMinus="1.452496e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.525000e+02" errorPlus="3.250000e+01" errorMinus="3.250000e+01"/>
+      <measurement value="4.325280e-02" errorPlus="8.529303e-03" errorMinus="8.630400e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.200000e+02" errorPlus="3.500000e+01" errorMinus="3.500000e+01"/>
+      <measurement value="2.568990e-02" errorPlus="5.054350e-03" errorMinus="5.102307e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.925000e+02" errorPlus="3.750000e+01" errorMinus="3.750000e+01"/>
+      <measurement value="1.518860e-02" errorPlus="2.913679e-03" errorMinus="2.887329e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.700000e+02" errorPlus="4.000000e+01" errorMinus="4.000000e+01"/>
+      <measurement value="8.127450e-03" errorPlus="1.718414e-03" errorMinus="1.707734e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.525000e+02" errorPlus="4.250000e+01" errorMinus="4.250000e+01"/>
+      <measurement value="4.543040e-03" errorPlus="9.198461e-04" errorMinus="9.454707e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.375000e+02" errorPlus="4.250000e+01" errorMinus="4.250000e+01"/>
+      <measurement value="2.324570e-03" errorPlus="4.706246e-04" errorMinus="4.695520e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.225000e+02" errorPlus="4.250000e+01" errorMinus="4.250000e+01"/>
+      <measurement value="1.218550e-03" errorPlus="2.772658e-04" errorMinus="2.719632e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.075000e+02" errorPlus="4.250000e+01" errorMinus="4.250000e+01"/>
+      <measurement value="6.155750e-04" errorPlus="1.410146e-04" errorMinus="1.409511e-04"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.955000e+02" errorPlus="4.550000e+01" errorMinus="4.550000e+01"/>
+      <measurement value="3.307130e-04" errorPlus="8.241889e-05" errorMinus="8.350808e-05"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.270500e+03" errorPlus="2.295000e+02" errorMinus="2.295000e+02"/>
+      <measurement value="7.707950e-05" errorPlus="1.807178e-05" errorMinus="1.953344e-05"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d21-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d21-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="5.000000e-02" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="4.545000e+00" errorPlus="9.473139e-01" errorMinus="9.590486e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.129190e+01" errorPlus="2.246728e+00" errorMinus="2.252359e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.568280e+01" errorPlus="3.179453e+00" errorMinus="3.222034e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.923750e+01" errorPlus="4.044999e+00" errorMinus="3.988519e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.000000e-01" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="2.448450e+01" errorPlus="5.170809e+00" errorMinus="5.203111e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.000000e-01" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="2.958400e+01" errorPlus="6.168950e+00" errorMinus="6.193492e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.000000e-01" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="2.501900e+01" errorPlus="5.313469e+00" errorMinus="5.374474e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.150000e+00" errorPlus="1.500000e-01" errorMinus="1.500000e-01"/>
+      <measurement value="1.284680e+01" errorPlus="2.762089e+00" errorMinus="2.764528e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e+00" errorPlus="2.000000e-01" errorMinus="2.000000e-01"/>
+      <measurement value="5.592720e+00" errorPlus="1.156130e+00" errorMinus="1.156967e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.000000e+00" errorPlus="3.000000e-01" errorMinus="3.000000e-01"/>
+      <measurement value="2.165250e+00" errorPlus="4.699867e-01" errorMinus="4.677832e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.700000e+00" errorPlus="4.000000e-01" errorMinus="4.000000e-01"/>
+      <measurement value="8.176000e-01" errorPlus="1.646140e-01" errorMinus="1.628053e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.050000e+00" errorPlus="9.500000e-01" errorMinus="9.500000e-01"/>
+      <measurement value="2.359770e-01" errorPlus="4.735341e-02" errorMinus="4.807232e-02"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d13-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d13-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="7.000000e-01" errorPlus="7.000000e-01" errorMinus="7.000000e-01"/>
+      <measurement value="1.248700e+00" errorPlus="2.724327e-01" errorMinus="2.745513e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.800000e+00" errorPlus="4.000000e-01" errorMinus="4.000000e-01"/>
+      <measurement value="3.030070e+00" errorPlus="6.749928e-01" errorMinus="6.584401e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.450000e+00" errorPlus="2.500000e-01" errorMinus="2.500000e-01"/>
+      <measurement value="9.609390e+00" errorPlus="2.131095e+00" errorMinus="2.113714e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.925000e+00" errorPlus="2.250000e-01" errorMinus="2.250000e-01"/>
+      <measurement value="4.596160e+01" errorPlus="9.380537e+00" errorMinus="9.443037e+00"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d19-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d19-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="1.200000e+00" errorPlus="2.000000e-01" errorMinus="2.000000e-01"/>
+      <measurement value="2.058280e+01" errorPlus="4.258017e+00" errorMinus="4.296699e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.650000e+00" errorPlus="2.500000e-01" errorMinus="2.500000e-01"/>
+      <measurement value="1.315660e+01" errorPlus="2.774808e+00" errorMinus="2.772704e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.200000e+00" errorPlus="3.000000e-01" errorMinus="3.000000e-01"/>
+      <measurement value="7.843360e+00" errorPlus="1.635590e+00" errorMinus="1.627125e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.850000e+00" errorPlus="3.500000e-01" errorMinus="3.500000e-01"/>
+      <measurement value="4.752390e+00" errorPlus="9.687109e-01" errorMinus="9.775894e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.700000e+00" errorPlus="5.000000e-01" errorMinus="5.000000e-01"/>
+      <measurement value="2.541410e+00" errorPlus="5.499359e-01" errorMinus="5.506720e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.850000e+00" errorPlus="6.500000e-01" errorMinus="6.500000e-01"/>
+      <measurement value="1.391200e+00" errorPlus="2.939656e-01" errorMinus="2.947572e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.350000e+00" errorPlus="8.500000e-01" errorMinus="8.500000e-01"/>
+      <measurement value="6.553130e-01" errorPlus="1.400664e-01" errorMinus="1.400795e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.250000e+00" errorPlus="1.050000e+00" errorMinus="1.050000e+00"/>
+      <measurement value="3.099090e-01" errorPlus="6.022957e-02" errorMinus="6.218028e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.065000e+01" errorPlus="1.350000e+00" errorMinus="1.350000e+00"/>
+      <measurement value="1.313330e-01" errorPlus="2.451056e-02" errorMinus="2.481022e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.600000e+01" errorPlus="4.000000e+00" errorMinus="4.000000e+00"/>
+      <measurement value="3.386430e-02" errorPlus="7.065365e-03" errorMinus="7.220122e-03"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d09-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d09-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="5.000000e-02" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.488830e+01" errorPlus="5.244849e+00" errorMinus="5.264737e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.436980e+01" errorPlus="5.030224e+00" errorMinus="5.049694e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.433290e+01" errorPlus="5.185530e+00" errorMinus="5.211291e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.384070e+01" errorPlus="4.849227e+00" errorMinus="4.915410e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.270670e+01" errorPlus="4.814459e+00" errorMinus="4.827157e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.162690e+01" errorPlus="4.612352e+00" errorMinus="4.626821e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.080160e+01" errorPlus="4.112624e+00" errorMinus="4.080438e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.965030e+01" errorPlus="4.194639e+00" errorMinus="4.188557e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.760150e+01" errorPlus="3.850092e+00" errorMinus="3.859756e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.634290e+01" errorPlus="3.272212e+00" errorMinus="3.289986e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.050000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.444420e+01" errorPlus="2.914421e+00" errorMinus="2.955342e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.150000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.271440e+01" errorPlus="2.765683e+00" errorMinus="2.791937e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.250000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.162280e+01" errorPlus="2.437281e+00" errorMinus="2.418043e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.350000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="9.898210e+00" errorPlus="1.986521e+00" errorMinus="1.997269e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.450000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="8.276860e+00" errorPlus="1.791985e+00" errorMinus="1.742947e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.600000e+00" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="5.999230e+00" errorPlus="1.222396e+00" errorMinus="1.234600e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.800000e+00" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="3.459200e+00" errorPlus="7.292973e-01" errorMinus="7.516454e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.200000e+00" errorPlus="3.000000e-01" errorMinus="3.000000e-01"/>
+      <measurement value="6.812840e-01" errorPlus="1.480814e-01" errorMinus="1.508826e-01"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d03-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d03-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="1.750000e+01" errorPlus="1.750000e+01" errorMinus="1.750000e+01"/>
+      <measurement value="3.873990e-01" errorPlus="8.507997e-02" errorMinus="8.530850e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.500000e+01" errorPlus="2.000000e+01" errorMinus="2.000000e+01"/>
+      <measurement value="2.185730e-01" errorPlus="4.668723e-02" errorMinus="4.652990e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.000000e+02" errorPlus="2.500000e+01" errorMinus="2.500000e+01"/>
+      <measurement value="7.960280e-02" errorPlus="1.622339e-02" errorMinus="1.609056e-02"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.475000e+02" errorPlus="2.250000e+01" errorMinus="2.250000e+01"/>
+      <measurement value="3.520890e-02" errorPlus="7.317778e-03" errorMinus="7.313912e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.975000e+02" errorPlus="2.750000e+01" errorMinus="2.750000e+01"/>
+      <measurement value="1.654870e-02" errorPlus="3.386647e-03" errorMinus="3.336376e-03"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.125000e+02" errorPlus="2.875000e+02" errorMinus="2.875000e+02"/>
+      <measurement value="1.473650e-03" errorPlus="2.860936e-04" errorMinus="2.833055e-04"/>
+    </dataPoint>
+  </dataPointSet>
+  <dataPointSet name="d05-x01-y01"
+    title="" path="/REF/ATLAS_2015_I1404878_custom" dimension="2">
+    <dimension dim="0" title="" />
+    <dimension dim="1" title="" />
+    <annotation>
+      <item key="Path" value="/REF/ATLAS_2015_I1404878_custom/d05-x01-y01" />
+      <item key="Title" value="" />
+      <item key="Type" value="Scatter2D" />
+    </annotation>
+    <dataPoint>
+      <measurement value="5.000000e-02" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.337060e+01" errorPlus="6.874264e+00" errorMinus="6.982955e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.342630e+01" errorPlus="6.905089e+00" errorMinus="6.943166e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.151310e+01" errorPlus="6.713137e+00" errorMinus="6.694874e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="3.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.982330e+01" errorPlus="6.425839e+00" errorMinus="6.429117e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="4.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.831300e+01" errorPlus="5.928263e+00" errorMinus="5.877913e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="5.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.592050e+01" errorPlus="5.489905e+00" errorMinus="5.464787e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="6.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.265530e+01" errorPlus="4.798533e+00" errorMinus="4.904218e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="7.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.996850e+01" errorPlus="4.194824e+00" errorMinus="4.169297e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="8.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.710840e+01" errorPlus="3.533177e+00" errorMinus="3.527369e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="9.500000e-01" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.384830e+01" errorPlus="2.910852e+00" errorMinus="2.962134e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.050000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="1.094210e+01" errorPlus="2.240899e+00" errorMinus="2.256070e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.150000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="8.672580e+00" errorPlus="1.748362e+00" errorMinus="1.755364e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.250000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="6.757060e+00" errorPlus="1.309172e+00" errorMinus="1.316904e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.350000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="4.903970e+00" errorPlus="9.850854e-01" errorMinus="1.007116e+00"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.450000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="3.394650e+00" errorPlus="7.003251e-01" errorMinus="7.138572e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.550000e+00" errorPlus="5.000000e-02" errorMinus="5.000000e-02"/>
+      <measurement value="2.349770e+00" errorPlus="5.015623e-01" errorMinus="5.052729e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="1.700000e+00" errorPlus="1.000000e-01" errorMinus="1.000000e-01"/>
+      <measurement value="1.072210e+00" errorPlus="2.107634e-01" errorMinus="2.011577e-01"/>
+    </dataPoint>
+    <dataPoint>
+      <measurement value="2.150000e+00" errorPlus="3.500000e-01" errorMinus="3.500000e-01"/>
+      <measurement value="9.208080e-02" errorPlus="2.204236e-02" errorMinus="2.181340e-02"/>
+    </dataPoint>
+  </dataPointSet>
+</aida>

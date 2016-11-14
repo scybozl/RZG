@@ -236,27 +236,27 @@ namespace Rivet {
 
 	  double absPout = fabs(vtophad.dot((vtoplep.cross(z_versor))/(vtoplep.cross(z_versor).mod())));
 	  _h_ttbar_ptout->fill(absPout);
-	  _h_ttbar_ptout_norm->fill(absPout);
+	  _h_ttbar_ptout_norm->fill(absPout, weight);
 	  
 	  double deltaPhi_ttbar = deltaPhi(toplep,tophad);
-	  _h_ttbar_deltaphi->fill(deltaPhi_ttbar);
-	  _h_ttbar_deltaphi_norm->fill(deltaPhi_ttbar);
+	  _h_ttbar_deltaphi->fill(deltaPhi_ttbar, weight);
+	  _h_ttbar_deltaphi_norm->fill(deltaPhi_ttbar, weight);
 
 	  double HT = tophad.pt() + toplep.pt();
-	  _h_ttbar_ht->fill(HT);
-	  _h_ttbar_ht_norm->fill(HT);
+	  _h_ttbar_ht->fill(HT, weight);
+	  _h_ttbar_ht_norm->fill(HT, weight);
 
 	  double rapboost = 0.5 * (fabs(tophad.rapidity() + toplep.rapidity()));
 	  if(!isnan(rapboost)){
-	  _h_ttbar_rapboost->fill(rapboost);
-	  _h_ttbar_rapboost_norm->fill(rapboost);
+	  _h_ttbar_rapboost->fill(rapboost, weight);
+	  _h_ttbar_rapboost_norm->fill(rapboost, weight);
 	  }
 
 	  double ystar = (tophad.pt() > toplep.pt()) ? 0.5 * (tophad.rap()-toplep.rap()) : 0.5*(toplep.rap()-tophad.rap()); 
 	  double chi_ttbar = exp(2 * fabs(ystar));
 	  if(!isnan(chi_ttbar)){
-	  _h_ttbar_chi->fill(chi_ttbar);
-	  _h_ttbar_chi_norm->fill(chi_ttbar);
+	  _h_ttbar_chi->fill(chi_ttbar, weight);
+	  _h_ttbar_chi_norm->fill(chi_ttbar, weight);
           }
 
 	  // fill only the hadronically decay top quark

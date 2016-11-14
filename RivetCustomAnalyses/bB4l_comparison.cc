@@ -11,6 +11,8 @@
 #include "Rivet/Math/Vector4.hh"
 #include "Rivet/Particle.hh"
 
+#include "YODA/Scatter2D.h"
+
 namespace Rivet {
 
 
@@ -82,7 +84,7 @@ namespace Rivet {
 	_histdeltaRl = bookHisto1D("deltaRl", 20, 0, 5);
 	_histPtMiss = bookHisto1D("PtMiss", 25, 0, 400);
 	_histHT = bookHisto1D("HT", 20, 0, 1200);
-	_histMlb = bookHisto1D("Mlb", 50, 0, 350);
+//	_histMlb = bookHisto1D("Mlb", 50, 0, 350);
 
 	_histmWjB = bookHisto1D("mWjB", 40, 150, 200);
 	_histmljB = bookHisto1D("mljB", 50, 0, 350);
@@ -91,9 +93,11 @@ namespace Rivet {
 	_histxB   = bookHisto1D("xB", 20, 0, 1);
 	_histpTbDec = bookHisto1D("pTbDec", 15, 0, 30);
 
-	_histmlb = bookHisto1D("mlb", 50, 0, 350);
-	_histmLeptonsjB = bookHisto1D("mLeptonsjB", 50, 0, 350);
-    }
+//	_histmlb = bookHisto1D("mlb", 50, 0, 350);
+//	_histmLeptonsjB = bookHisto1D("mLeptonsjB", 50, 0, 350);
+ 
+	YODA::Scatter2D _scatterPjB = Scatter2D("PjB");
+   }
 
 
     /// Perform the per-event analysis
@@ -338,24 +342,37 @@ namespace Rivet {
 	_histmjB->fill((b_jets[0]->momentum().mass() + b_bar_jets[0]->momentum().mass())/2, weight);
 	if(!leptonsP.empty() && !leptonsM.empty()) {
 		 _histmljB->fill(((Particle(leptonsP[0]).momentum()+b_jets[0]->momentum()).mass() + (Particle(leptonsM[0]).momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
-}	
+}
+     for (double delR = 0; delR <= 2.0; delR += 2.0/50) {
+        double sumpTb=0;
+        double sumpTB=0;
+        foreach (const GenParticle* p, Rivet::particles(event.genEvent())) {
+          if (isHadron(p) && deltaR(FourMomentum(p->momentum()), b_jets[0]->momentum()) < delR) sumpTb += Particle(*p).pT();
+          if (isHadron(p) && deltaR(FourMomentum(p->momentum()), b_bar_jets[0]->momentum()) < delR) sumpTB += Particle(*p).pT();
+        }
+        double entry = crossSection()*1/2*(sumpTb/b_jets[0]->pT() + sumpTB/b_bar_jets[0]->pT());
+        _scatterPjB.addPoint(delR, entry);
+      }
+
+	
      }
 	_histPtMiss->fill(MET, weight);
+
 	//_histHT->fill(HT, weight);
 	//if(passed_Mlb == true) {
-        if(b_jets_old.size() >= 2 && !elecFS.empty() && !muonFS.empty()) {
-		if((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass()
-		> (elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass()) {
-		_histMlb->fill(((elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass())/2, weight);
-		}
-		else _histMlb->fill(((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass())/2, weight);
-	}
-	if(b_jets.size()>=1 && b_bar_jets.size()>=1 && !elecFS.empty() && !muonFS.empty()){
-	  _histmLeptonsjB->fill(((elecFS[0].momentum()+b_jets[0]->momentum()).mass() + (muonFS[0].momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
-	}
-	if(bs.size()>=1 && bbars.size()>=1 && !elecFS.empty() && !muonFS.empty()){
-	   _histmlb->fill(((elecFS[0].momentum()+Particle(bs[0]).momentum()).mass() + (muonFS[0].momentum()+Particle(bbars[0]).momentum()).mass())/2, weight);
-	}
+//        if(b_jets_old.size() >= 2 && !elecFS.empty() && !muonFS.empty()) {
+//		if((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass()
+//		> (elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass()) {
+//		_histMlb->fill(((elecFS[0].momentum() + b_jets_old[1]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[0]->momentum()).mass())/2, weight);
+//		}
+//		else _histMlb->fill(((elecFS[0].momentum() + b_jets_old[0]->momentum()).mass() + (muonFS[0].momentum() + b_jets_old[1]->momentum()).mass())/2, weight);
+//	}
+//	if(b_jets.size()>=1 && b_bar_jets.size()>=1 && !elecFS.empty() && !muonFS.empty()){
+//	  _histmLeptonsjB->fill(((elecFS[0].momentum()+b_jets[0]->momentum()).mass() + (muonFS[0].momentum()+b_bar_jets[0]->momentum()).mass())/2, weight);
+//	}
+//	if(bs.size()>=1 && bbars.size()>=1 && !elecFS.empty() && !muonFS.empty()){
+//	   _histmlb->fill(((elecFS[0].momentum()+Particle(bs[0]).momentum()).mass() + (muonFS[0].momentum()+Particle(bbars[0]).momentum()).mass())/2, weight);
+//	}
       
     }
 
@@ -379,12 +396,12 @@ namespace Rivet {
 	scale(_histdeltaRl, norm);
 	scale(_histPtMiss, norm);
 	scale(_histHT, norm);
-	scale(_histMlb, norm);
+//	scale(_histMlb, norm);
 	scale(_histmWjB, norm);
 	scale(_histmljB, norm);
 	scale(_histmjB, norm);
-	scale(_histmLeptonsjB, norm);
-        scale(_histmlb, norm);
+//	scale(_histmLeptonsjB, norm);
+//        scale(_histmlb, norm);
       //const double norm = crossSection()/sumOfWeights();
       //typedef map<unsigned int, Histo1DPtr>::value_type IDtoHisto1DPtr; ///< @todo Remove when C++11 allowed
       //foreach (IDtoHisto1DPtr ihpair, _hMap) scale(ihpair.second, norm); ///< @todo Use normalize(ihpair.second, crossSection())
@@ -404,10 +421,10 @@ namespace Rivet {
 	Histo1DPtr _histdeltaRl;
 	Histo1DPtr _histPtMiss;
 	Histo1DPtr _histHT;
-	Histo1DPtr _histMlb;
+//	Histo1DPtr _histMlb;
 
-	Histo1DPtr _histmlb;
-        Histo1DPtr _histmLeptonsjB;
+//	Histo1DPtr _histmlb;
+//        Histo1DPtr _histmLeptonsjB;
 
 	Histo1DPtr _histmWjB;
         Histo1DPtr _histmljB;
@@ -415,6 +432,8 @@ namespace Rivet {
         Histo1DPtr _histdeltaR;
         Histo1DPtr _histxB;
         Histo1DPtr _histpTbDec;
+
+	YODA::Scatter2D _scatterPjB;
 /*
     unsigned int _thresholdLimit(unsigned int histId) {
       if (histId == 0) return 4;
