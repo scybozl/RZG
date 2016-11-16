@@ -40,12 +40,23 @@ def initRun():
     os.system("chmod a+x initRun.sh")
     os.system("./initRun.sh")
     
-def createInputFile(order, Ecm, scale, PDF, shower, matching):
+def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass):
 
 
     if order=="LO":
 
-      inputFileName=WorkFolder+"GenericLO/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+".in"
+      gosamFilename=WorkFolder+"GenericLO/gosamtT"+topmass+".rc"
+      GenericGosamFile=open(GoSamLO, 'r')
+      gosamFile=open(gosamFilename, 'w')
+
+      for line in GenericGosamFile:
+	if line.find("mT=172.5")!=-1:
+	  gosamFile.write("                        GF=0.0000116637, mT="+topmass.split("*GeV")[0]+", wT=1.4426\n")
+	else: gosamFile.write(line)
+      
+
+
+      inputFileName=WorkFolder+"GenericLO/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+".in"
       GenericfileLO=open(SettingsFolder+GenericInputFileLO,'r')
       fileLO=open(inputFileName,'w')
 
@@ -70,12 +81,26 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching):
 	  if shower=="default": fileLO.write("read Matchbox/FiveFlavourScheme.in\n")
 	  elif shower=="dipole": fileLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
 	  else: print "Wrong shower setting\n"
-	elif line.find("saverun")!=-1: fileLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+" EventGenerator")
+	elif line.find("set t:NominalMass")!=-1:
+	  fileLO.write("set t:NominalMass "+topmass+"*GeV\n")
+	  fileLO.write("set t:HardProcessMass "+topmass+"*GeV\n")
+	elif line.find("gosamtT")!=-1:
+	  fileLO.write("set Amplitudes/GoSam:SetupInFilename gosamtT"+topmass+".rc")
+	elif line.find("saverun")!=-1: fileLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+" EventGenerator")
 	else: fileLO.write(line)	
 
     if order=="NLO":
 
-      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+".in"
+      gosamFilename=WorkFolder+"Generic/gosamtTNLO"+topmass+".rc"
+      GenericGosamFile=open(GoSamNLO, 'r')
+      gosamFile=open(gosamFilename, 'w')
+
+      for line in GenericGosamFile:
+        if line.find("mT=172.5")!=-1:
+          gosamFile.write("                        GF=0.0000116637, mT="+topmass.split("*GeV")[0]+", wT=1.4426\n")
+        else: gosamFile.write(line)
+
+      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+".in"
       GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
       fileNLO=open(inputFileName,'w')
       
@@ -89,21 +114,35 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching):
           else:
             fileNLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
         elif line.find("set myPDFset:PDFName")!=-1:
-          fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
+          if(PDF!="MSTW2008nnlo") fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
+	  if(PDF=="MSTW2008nnlo") 
+		fileNLO.write("set myPDFset:PDFName "+PDF+"68cl\n")
+		fileNLO.write("cd /Herwig/Couplings\n")
+
+		fileNLO.write("set NLOAlphaS:input_scale 91.1876*GeV\n")
+		fileNLO.write("set NLOAlphaS:input_alpha_s 0.11707\n")
+		fileNLO.write("set NLOAlphaS:QuarkMasses 0, 0, 0, 1.4, 4.75, 1e+10")
+		fileNLO.write("set NLOAlphaS:max_active_flavours 5")
+
         elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
           if order=="NLO" and shower=="default": 
-		if matching=="MCatNLO": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
 		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DefaultShower.in\n")
 		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
           elif order=="NLO" and shower=="dipole":
-		if matching=="MCatNLO": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
+		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
 		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DipoleShower.in\n")
           else: print "Wrong shower setting\n"
 	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
           if shower=="default": fileNLO.write("read Matchbox/FiveFlavourScheme.in\n")
           elif shower=="dipole": fileNLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
           else: print "Wrong shower setting\n"
-        elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+" EventGenerator")
+	elif line.find("set t:NominalMass")!=-1:
+          fileNLO.write("set t:NominalMass "+topmass+"*GeV\n")
+          fileNLO.write("set t:HardProcessMass "+topmass+"*GeV\n")
+	elif line.find("gosamtT")!=-1:
+          fileNLO.write("set Amplitudes/GoSam:SetupInFilename gosamtTNLO"+topmass+".rc") 
+        elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+" EventGenerator")
         else: fileNLO.write(line)
 
 def SubmitHerwigJob(inputfile):
@@ -165,9 +204,12 @@ for orders in options[0].split("\t"):
 	     for matchings in options[5].split("\t"):
 
 		matching=matchings
+		for topmasses in options[6].split("\t"):
 
-		createInputFile(order, Ecm, scale, pdf, shower, matching)
-		SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+".in")
+		  topmass=topmasses
+
+		  createInputFile(order, Ecm, scale, pdf, shower, matching, topmass)
+		  SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+".in")
 
 #initRun()
 #for i in range(100):

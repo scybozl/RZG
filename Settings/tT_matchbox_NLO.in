@@ -197,6 +197,14 @@ set /Herwig/Particles/pbar-:PDF myPDFset
 set /Herwig/Partons/QCDExtractor:FirstPDF myPDFset
 set /Herwig/Partons/QCDExtractor:SecondPDF myPDFset
 
+#cd /Herwig/Couplings
+
+#set NLOAlphaS:input_scale 91.1876*GeV
+#set NLOAlphaS:input_alpha_s 0.135
+#set NLOAlphaS:QuarkMasses 0, 0, 0, 1.4, 4.75, 1e+10
+#set NLOAlphaS:max_active_flavours 5
+
+
 #set /Herwig/Partons/HardLOPDF:PDFName MSTW2008nlo68cl
 #set /Herwig/Partons/HardNLOPDF:PDFName MSTW2008nlo68cl
 
