@@ -191,6 +191,7 @@ create ThePEG::LHAPDF myPDFset ThePEGLHAPDF.so
 set myPDFset:PDFName MSTW2008nlo68cl
 set myPDFset:RemnantHandler HadronRemnants
 
+cd /Herwig/Partons
 set /Herwig/Particles/p+:PDF myPDFset
 set /Herwig/Particles/pbar-:PDF myPDFset
 
