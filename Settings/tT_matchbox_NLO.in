@@ -188,8 +188,8 @@ set /Herwig/MatrixElements/Matchbox/Factory:FixedQEDCouplings On
 
 cd /Herwig/Partons
 create ThePEG::LHAPDF myPDFset ThePEGLHAPDF.so
-set myPDFset:PDFName MSTW2008nlo68cl
 set myPDFset:RemnantHandler HadronRemnants
+set myPDFset:PDFName MSTW2008nlo68cl
 
 cd /Herwig/Partons
 set /Herwig/Particles/p+:PDF myPDFset
