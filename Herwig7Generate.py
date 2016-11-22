@@ -8,8 +8,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 20000
-nRuns = 500
+nEvPerFile = 10000
+nRuns = 1000
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -121,7 +121,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -o /dev/null -e /dev/null "+ submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -194,7 +194,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or alphaSMZ!="1.405556e-01" or Ecm!="8000")
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -213,12 +213,22 @@ for subdir in SubDirPath(pars):
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
 	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
+				if (i+1)%400==0:
+					while True:
+		                          os.system('qstat -u lscyboz > file')
+                		          strn=open('file', 'r').read()
+           		                  if len(strn) <= 800: break
+                          #if sum(1 for line in strn)<402: break
+                                          time.sleep(15)
+                                          print "."
+                                        print "\n"
+
 
 			## As long as there are processed jobs in the queue, wait
 	                while True:
 	                  os.system('qstat -u lscyboz > file')
 	                  strn=open('file', 'r').read()
-	                  if len(strn) <= 500: break
+	                  if len(strn) <= 800: break
 	                  #if sum(1 for line in strn)<402: break
 	                  time.sleep(15)
 	                  print "."

@@ -114,8 +114,7 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass):
           else:
             fileNLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
         elif line.find("set myPDFset:PDFName")!=-1:
-          if PDF!="MSTW2008nnlo": fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
-	  elif PDF=="MSTW2008nnlo": 
+	  if PDF=="MSTW2008nnlo": 
 		fileNLO.write("set myPDFset:PDFName "+PDF+"68cl\n")
 		fileNLO.write("cd /Herwig/Couplings\n")
 
@@ -123,6 +122,16 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass):
 		fileNLO.write("set NLOAlphaS:input_alpha_s 0.11707\n")
 		fileNLO.write("set NLOAlphaS:QuarkMasses 0, 0, 0, 1.4, 4.75, 1e+10\n")
 		fileNLO.write("set NLOAlphaS:max_active_flavours 5\n")
+	  elif PDF=="NNPDF":
+		fileNLO.write("set myPDFset:PDFName "+PDF+"30_nlo_as_0118\n")
+                fileNLO.write("cd /Herwig/Couplings\n")
+
+                fileNLO.write("set NLOAlphaS:input_scale 91.199997*GeV\n")
+                fileNLO.write("set NLOAlphaS:input_alpha_s 0.118\n")
+                fileNLO.write("set NLOAlphaS:QuarkMasses 0, 0, 0, 1.275, 4.18, 173.07\n")
+                fileNLO.write("set NLOAlphaS:max_active_flavours 5\n")
+
+          else: fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
 
         elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
           if order=="NLO" and shower=="default": 
@@ -173,7 +182,7 @@ def SubmitHerwigJob(inputfile):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -e /dev/null -o /dev/null "+ submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)       
         return True
 
