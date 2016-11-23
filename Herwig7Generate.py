@@ -186,7 +186,9 @@ for subdir in SubDirPath(pars):
 			topmass=topmasses
 	                ## Name tag for the run
 	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
+			settingsdiLep=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_dilepton_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
+			sampledParsdiLep = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settingsdiLep+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
 	                ## options file at the right placee
@@ -206,7 +208,8 @@ for subdir in SubDirPath(pars):
 	                print "Now processing "+settings+"...\n"
 
 	                ## Submit the job to Herwig
-	                for i in range(nRuns):
+			if Ecm!="13000":
+	                  for i in range(nRuns):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
@@ -222,7 +225,28 @@ for subdir in SubDirPath(pars):
                                           time.sleep(15)
                                           print "."
                                         print "\n"
+			## IF some yoda files were generated a second time, re-run the yoda merging
+                        flag=False
+                        print "Now processing "+settingsdiLep+"...\n"
 
+			## Submit the job to Herwig (dilepton channel)
+			if Ecm=="13000":
+                          for i in range(nRuns):
+                                spec='%03.0f' % (i,)
+                                if not os.path.exists(sampledParsdiLep+spec):
+                                  os.system("mkdir -p "+sampledParsdilep+spec)
+                                os.system("cp "+InputFolder+"Herwig_"+settingsdiLep.split("_"+alphaSMZ)[0]+".in "+sampledParsdiLep)
+                                if (i+1)%100==0: print "Processing run #"+str(i)
+                                SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settingsdiLep.split("_"+alphaSMZ)[0]+".run", index)
+                                if (i+1)%400==0:
+                                        while True:
+                                          os.system('qstat -u lscyboz > file')
+                                          strn=open('file', 'r').read()
+                                          if len(strn) <= 800: break
+                          #if sum(1 for line in strn)<402: break
+                                          time.sleep(15)
+                                          print "."
+                                        print "\n"
 
 			## As long as there are processed jobs in the queue, wait
 	                while True:
