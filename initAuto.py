@@ -100,23 +100,37 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass):
           gosamFile.write("                        GF=0.0000116637, mT="+topmass.split("*GeV")[0]+", wT=1.4426\n")
         else: gosamFile.write(line)
 
-      inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+".in"
-      GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
-      fileNLO=open(inputFileName,'w')
+
+      inputFileName1=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+".in"
+
+      ### Also create another input file in case the ttJets routine is to be used (only dilepton channel)
+      inputFileName2=inputFileName1.split(".in")[0]+"_dilepton.in"
+      if Ecm==13000:
+	inputList = [inputFileName1, inputFileName2]
+      else:
+	inputList = [inputFileName1]
+
+      for inputFileName in inputList:
+       GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
+       fileNLO=open(inputFileName,'w')
       
-      for line in GenericfileNLO:
+       for line in GenericfileNLO:
+	if inputFileName==inputFileName2 and line.find("set t:Width")!=-1:
+	   fileNLO.write("do t:SelectDecayModes t->nu_mu,mu+,b; t->nu_e,e+,b; t->nu_tau,tau+,b;\n")
+	   fileNLO.write("create Herwig::BranchingRatioReweighter /Herwig/Generators/BRReweighter\n")
+	   fileNLO.write("insert /Herwig/Generators/EventGenerator:EventHandler:PostDecayHandlers 0 /Herwig/Generators/BRReweighter\n")
         if line.find("set EventHandler:LuminosityFunction")!=-1:
-          fileNLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"*GeV"+"\n")
+           fileNLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"*GeV"+"\n")
         elif line.find("set Factory:ScaleChoice")!=-1:
-          if scale!="TopPairMassScale" and scale!="TopPairMTScale":
-            fileNLO.write("set Factory:ScaleChoice Scales/FixedScale\n")
-            fileNLO.write("set Scales/FixedScale:FixedScale "+scale+"*GeV"+"\n")
-          else:
-            fileNLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
+           if scale!="TopPairMassScale" and scale!="TopPairMTScale":
+             fileNLO.write("set Factory:ScaleChoice Scales/FixedScale\n")
+             fileNLO.write("set Scales/FixedScale:FixedScale "+scale+"*GeV"+"\n")
+           else:
+             fileNLO.write("set Factory:ScaleChoice Scales/"+scale+"\n")
         elif line.find("set myPDFset:PDFName")!=-1:
-	  if PDF=="MSTW2008nnlo": 
-		fileNLO.write("set myPDFset:PDFName "+PDF+"68cl\n")
-		fileNLO.write("cd /Herwig/Couplings\n")
+ 	  if PDF=="MSTW2008nnlo": 
+ 		fileNLO.write("set myPDFset:PDFName "+PDF+"68cl\n")
+ 		fileNLO.write("cd /Herwig/Couplings\n")
 
 		fileNLO.write("set NLOAlphaS:input_scale 91.1876*GeV\n")
 		fileNLO.write("set NLOAlphaS:input_alpha_s 0.11707\n")
@@ -134,23 +148,23 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass):
           else: fileNLO.write("set myPDFset:PDFName "+PDF+"nlo68cl\n")
 
         elif line.find("read Matchbox/LO-DefaultShower.in")!=-1:
-          if order=="NLO" and shower=="default": 
-		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
-		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DefaultShower.in\n")
-		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
-          elif order=="NLO" and shower=="dipole":
-		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
-		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DipoleShower.in\n")
-          else: print "Wrong shower setting\n"
-	elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
-          if shower=="default": fileNLO.write("read Matchbox/FiveFlavourScheme.in\n")
-          elif shower=="dipole": fileNLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
-          else: print "Wrong shower setting\n"
-	elif line.find("set t:NominalMass")!=-1:
-          fileNLO.write("set t:NominalMass "+topmass+"*GeV\n")
-          fileNLO.write("set t:HardProcessMass "+topmass+"*GeV\n")
-	elif line.find("gosamtT")!=-1:
-          fileNLO.write("set Amplitudes/GoSam:SetupInFilename gosamtTNLO"+topmass+".rc") 
+           if order=="NLO" and shower=="default": 
+ 		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
+ 		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DefaultShower.in\n")
+ 		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
+           elif order=="NLO" and shower=="dipole":
+ 		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
+ 		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DipoleShower.in\n")
+           else: print "Wrong shower setting\n"
+        elif line.find("read Matchbox/FiveFlavourScheme")!=-1:
+           if shower=="default": fileNLO.write("read Matchbox/FiveFlavourScheme.in\n")
+           elif shower=="dipole": fileNLO.write("read Matchbox/FiveFlavourNoBMassScheme.in\n")
+           else: print "Wrong shower setting\n"
+ 	elif line.find("set t:NominalMass")!=-1:
+           fileNLO.write("set t:NominalMass "+topmass+"*GeV\n")
+           fileNLO.write("set t:HardProcessMass "+topmass+"*GeV\n")
+ 	elif line.find("gosamtT")!=-1:
+           fileNLO.write("set Amplitudes/GoSam:SetupInFilename gosamtTNLO"+topmass+".rc") 
         elif line.find("saverun")!=-1: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+" EventGenerator")
         else: fileNLO.write(line)
 
@@ -189,7 +203,7 @@ def SubmitHerwigJob(inputfile):
     else:
       return False
 
-optionsFile = open("options2.in", 'r')
+optionsFile = open("options.in", 'r')
 options = optionsFile.read().split("\n")
 
 os.system("cp "+GoSamLO+" "+WorkFolder+"GenericLO/")
