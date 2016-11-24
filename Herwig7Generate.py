@@ -103,7 +103,10 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         analyses=""
         for routines in options[index].split("\t"):
+	  if InputFileNameGen.find("dilepton")==-1:
                 analyses += " -a "+routines
+	  else:
+		analyses += " -a ATLAS_2015_ttJets"
         for norms in options[index+1].split("\t"):
                 codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+norms+".yoda -x "+norms)
         codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+"unnorm.yoda")
@@ -196,7 +199,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or alphaSMZ!="1.316667e-01")
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ!="1.405556e-01"))# and alphaSMZ!="1.427778e-01"))
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -208,8 +211,7 @@ for subdir in SubDirPath(pars):
 	                print "Now processing "+settings+"...\n"
 
 	                ## Submit the job to Herwig
-			if Ecm!="13000":
-	                  for i in range(nRuns):
+	                for i in range(nRuns):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
@@ -229,7 +231,7 @@ for subdir in SubDirPath(pars):
                         flag=False
                         print "Now processing "+settingsdiLep+"...\n"
 
-			## Submit the job to Herwig (dilepton channel)
+			## Submit the job to Herwig (dilepton channel) a second time
 			if Ecm=="13000":
                           for i in range(nRuns):
                                 spec='%03.0f' % (i,)
@@ -268,3 +270,14 @@ for subdir in SubDirPath(pars):
 	                  os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
 
 			os.system("cp "+sampledPars+"MC_Herwig_"+settings+"*.yoda "+subdir)
+
+			## Yoda-merge the dilepton channel files
+                        for norms in options[index+1].split("\t"):
+                          if not os.path.exists(sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_"+norms+".yoda") or flag==True or newMerge==True:
+                                print "Yoda-merging "+settingsdiLep+" at xs="+norms+" pb"
+                                os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_"+norms+".yoda")
+                        if not os.path.exists(sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda") or flag==True or newMerge==True:
+                          print "Yoda-merging "+settingsdilep+" at generated cross-section"
+                          os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda")
+
+                        os.system("cp "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"*.yoda "+subdir)
