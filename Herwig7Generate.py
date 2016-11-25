@@ -236,7 +236,7 @@ for subdir in SubDirPath(pars):
                           for i in range(nRuns):
                                 spec='%03.0f' % (i,)
                                 if not os.path.exists(sampledParsdiLep+spec):
-                                  os.system("mkdir -p "+sampledParsdilep+spec)
+                                  os.system("mkdir -p "+sampledParsdiLep+spec)
                                 os.system("cp "+InputFolder+"Herwig_"+settingsdiLep.split("_"+alphaSMZ)[0]+".in "+sampledParsdiLep)
                                 if (i+1)%100==0: print "Processing run #"+str(i)
                                 SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settingsdiLep.split("_"+alphaSMZ)[0]+".run", index)
@@ -277,7 +277,7 @@ for subdir in SubDirPath(pars):
                                 print "Yoda-merging "+settingsdiLep+" at xs="+norms+" pb"
                                 os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_"+norms+".yoda")
                         if not os.path.exists(sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda") or flag==True or newMerge==True:
-                          print "Yoda-merging "+settingsdilep+" at generated cross-section"
+                          print "Yoda-merging "+settingsdiLep+" at generated cross-section"
                           os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda")
 
                         os.system("cp "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"*.yoda "+subdir)
