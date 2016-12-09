@@ -18,6 +18,9 @@
 namespace Rivet {
 
   class ATLAS_2015_ttJets : public Analysis {
+
+  #include "NLOHisto1D.cc"
+
   public:
     
     ATLAS_2015_ttJets() : Analysis("ATLAS_2015_ttJets"){ }
@@ -94,17 +97,25 @@ namespace Rivet {
 
     void initializeHistos() {
       // ========== Event Count ===============
-      _h_Nevents           = bookHisto1D ("Nevents", 3, 0, 3);  
+      _h_Nevents           = bookNLOHisto1D ("Nevents", 3, 0, 3);  
 
-      _h_bjet_pt           = bookHisto1D (1,1,1);
-      _h_2bjet_pt          = bookHisto1D (2,1,1);
-      _h_ljet_pt           = bookHisto1D (3,1,1);
+      const double pt0[] = {35.,55.,75.,97.5,130.,200.,625.};
+      const double pt1[] = {32.5,47.5,65.,87.5,125.,575.};
+      const double pt2[] = {32.5,50.,72.5,97.5,130.,200.,625.};
+
+      const std::vector<double> binEdgespt0(pt0, pt0+sizeof(pt0)/sizeof(pt0[0]));
+      const std::vector<double> binEdgespt1(pt1, pt1+sizeof(pt1)/sizeof(pt1[0]));
+      const std::vector<double> binEdgespt2(pt2, pt2+sizeof(pt2)/sizeof(pt2[0]));
+
+      _h_bjet_pt           = bookNLOHisto1D ("d01-x01-y01",binEdgespt0);
+      _h_2bjet_pt          = bookNLOHisto1D ("d02-x01-y01",binEdgespt1);
+      _h_ljet_pt           = bookNLOHisto1D ("d03-x01-y01",binEdgespt2);
 
       // ========== Jet multiplicity ========== 
-      _h_njet25 	  = bookHisto1D ("Mult25", 5, -0.5, 4.5);
-      _h_njet40 	  = bookHisto1D ("Mult40", 4, -0.5, 3.5);
-      _h_njet60 	  = bookHisto1D ("Mult60", 4, -0.5, 3.5);
-      _h_njet80 	  = bookHisto1D ("Mult80", 4, -0.5, 3.5);
+      _h_njet25 	  = bookNLOHisto1D ("Mult25", 5, -0.5, 4.5);
+      _h_njet40 	  = bookNLOHisto1D ("Mult40", 4, -0.5, 3.5);
+      _h_njet60 	  = bookNLOHisto1D ("Mult60", 4, -0.5, 3.5);
+      _h_njet80 	  = bookNLOHisto1D ("Mult80", 4, -0.5, 3.5);
 
       // ========== Gap Fraction===============
       const double q0[] = {25.,35.,45.,55.,65.,75.,85.,95.,110.,130.,150.,170.,190.,210.,230.,250.,270.,300.,310.};
@@ -113,23 +124,23 @@ namespace Rivet {
       const double qsum[] = {25.,35.,45.,55.,65.,75.,85.,95.,110.,130.,150.,170.,190.,210.,230.,250.,270.,300.,340.,380.,420.,500.,510.};
       const std::vector<double> binEdgesQSum(qsum,qsum+sizeof(qsum)/sizeof(qsum[0]));
 
-      _h_pTQ01		= bookHisto1D ("pTQ01", binEdgesQ0);
-      _h_pTQ02		= bookHisto1D ("pTQ02", binEdgesQ0);
-      _h_pTQ03		= bookHisto1D ("pTQ03", binEdgesQ0);
-      _h_pTQ04		= bookHisto1D ("pTQ04", binEdgesQ0);
-      _h_pTQsum1	= bookHisto1D ("pTQsum1", binEdgesQSum);
-      _h_pTQsum2	= bookHisto1D ("pTQsum2", binEdgesQSum);
-      _h_pTQsum3	= bookHisto1D ("pTQsum3", binEdgesQSum);
-      _h_pTQsum4	= bookHisto1D ("pTQsum4", binEdgesQSum);
+      _h_pTQ01		= bookNLOHisto1D ("pTQ01", binEdgesQ0);
+      _h_pTQ02		= bookNLOHisto1D ("pTQ02", binEdgesQ0);
+      _h_pTQ03		= bookNLOHisto1D ("pTQ03", binEdgesQ0);
+      _h_pTQ04		= bookNLOHisto1D ("pTQ04", binEdgesQ0);
+      _h_pTQsum1	= bookNLOHisto1D ("pTQsum1", binEdgesQSum);
+      _h_pTQsum2	= bookNLOHisto1D ("pTQsum2", binEdgesQSum);
+      _h_pTQsum3	= bookNLOHisto1D ("pTQsum3", binEdgesQSum);
+      _h_pTQsum4	= bookNLOHisto1D ("pTQsum4", binEdgesQSum);
 
-      _h_pTMQ01		= bookHisto1D ("pTMQ01", binEdgesQ0);
-      _h_pTMQ02		= bookHisto1D ("pTMQ02", binEdgesQ0);
-      _h_pTMQ03		= bookHisto1D ("pTMQ03", binEdgesQ0);
-      _h_pTMQ04		= bookHisto1D ("pTMQ04", binEdgesQ0);
-      _h_pTMQsum1	= bookHisto1D ("pTMQsum1", binEdgesQSum);
-      _h_pTMQsum2	= bookHisto1D ("pTMQsum2", binEdgesQSum);
-      _h_pTMQsum3	= bookHisto1D ("pTMQsum3", binEdgesQSum);
-      _h_pTMQsum4	= bookHisto1D ("pTMQsum4", binEdgesQSum);
+      _h_pTMQ01		= bookNLOHisto1D ("pTMQ01", binEdgesQ0);
+      _h_pTMQ02		= bookNLOHisto1D ("pTMQ02", binEdgesQ0);
+      _h_pTMQ03		= bookNLOHisto1D ("pTMQ03", binEdgesQ0);
+      _h_pTMQ04		= bookNLOHisto1D ("pTMQ04", binEdgesQ0);
+      _h_pTMQsum1	= bookNLOHisto1D ("pTMQsum1", binEdgesQSum);
+      _h_pTMQsum2	= bookNLOHisto1D ("pTMQsum2", binEdgesQSum);
+      _h_pTMQsum3	= bookNLOHisto1D ("pTMQsum3", binEdgesQSum);
+      _h_pTMQsum4	= bookNLOHisto1D ("pTMQsum4", binEdgesQSum);
 
       _h_gapFracQ01	= bookScatter2D ("GapFracQ01", true);
       _h_gapFracQ02	= bookScatter2D ("GapFracQ02", true);
@@ -184,7 +195,7 @@ namespace Rivet {
       }
 
       eventsBefore  += weight;
-      _h_Nevents->fill(0.5, weight);
+      _h_Nevents->fill(0.5, event);
 
       // Event Selection: Require exactly one electron and exactly one muon
       if (_electrons.size() != 1 || _muons.size() != 1) return;  
@@ -197,10 +208,10 @@ namespace Rivet {
       // Event Selection: Require at least two b-tagged jets. Collect vector of two highest pT b-jets
       Jets bjets, extrajets;
       for (unsigned int i = 0; i < all_jets.size(); i++) {
-        Particles bTags = all_jets[i].particles();
+        Particles bTags = all_jets[i].bTags();
         int count_hadrons = 0;
         foreach( Particle b, bTags ){
-          if(b.containsBottom() && b.pT() > 5*GeV && deltaR(all_jets[i],b)<0.3)
+          if(b.pT() > 5*GeV && deltaR(all_jets[i],b)<0.3)
             count_hadrons++;
         }
         bool b_tagged = false;
@@ -213,7 +224,7 @@ namespace Rivet {
       if (bjets.size() < 2)  return;
       eventsAll += weight;
       eventsEMU2B += weight;
-      _h_Nevents->fill(1.5, weight);
+      _h_Nevents->fill(1.5, event);
 
       // ========== pT Spectra ================
       double ljetpt = 0.;
@@ -221,11 +232,11 @@ namespace Rivet {
       double b2jetpt = 0.;
 
       if(extrajets.size()>0){
-        _h_Nevents->fill(2.5, weight);
+        _h_Nevents->fill(2.5, event);
         eventsEMU2B1J += weight;
         if (extrajets[0].pt()>250.*GeV) ljetpt = 275*GeV;
         else ljetpt = extrajets[0].pt();
-        _h_ljet_pt->fill(ljetpt, weight);  
+        _h_ljet_pt->fill(ljetpt, event);  
       }
       if(bjets[0].pt()>250.*GeV) bjetpt = 275*GeV;
       else bjetpt = bjets[0].pt();
@@ -233,8 +244,8 @@ namespace Rivet {
       if(bjets[1].pt()>150.*GeV) b2jetpt = 175*GeV;
       else b2jetpt = bjets[1].pt();
 
-      _h_bjet_pt->fill(bjetpt, weight); 
-      _h_2bjet_pt->fill(b2jetpt, weight); 
+      _h_bjet_pt->fill(bjetpt, event); 
+      _h_2bjet_pt->fill(b2jetpt, event); 
 
       // ========== Jet multiplicity ========== 
       unsigned int njet25 = 0;
@@ -255,10 +266,10 @@ namespace Rivet {
       if(njet60>3) njet60 = 3;
       if(njet80>3) njet80 = 3;
 
-      _h_njet25->fill(njet25, weight); 
-      _h_njet40->fill(njet40, weight);
-      _h_njet60->fill(njet60, weight);
-      _h_njet80->fill(njet80, weight);
+      _h_njet25->fill(njet25, event); 
+      _h_njet40->fill(njet40, event);
+      _h_njet60->fill(njet60, event);
+      _h_njet80->fill(njet80, event);
 
       // ========== Gap Fraction===============
       // extrajets is array of extra jets from 0 to n, highest pT first
@@ -293,14 +304,14 @@ namespace Rivet {
       if(ptsum3>505.*GeV) ptsum3 = 505.*GeV;
       if(ptsum4>505.*GeV) ptsum4 = 505.*GeV;
 
-      _h_pTQ01->fill(pt1,weight);
-      _h_pTQ02->fill(pt2,weight);
-      _h_pTQ03->fill(pt3,weight);
-      _h_pTQ04->fill(pt4,weight);
-      _h_pTQsum1->fill(ptsum1,weight);
-      _h_pTQsum2->fill(ptsum2,weight);
-      _h_pTQsum3->fill(ptsum3,weight);
-      _h_pTQsum4->fill(ptsum4,weight);
+      _h_pTQ01->fill(pt1,event);
+      _h_pTQ02->fill(pt2,event);
+      _h_pTQ03->fill(pt3,event);
+      _h_pTQ04->fill(pt4,event);
+      _h_pTQsum1->fill(ptsum1,event);
+      _h_pTQsum2->fill(ptsum2,event);
+      _h_pTQsum3->fill(ptsum3,event);
+      _h_pTQsum4->fill(ptsum4,event);
 
       // Invariant mass calculation / regions
       double Memubb = 0.;
@@ -333,23 +344,23 @@ namespace Rivet {
       Memubb = pow(pow(Etot,2)-(pe2+pmu2+pb12+pb22+2*(pepmu+pepb1+pepb2+pmupb1+pmupb2+pb1pb2)),0.5);
       if(Memubb<300.*GeV){
         eventsM1 += weight;
-        _h_pTMQ01->fill(pt4,weight);
-        _h_pTMQsum1->fill(ptsum4,weight);
+        _h_pTMQ01->fill(pt4,event);
+        _h_pTMQsum1->fill(ptsum4,event);
       }
       if(Memubb>300.*GeV && Memubb<425.*GeV){
         eventsM2 += weight;
-        _h_pTMQ02->fill(pt4,weight);
-        _h_pTMQsum2->fill(ptsum4,weight);
+        _h_pTMQ02->fill(pt4,event);
+        _h_pTMQsum2->fill(ptsum4,event);
       }
       if(Memubb>425.*GeV && Memubb<600.*GeV){
         eventsM3 += weight;
-        _h_pTMQ03->fill(pt4,weight);
-        _h_pTMQsum3->fill(ptsum4,weight);
+        _h_pTMQ03->fill(pt4,event);
+        _h_pTMQsum3->fill(ptsum4,event);
       }
       if(Memubb>600.*GeV){
         eventsM4 += weight;
-        _h_pTMQ04->fill(pt4,weight);
-        _h_pTMQsum4->fill(ptsum4,weight);
+        _h_pTMQ04->fill(pt4,event);
+        _h_pTMQsum4->fill(ptsum4,event);
       }
     }
 
@@ -362,6 +373,32 @@ namespace Rivet {
       std::cout	<< "        sumOfWeights() = " << sumOfWeights() << std::endl;
       std::cout	<< "+++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
+      _h_ljet_pt->finalize();
+      _h_bjet_pt->finalize();
+      _h_2bjet_pt->finalize();
+      _h_njet25->finalize();
+      _h_njet40->finalize();
+      _h_njet60->finalize();
+      _h_njet80->finalize();
+
+      _h_pTQ01->finalize();
+      _h_pTQ02->finalize();
+      _h_pTQ03->finalize();
+      _h_pTQ04->finalize();
+      _h_pTQsum1->finalize();
+      _h_pTQsum2->finalize();
+      _h_pTQsum3->finalize();
+      _h_pTQsum4->finalize();
+
+      _h_pTMQ01->finalize();
+      _h_pTMQ02->finalize();
+      _h_pTMQ03->finalize();
+      _h_pTMQ04->finalize();
+      _h_pTMQsum1->finalize();
+      _h_pTMQsum2->finalize();
+      _h_pTMQsum3->finalize();
+      _h_pTMQsum4->finalize();
+
       normalize(_h_ljet_pt);  
       normalize(_h_bjet_pt);  
       normalize(_h_2bjet_pt);  
@@ -369,6 +406,7 @@ namespace Rivet {
       normalize(_h_njet40);  
       normalize(_h_njet60);  
       normalize(_h_njet80);  
+
 
       // Build gap fraction plots
       for (unsigned int j = 0; j < 22; j++) {
@@ -445,34 +483,34 @@ namespace Rivet {
   private:
    
     /// @name Histogram helper functions
-    Histo1DPtr _h_Nevents;  
+    NLOHisto1DPtr _h_Nevents;  
 
-    Histo1DPtr _h_ljet_pt;
-    Histo1DPtr _h_bjet_pt;
-    Histo1DPtr _h_2bjet_pt;
+    NLOHisto1DPtr _h_ljet_pt;
+    NLOHisto1DPtr _h_bjet_pt;
+    NLOHisto1DPtr _h_2bjet_pt;
     
-    Histo1DPtr _h_njet25;
-    Histo1DPtr _h_njet40;
-    Histo1DPtr _h_njet60;
-    Histo1DPtr _h_njet80;
+    NLOHisto1DPtr _h_njet25;
+    NLOHisto1DPtr _h_njet40;
+    NLOHisto1DPtr _h_njet60;
+    NLOHisto1DPtr _h_njet80;
 
-    Histo1DPtr _h_pTQ01;
-    Histo1DPtr _h_pTQ02;
-    Histo1DPtr _h_pTQ03;
-    Histo1DPtr _h_pTQ04;
-    Histo1DPtr _h_pTQsum1;
-    Histo1DPtr _h_pTQsum2;
-    Histo1DPtr _h_pTQsum3;
-    Histo1DPtr _h_pTQsum4;
+    NLOHisto1DPtr _h_pTQ01;
+    NLOHisto1DPtr _h_pTQ02;
+    NLOHisto1DPtr _h_pTQ03;
+    NLOHisto1DPtr _h_pTQ04;
+    NLOHisto1DPtr _h_pTQsum1;
+    NLOHisto1DPtr _h_pTQsum2;
+    NLOHisto1DPtr _h_pTQsum3;
+    NLOHisto1DPtr _h_pTQsum4;
 
-    Histo1DPtr _h_pTMQ01;
-    Histo1DPtr _h_pTMQ02;
-    Histo1DPtr _h_pTMQ03;
-    Histo1DPtr _h_pTMQ04;
-    Histo1DPtr _h_pTMQsum1;
-    Histo1DPtr _h_pTMQsum2;
-    Histo1DPtr _h_pTMQsum3;
-    Histo1DPtr _h_pTMQsum4;
+    NLOHisto1DPtr _h_pTMQ01;
+    NLOHisto1DPtr _h_pTMQ02;
+    NLOHisto1DPtr _h_pTMQ03;
+    NLOHisto1DPtr _h_pTMQ04;
+    NLOHisto1DPtr _h_pTMQsum1;
+    NLOHisto1DPtr _h_pTMQsum2;
+    NLOHisto1DPtr _h_pTMQsum3;
+    NLOHisto1DPtr _h_pTMQsum4;
 
     Scatter2DPtr _h_gapFracQ01;
     Scatter2DPtr _h_gapFracQ02;
