@@ -97,11 +97,11 @@ namespace Rivet {
 
     void initializeHistos() {
       // ========== Event Count ===============
-      _h_Nevents           = bookNLOHisto1D ("Nevents", 3, 0, 3);  
+      _h_Nevents           = bookNLOHisto1D ("Nevents", 4, 0, 4);  
 
-      const double pt0[] = {35.,55.,75.,97.5,130.,200.,625.};
-      const double pt1[] = {32.5,47.5,65.,87.5,125.,575.};
-      const double pt2[] = {32.5,50.,72.5,97.5,130.,200.,625.};
+      const double pt0[] = {25.,45.,65.,85.,110.,150.,250.,1000.};
+      const double pt1[] = {25.,40.,55.,75.,100.,150.,1000.};
+      const double pt2[] = {25.,40.,60.,85.,110.,150.,250.,1000.};
 
       const std::vector<double> binEdgespt0(pt0, pt0+sizeof(pt0)/sizeof(pt0[0]));
       const std::vector<double> binEdgespt1(pt1, pt1+sizeof(pt1)/sizeof(pt1[0]));
@@ -359,6 +359,7 @@ namespace Rivet {
       }
       if(Memubb>600.*GeV){
         eventsM4 += weight;
+	_h_Nevents->fill(3.5,event);
         _h_pTMQ04->fill(pt4,event);
         _h_pTMQsum4->fill(ptsum4,event);
       }
