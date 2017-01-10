@@ -96,6 +96,11 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
+	if float(alphaSMZ)>=0.145:
+	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:Qmin 1.200' >> "+OutputFolder+SetupFileNameGen)
+	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:ThresholdOption Current' >> "+OutputFolder+SetupFileNameGen)
+	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:NumberOfLoops 3' >> "+OutputFolder+SetupFileNameGen)
+
 	if(InputFileNameGen.find("dipole")!=-1):
 	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
@@ -103,10 +108,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         analyses=""
         for routines in options[index].split("\t"):
-	  if InputFileNameGen.find("dilepton")==-1:
                 analyses += " -a "+routines
-	  else:
-		analyses += " -a ATLAS_2015_ttJets"
         for norms in options[index+1].split("\t"):
                 codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+norms+".yoda -x "+norms)
         codeLines2.append("rivet"+analyses+" "+tmp+OutputFile+" -H "+OutputYoda+"unnorm.yoda")
@@ -124,7 +126,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub "+ submitFileNameSH
+        cmd = "qsub -l h_rt=05:00:00 "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -189,9 +191,7 @@ for subdir in SubDirPath(pars):
 			topmass=topmasses
 	                ## Name tag for the run
 	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
-			settingsdiLep=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_dilepton_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
-			sampledParsdiLep = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settingsdiLep+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
 	                ## options file at the right placee
@@ -199,7 +199,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ!="1.405556e-01"))# and alphaSMZ!="1.427778e-01"))
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ!="1.450000e-01"))# and alphaSMZ!="1.427778e-01"))
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -209,6 +209,7 @@ for subdir in SubDirPath(pars):
 	                ## IF some yoda files were generated a second time, re-run the yoda merging
 	                flag=False
 	                print "Now processing "+settings+"...\n"
+
 
 	                ## Submit the job to Herwig
 	                for i in range(nRuns):
@@ -223,28 +224,6 @@ for subdir in SubDirPath(pars):
 		                          os.system('qstat -u lscyboz > file')
                 		          strn=open('file', 'r').read()
            		                  if len(strn) <= 800: break
-                          #if sum(1 for line in strn)<402: break
-                                          time.sleep(15)
-                                          print "."
-                                        print "\n"
-			## IF some yoda files were generated a second time, re-run the yoda merging
-                        flag=False
-                        print "Now processing "+settingsdiLep+"...\n"
-
-			## Submit the job to Herwig (dilepton channel) a second time
-			if Ecm=="13000":
-                          for i in range(nRuns):
-                                spec='%03.0f' % (i,)
-                                if not os.path.exists(sampledParsdiLep+spec):
-                                  os.system("mkdir -p "+sampledParsdiLep+spec)
-                                os.system("cp "+InputFolder+"Herwig_"+settingsdiLep.split("_"+alphaSMZ)[0]+".in "+sampledParsdiLep)
-                                if (i+1)%100==0: print "Processing run #"+str(i)
-                                SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settingsdiLep.split("_"+alphaSMZ)[0]+".run", index)
-                                if (i+1)%400==0:
-                                        while True:
-                                          os.system('qstat -u lscyboz > file')
-                                          strn=open('file', 'r').read()
-                                          if len(strn) <= 800: break
                           #if sum(1 for line in strn)<402: break
                                           time.sleep(15)
                                           print "."
@@ -271,13 +250,3 @@ for subdir in SubDirPath(pars):
 
 			os.system("cp "+sampledPars+"MC_Herwig_"+settings+"*.yoda "+subdir)
 
-			## Yoda-merge the dilepton channel files
-                        for norms in options[index+1].split("\t"):
-                          if not os.path.exists(sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_"+norms+".yoda") or flag==True or newMerge==True:
-                                print "Yoda-merging "+settingsdiLep+" at xs="+norms+" pb"
-                                os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_"+norms+".yoda")
-                        if not os.path.exists(sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda") or flag==True or newMerge==True:
-                          print "Yoda-merging "+settingsdiLep+" at generated cross-section"
-                          os.system("yodamerge "+sampledParsdiLep+"*/*"+norms+".yoda -o "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"_unnorm.yoda")
-
-                        os.system("cp "+sampledParsdiLep+"MC_Herwig_"+settingsdiLep+"*.yoda "+subdir)
