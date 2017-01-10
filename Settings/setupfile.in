@@ -1,0 +1,12 @@
+set /Herwig/Shower/GammatoQQbarSudakov:pTmin 1.0
+set /Herwig/Shower/GtoGGSudakov:pTmin 1.0
+set /Herwig/Shower/GtoQQbarSudakov:pTmin 1.0
+set /Herwig/Shower/GtobbbarSudakov:pTmin 1.0
+set /Herwig/Shower/GtoccbarSudakov:pTmin 1.0
+set /Herwig/Shower/LtoLGammaSudakov:pTmin 1.0
+set /Herwig/Shower/QtoGQSudakov:pTmin 1.0
+set /Herwig/Shower/QtoGammaQSudakov:pTmin 1.0
+set /Herwig/Shower/QtoQGSudakov:pTmin 1.0
+set /Herwig/Shower/QtoQGammaSudakov:pTmin 1.0
+set /Herwig/Shower/dtoGdSudakov:pTmin 1.0
+set /Herwig/Shower/utoGuSudakov:pTmin 1.0
