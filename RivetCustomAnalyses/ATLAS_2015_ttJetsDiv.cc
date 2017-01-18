@@ -114,7 +114,7 @@ namespace Rivet {
 
       _h_neventsQ0	= bookHisto1D ("neventsQ0", binEdgesQ0);
 
-      _h_jetEvents1Q0	= bookHisto1D ("jetEvents1Q0", binEdgesQ0);
+      _h_jetEvents1Q0	= bookScatter2D ("jetEvents1Q0", true);
 
       _h_pTQ01		= bookHisto1D ("pTQ01", binEdgesQ0);
       _h_pTQ02		= bookHisto1D ("pTQ02", binEdgesQ0);
@@ -219,7 +219,6 @@ namespace Rivet {
       eventsEMU2B += weight;
       _h_Nevents->fill(1.5, weight);
 
-      _h_neventsQ0->fill(30, weight);
 
       // ========== pT Spectra ================
       double ljetpt = 0.;
@@ -382,6 +381,10 @@ namespace Rivet {
 
       std::cout << "eventsAll = " << eventsAll << "\n";
 
+      for (unsigned int j = 0; j < _h_neventsQ0->numPoints(); ++j) {
+	_h_neventsQ0->point(j).setY(eventsAll, sqrt(eventsAllerr));
+      }
+
       // Build gap fraction plots
       for (unsigned int j = 0; j < 22; j++) {
         if(j<18){
@@ -486,7 +489,7 @@ namespace Rivet {
         _h_gapFracMQsum4->point(j).setY(gapSumM4,uncertSumM4);
       }
       integrateInv(_h_jetEvents1Q0, _h_pTQ01);
-      *_h_gapFracQ01 = YODA::efficiency(YODA::add(*_h_jetEvents1Q0, *_h_neventsQ0), *_h_jetEvents1Q0);
+      efficiency(_h_GapFracQ01, _h_jetEvents1Q0, _h_neventsQ0);
     }
   private:
    
@@ -521,7 +524,7 @@ namespace Rivet {
     Histo1DPtr _h_pTMQsum4;
 
     Histo1DPtr _h_neventsQ0;
-    Histo1DPtr _h_jetEvents1Q0;
+    Scatter2DPtr _h_jetEvents1Q0;
 
     Scatter2DPtr _h_gapFracQ01;
     Scatter2DPtr _h_gapFracQ02;
@@ -575,12 +578,25 @@ namespace Rivet {
       return true;
     }
 
-    Scatter2DPtr efficiency(Scatter2DPtr accepted, Scatter2DPtr total) {
-      Scatter2D tmp = divide(accepted, total);
-    for (size_t i = 0; i < accepted.numBins(); ++i) {
-      const HistoBin1D& b_acc = accepted.bin(i);
-      const HistoBin1D& b_tot = total.bin(i);
-      Point2D& point = tmp.point(i);
+    void efficiency(Scatter2DPtr target, Scatter2DPtr accepted, Scatter2DPtr total) {
+     for (size_t i = 0; i < accepted.numPoints(); ++i) {
+      const Point2D& b_acc = accepted.point(i);
+      const Point2D& b_tot = total.point(i);
+
+
+      double eff = std::numeric_limits<double>::quiet_NaN();
+      double err = std::numeric_limits<double>::quiet_NaN();
+      try {
+        if (b_tot.y() != 0) {
+          eff = 1-b_acc.y() / b_tot.y();
+          err = sqrt(abs( ((1-2*eff)*sqr(b_acc.yErrAvg()) + sqr(eff)*sqr(b_tot.yErrAvg())) / sqr(b_tot.y()) ));
+        }
+      } catch (const LowStatsError& e) {
+      }
+      target->point(i).setY(eff, err);
+     }
+     return true;
+    }
 
 
   std::pair <double,double> integralRange2(Histo1DPtr histo, size_t binindex1, size_t binindex2) const {
