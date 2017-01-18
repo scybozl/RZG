@@ -112,7 +112,7 @@ namespace Rivet {
       const double qsum[] = {25.,35.,45.,55.,65.,75.,85.,95.,110.,130.,150.,170.,190.,210.,230.,250.,270.,300.,340.,380.,420.,500.,510.};
       const std::vector<double> binEdgesQSum(qsum,qsum+sizeof(qsum)/sizeof(qsum[0]));
 
-      _h_neventsQ0	= bookHisto1D ("neventsQ0", binEdgesQ0);
+      _h_neventsQ0	= bookScatter2D ("neventsQ0", true);
 
       _h_jetEvents1Q0	= bookScatter2D ("jetEvents1Q0", true);
 
@@ -489,7 +489,7 @@ namespace Rivet {
         _h_gapFracMQsum4->point(j).setY(gapSumM4,uncertSumM4);
       }
       integrateInv(_h_jetEvents1Q0, _h_pTQ01);
-      efficiency(_h_GapFracQ01, _h_jetEvents1Q0, _h_neventsQ0);
+      efficiency(_h_gapFracQ01, _h_jetEvents1Q0, _h_neventsQ0);
     }
   private:
    
@@ -523,7 +523,7 @@ namespace Rivet {
     Histo1DPtr _h_pTMQsum3;
     Histo1DPtr _h_pTMQsum4;
 
-    Histo1DPtr _h_neventsQ0;
+    Scatter2DPtr _h_neventsQ0;
     Scatter2DPtr _h_jetEvents1Q0;
 
     Scatter2DPtr _h_gapFracQ01;
@@ -563,7 +563,7 @@ namespace Rivet {
 
 
     void integrateInv(Scatter2DPtr target, Histo1DPtr source) const {
-      assert (target->numBins() == source->numBins());
+      assert (target->numPoints() == source->numBins());
 
       double totalSumW = 0;
       double totalSumW2 = 0;
@@ -575,27 +575,25 @@ namespace Rivet {
 	target->point(j).setY(totalSumW, sqrt(totalSumW2));
       }
 
-      return true;
+      return;
     }
 
     void efficiency(Scatter2DPtr target, Scatter2DPtr accepted, Scatter2DPtr total) {
-     for (size_t i = 0; i < accepted.numPoints(); ++i) {
-      const Point2D& b_acc = accepted.point(i);
-      const Point2D& b_tot = total.point(i);
+     for (size_t i = 0; i < accepted->numPoints(); ++i) {
+      const Point2D& b_acc = accepted->point(i);
+      const Point2D& b_tot = total->point(i);
 
 
       double eff = std::numeric_limits<double>::quiet_NaN();
       double err = std::numeric_limits<double>::quiet_NaN();
-      try {
-        if (b_tot.y() != 0) {
+      if (b_tot.y() != 0) {
           eff = 1-b_acc.y() / b_tot.y();
           err = sqrt(abs( ((1-2*eff)*sqr(b_acc.yErrAvg()) + sqr(eff)*sqr(b_tot.yErrAvg())) / sqr(b_tot.y()) ));
-        }
-      } catch (const LowStatsError& e) {
       }
+            
       target->point(i).setY(eff, err);
      }
-     return true;
+     return;
     }
 
 
