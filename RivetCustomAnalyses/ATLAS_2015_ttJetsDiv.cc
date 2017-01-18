@@ -558,8 +558,9 @@ namespace Rivet {
     double eventsEMU2B;
     double eventsEMU2B1J;
 
-    void integrateInv(Histo1DPtr target, Histo1DPtr source) const {
-      assert (target.numBins() == source.numBins());
+
+    void integrateInv(Scatter2DPtr target, Histo1DPtr source) const {
+      assert (target->numBins() == source->numBins());
 
       double totalSumW = 0;
       double totalSumW2 = 0;
@@ -568,13 +569,19 @@ namespace Rivet {
 	totalSumW 		  	+= source->bin(j).sumW();
 	totalSumW2 		  	+= source->bin(j).sumW2();
 	totalNumEntries 	  	+= source->bin(j).numEntries();
-	target->bin(j)._sumW	  	=  totalSumW;
-	target->bin(j)._sumW2	  	=  totalSumW2;
-	target->bin(j)._numEntries 	=  totalNumEntries;
+	target->point(j).setY(totalSumW, sqrt(totalSumW2));
       }
 
       return true;
     }
+
+    Scatter2DPtr efficiency(Scatter2DPtr accepted, Scatter2DPtr total) {
+      Scatter2D tmp = divide(accepted, total);
+    for (size_t i = 0; i < accepted.numBins(); ++i) {
+      const HistoBin1D& b_acc = accepted.bin(i);
+      const HistoBin1D& b_tot = total.bin(i);
+      Point2D& point = tmp.point(i);
+
 
   std::pair <double,double> integralRange2(Histo1DPtr histo, size_t binindex1, size_t binindex2) const {
       assert(binindex2 >= binindex1);
