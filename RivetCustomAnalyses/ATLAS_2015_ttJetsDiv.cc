@@ -115,6 +115,16 @@ namespace Rivet {
       _h_neventsQ0	= bookScatter2D ("neventsQ0", binEdgesQ0, "Total selected events", "Q_0", "dsigma/dQ_0");
       _h_neventsQsum      = bookScatter2D ("neventsQsum", binEdgesQSum, "Total selected events", "Q_sum", "dsigma/dQ_sum");
 
+      _h_neventsMQ01      = bookScatter2D ("neventsMQ01", binEdgesQ0, "Total selected events", "Q_0", "dsigma/dQ_0");
+      _h_neventsMQ02      = bookScatter2D ("neventsMQ02", binEdgesQ0, "Total selected events", "Q_0", "dsigma/dQ_0");
+      _h_neventsMQ03      = bookScatter2D ("neventsMQ03", binEdgesQ0, "Total selected events", "Q_0", "dsigma/dQ_0");
+      _h_neventsMQ04      = bookScatter2D ("neventsMQ04", binEdgesQ0, "Total selected events", "Q_0", "dsigma/dQ_0");
+
+      _h_neventsMQsum1      = bookScatter2D ("neventsMQsum1", binEdgesQSum, "Total selected events", "Q_sum", "dsigma/dQ_sum");
+      _h_neventsMQsum2      = bookScatter2D ("neventsMQsum2", binEdgesQSum, "Total selected events", "Q_sum", "dsigma/dQ_sum");
+      _h_neventsMQsum3      = bookScatter2D ("neventsMQsum3", binEdgesQSum, "Total selected events", "Q_sum", "dsigma/dQ_sum");
+      _h_neventsMQsum4      = bookScatter2D ("neventsMQsum4", binEdgesQSum, "Total selected events", "Q_sum", "dsigma/dQ_sum");
+
       _h_jetEventsQ01	= bookScatter2D ("jetEventsQ01", binEdgesQ0, "Add. jet events integral 1", "Q_0", "dsigma_sel/dQ_0");
       _h_jetEventsQ02   = bookScatter2D ("jetEventsQ02", binEdgesQ0, "Add. jet events integral 2", "Q_0", "dsigma_sel/dQ_0");
       _h_jetEventsQ03   = bookScatter2D ("jetEventsQ03", binEdgesQ0, "Add. jet events integral 3", "Q_0", "dsigma_sel/dQ_0");
@@ -125,15 +135,15 @@ namespace Rivet {
       _h_jetEventsMQ03   = bookScatter2D ("jetEventsMQ03", binEdgesQ0, "Add. jet events integral 3", "Q_0", "dsigma_sel/dQ_0");
       _h_jetEventsMQ04   = bookScatter2D ("jetEventsMQ04", binEdgesQ0, "Add. jet events integral 4", "Q_0", "dsigma_sel/dQ_0");
 
-      _h_jetEventsQsum1   = bookScatter2D ("jetEventsQsum1", binEdgesQsum, "Add. jet events integral 1", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsQsum2   = bookScatter2D ("jetEventsQsum2", binEdgesQsum, "Add. jet events integral 2", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsQsum3   = bookScatter2D ("jetEventsQsum3", binEdgesQsum, "Add. jet events integral 3", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsQsum4   = bookScatter2D ("jetEventsQsum4", binEdgesQsum, "Add. jet events integral 4", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsQsum1   = bookScatter2D ("jetEventsQsum1", binEdgesQSum, "Add. jet events integral 1", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsQsum2   = bookScatter2D ("jetEventsQsum2", binEdgesQSum, "Add. jet events integral 2", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsQsum3   = bookScatter2D ("jetEventsQsum3", binEdgesQSum, "Add. jet events integral 3", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsQsum4   = bookScatter2D ("jetEventsQsum4", binEdgesQSum, "Add. jet events integral 4", "Q_sum", "dsigma_sel/dQ_sum");
 
-      _h_jetEventsMQsum1   = bookScatter2D ("jetEventsMQsum1", binEdgesQsum, "Add. jet events integral 1", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsMQsum2   = bookScatter2D ("jetEventsMQsum2", binEdgesQsum, "Add. jet events integral 2", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsMQsum3   = bookScatter2D ("jetEventsMQsum3", binEdgesQsum, "Add. jet events integral 3", "Q_sum", "dsigma_sel/dQ_sum");
-      _h_jetEventsMQsum4   = bookScatter2D ("jetEventsMQsum4", binEdgesQsum, "Add. jet events integral 4", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsMQsum1   = bookScatter2D ("jetEventsMQsum1", binEdgesQSum, "Add. jet events integral 1", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsMQsum2   = bookScatter2D ("jetEventsMQsum2", binEdgesQSum, "Add. jet events integral 2", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsMQsum3   = bookScatter2D ("jetEventsMQsum3", binEdgesQSum, "Add. jet events integral 3", "Q_sum", "dsigma_sel/dQ_sum");
+      _h_jetEventsMQsum4   = bookScatter2D ("jetEventsMQsum4", binEdgesQSum, "Add. jet events integral 4", "Q_sum", "dsigma_sel/dQ_sum");
 
       _h_pTQ01		= bookHisto1D ("pTQ01", binEdgesQ0);
       _h_pTQ02		= bookHisto1D ("pTQ02", binEdgesQ0);
@@ -504,6 +514,16 @@ namespace Rivet {
     Scatter2DPtr _h_jetEventsMQsum2;
     Scatter2DPtr _h_jetEventsMQsum3;
     Scatter2DPtr _h_jetEventsMQsum4;
+
+    Scatter2DPtr _h_neventsMQ01;
+    Scatter2DPtr _h_neventsMQ02;
+    Scatter2DPtr _h_neventsMQ03;
+    Scatter2DPtr _h_neventsMQ04;
+
+    Scatter2DPtr _h_neventsMQsum1;
+    Scatter2DPtr _h_neventsMQsum2;
+    Scatter2DPtr _h_neventsMQsum3;
+    Scatter2DPtr _h_neventsMQsum4;
 
     Scatter2DPtr _h_gapFracQ01;
     Scatter2DPtr _h_gapFracQ02;
