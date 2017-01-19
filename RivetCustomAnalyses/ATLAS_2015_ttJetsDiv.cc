@@ -430,8 +430,8 @@ namespace Rivet {
       integrateInv(_h_jetEventsQ02, _h_pTQ02);
       integrateInv(_h_jetEventsQ03, _h_pTQ03);
       integrateInv(_h_jetEventsQ04, _h_pTQ04);
-      integrateInv(_h_jetEventsMQ01, _h_pTQ01);
-      integrateInv(_h_jetEventsMQ02, _h_pTQ02);
+      integrateInv(_h_jetEventsMQ01, _h_pTMQ01);
+      integrateInv(_h_jetEventsMQ02, _h_pTMQ02);
       integrateInv(_h_jetEventsMQ03, _h_pTMQ03);
       integrateInv(_h_jetEventsMQ04, _h_pTMQ04);
 
@@ -439,10 +439,10 @@ namespace Rivet {
       efficiency(_h_gapFracQ02, _h_jetEventsQ02, _h_neventsQ0);
       efficiency(_h_gapFracQ03, _h_jetEventsQ03, _h_neventsQ0);
       efficiency(_h_gapFracQ04, _h_jetEventsQ04, _h_neventsQ0);
-      efficiency(_h_gapFracMQ01, _h_jetEventsMQ01, _h_neventsQ0);
-      efficiency(_h_gapFracMQ02, _h_jetEventsMQ02, _h_neventsQ0);
-      efficiency(_h_gapFracMQ03, _h_jetEventsMQ03, _h_neventsQ0);
-      efficiency(_h_gapFracMQ04, _h_jetEventsMQ04, _h_neventsQ0);
+      efficiency(_h_gapFracMQ01, _h_jetEventsMQ01, _h_neventsMQ01);
+      efficiency(_h_gapFracMQ02, _h_jetEventsMQ02, _h_neventsMQ02);
+      efficiency(_h_gapFracMQ03, _h_jetEventsMQ03, _h_neventsMQ03);
+      efficiency(_h_gapFracMQ04, _h_jetEventsMQ04, _h_neventsMQ04);
 
       integrateInv(_h_jetEventsQsum1, _h_pTQsum1);
       integrateInv(_h_jetEventsQsum2, _h_pTQsum2);
@@ -457,10 +457,10 @@ namespace Rivet {
       efficiency(_h_gapFracQsum2, _h_jetEventsQsum2, _h_neventsQsum);
       efficiency(_h_gapFracQsum3, _h_jetEventsQsum3, _h_neventsQsum);
       efficiency(_h_gapFracQsum4, _h_jetEventsQsum4, _h_neventsQsum);
-      efficiency(_h_gapFracMQsum1, _h_jetEventsMQsum1, _h_neventsQsum);
-      efficiency(_h_gapFracMQsum2, _h_jetEventsMQsum2, _h_neventsQsum);
-      efficiency(_h_gapFracMQsum3, _h_jetEventsMQsum3, _h_neventsQsum);
-      efficiency(_h_gapFracMQsum4, _h_jetEventsMQsum4, _h_neventsQsum);
+      efficiency(_h_gapFracMQsum1, _h_jetEventsMQsum1, _h_neventsMQsum1);
+      efficiency(_h_gapFracMQsum2, _h_jetEventsMQsum2, _h_neventsMQsum2);
+      efficiency(_h_gapFracMQsum3, _h_jetEventsMQsum3, _h_neventsMQsum3);
+      efficiency(_h_gapFracMQsum4, _h_jetEventsMQsum4, _h_neventsMQsum4);
 
     }
   private:
