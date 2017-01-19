@@ -20,7 +20,7 @@ SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 SetupFileNameGen    = "setupfile.in"
 WorkFolder        = "/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 
-pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/mc/"
+pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/scan/"
 
 flag=False
 
@@ -126,7 +126,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -l h_rt=05:00:00 "+ submitFileNameSH
+        cmd = "qsub -l h_rt=12:00:00 "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -137,7 +137,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 ## Options file for systematic generation: the user should set the settings required for the different runs there
 
-optionsFile = open("options2.in", 'r')
+optionsFile = open("option2OLD.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
@@ -146,7 +146,7 @@ os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/Ri
 #initRun()
 #for i in range(100):
 for subdir in SubDirPath(pars):
-	params=open(subdir+"/used_params",'r')
+	params=open(subdir+"/params.dat",'r')
 	for line in params:
 		if 'alphaSMZ' in line:
 		  alphaSMZ=line.split()[1]
@@ -199,7 +199,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ!="1.450000e-01"))# and alphaSMZ!="1.427778e-01"))
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)# and alphaSMZ!="1.427778e-01"))
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"

@@ -20,7 +20,7 @@ SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 SetupFileNameGen    = "setupfile.in"
 WorkFolder        = "/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 
-pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/mc/"
+pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/scan/"
 
 flag=False
 
@@ -61,6 +61,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
     OutputFileFinal  = OutputFolder+OutputFile
 
     submitFileNameSH = WorkFolder+"Submit_"+settings+"_"+specStr+".sh"
+
 
     flag = False
     redo = False
@@ -115,13 +116,14 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         for codeLine in codeLines2:
             submitfile2.write(codeLine+" \n")
 
+
         submitfile2.write("rm "+ submitFileNameSH + " \n")
         submitfile2.write("rm -r "+ tmp + " \n")
         submitfile2.close()
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -l "+ submitFileNameSH
+        cmd = "qsub "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -141,7 +143,7 @@ os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/Ri
 #initRun()
 #for i in range(100):
 for subdir in SubDirPath(pars):
-	params=open(subdir+"/used_params",'r')
+	params=open(subdir+"/params.dat",'r')
 	for line in params:
 		if 'alphaSMZ' in line:
 		  alphaSMZ=line.split()[1]
@@ -216,8 +218,8 @@ for subdir in SubDirPath(pars):
 	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
 				if (i+1)%400==0:
 					while True:
-		                          os.system('qstat -u lscyboz > file')
-                		          strn=open('file', 'r').read()
+		                          os.system("qstat -u lscyboz > file")
+                		          strn=open("file", 'r').read()
            		                  if len(strn) <= 800: break
                           #if sum(1 for line in strn)<402: break
                                           time.sleep(15)
@@ -226,8 +228,8 @@ for subdir in SubDirPath(pars):
 
 			## As long as there are processed jobs in the queue, wait
 	                while True:
-	                  os.system('qstat -u lscyboz > file')
-	                  strn=open('file', 'r').read()
+	                  os.system("qstat -u lscyboz > file")
+	                  strn=open("file", 'r').read()
 	                  if len(strn) <= 800: break
 	                  #if sum(1 for line in strn)<402: break
 	                  time.sleep(15)
