@@ -583,11 +583,10 @@ namespace Rivet {
       double eff = std::numeric_limits<double>::quiet_NaN();
       double err = std::numeric_limits<double>::quiet_NaN();
       if (b_tot.y() != 0) {
-          eff = 1-b_acc.y() / b_tot.y();
+          eff = b_acc.y() / b_tot.y();
           err = sqrt(abs( ((1-2*eff)*sqr(b_acc.yErrAvg()) + sqr(eff)*sqr(b_tot.yErrAvg())) / sqr(b_tot.y()) ));
       }
-            
-      target->point(i).setY(eff, err);
+      target->point(i).setY(1-eff, err);
      }
      return;
     }

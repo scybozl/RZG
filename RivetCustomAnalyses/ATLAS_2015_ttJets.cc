@@ -211,6 +211,7 @@ namespace Rivet {
       }
       if (bjets.size() < 2)  return;
       eventsAll += weight;
+      eventsAllerr += weight*weight;
       eventsEMU2B += weight;
       _h_Nevents->fill(1.5, weight);
 
@@ -332,21 +333,25 @@ namespace Rivet {
       Memubb = pow(pow(Etot,2)-(pe2+pmu2+pb12+pb22+2*(pepmu+pepb1+pepb2+pmupb1+pmupb2+pb1pb2)),0.5);
       if(Memubb<300.*GeV){
         eventsM1 += weight;
+	eventsM1err += weight*weight;
         _h_pTMQ01->fill(pt4,weight);
         _h_pTMQsum1->fill(ptsum4,weight);
       }
       if(Memubb>300.*GeV && Memubb<425.*GeV){
         eventsM2 += weight;
+	eventsM2err += weight*weight;
         _h_pTMQ02->fill(pt4,weight);
         _h_pTMQsum2->fill(ptsum4,weight);
       }
       if(Memubb>425.*GeV && Memubb<600.*GeV){
         eventsM3 += weight;
+	eventsM3err += weight*weight;
         _h_pTMQ03->fill(pt4,weight);
         _h_pTMQsum3->fill(ptsum4,weight);
       }
       if(Memubb>600.*GeV){
         eventsM4 += weight;
+	eventsM4err += weight*weight;
         _h_pTMQ04->fill(pt4,weight);
         _h_pTMQsum4->fill(ptsum4,weight);
       }
@@ -375,101 +380,101 @@ namespace Rivet {
           std::pair <double, double> jetEvents1 = integralRange2(_h_pTQ01,j,17);
 	  double jE1 = jetEvents1.first + _h_pTQ01->bin(17).sumW();
 	  double jE1err = jetEvents1.second + _h_pTQ01->bin(17).sumW2();
-          double gap1 = (eventsAll - jE1)/eventsAll;
-          double uncert1 = sqrt(jE1err+jE1*eventsAll)/eventsAll;
-          _h_gapFracQ01->point(j).setY(gap1,uncert1);
+          double eff1 = jE1/eventsAll;
+          double uncert1 = sqrt(abs( ((1-2*eff1)*jE1err+sqr(eff1)*eventsAllerr) / sqr(eventsAll )));
+          _h_gapFracQ01->point(j).setY(1-eff1,uncert1);
 	  std::pair <double, double> jetEvents2 = integralRange2(_h_pTQ02,j,17);
           double jE2 = jetEvents2.first + _h_pTQ02->bin(17).sumW();
           double jE2err = jetEvents2.second + _h_pTQ02->bin(17).sumW2();
-          double gap2 = (eventsAll - jE2)/eventsAll;
-          double uncert2 = sqrt(jE2err+jE2*eventsAll)/eventsAll;
-          _h_gapFracQ02->point(j).setY(gap2,uncert2);
+          double eff2 = jE2/eventsAll;
+          double uncert2 = sqrt(abs( ((1-2*eff1)*jE2err+sqr(eff2)*eventsAllerr) / sqr(eventsAll )));
+          _h_gapFracQ02->point(j).setY(1-eff2,uncert2);
 	  std::pair <double, double> jetEvents3 = integralRange2(_h_pTQ03,j,17);
           double jE3 = jetEvents3.first + _h_pTQ03->bin(17).sumW();
           double jE3err = jetEvents3.second + _h_pTQ03->bin(17).sumW2();
-          double gap3 = (eventsAll - jE3)/eventsAll;
-          double uncert3 = sqrt(jE3err+jE3*eventsAll)/eventsAll;
-          _h_gapFracQ03->point(j).setY(gap3,uncert3);
+          double eff3 = jE3/eventsAll;
+          double uncert3 = sqrt(abs( ((1-2*eff3)*jE3err+sqr(eff3)*eventsAllerr) / sqr(eventsAll )));
+          _h_gapFracQ03->point(j).setY(1-eff3,uncert3);
 	  std::pair <double, double> jetEvents4 = integralRange2(_h_pTQ04,j,17);
           double jE4 = jetEvents4.first + _h_pTQ04->bin(17).sumW();
           double jE4err = jetEvents4.second + _h_pTQ04->bin(17).sumW2();
-          double gap4 = (eventsAll - jE4)/eventsAll;
-          double uncert4 = sqrt(jE4err+jE4*eventsAll)/eventsAll;
-          _h_gapFracQ04->point(j).setY(gap4,uncert4);
+          double eff4 = jE4/eventsAll;
+          double uncert4 = sqrt(abs( ((1-2*eff4)*jE4err+sqr(eff4)*eventsAllerr) / sqr(eventsAll )));
+          _h_gapFracQ04->point(j).setY(1-eff4,uncert4);
 	  std::pair <double, double> jetEventsM1 = integralRange2(_h_pTMQ01,j,17);
           double jEM1 = jetEventsM1.first + _h_pTMQ01->bin(17).sumW();
           double jEM1err = jetEventsM1.second + _h_pTMQ01->bin(17).sumW2();
-          double gapM1 = (eventsM1 - jEM1)/eventsM1;
-          double uncertM1 = sqrt(jEM1err+jEM1*eventsM1)/eventsM1;
-          _h_gapFracMQ01->point(j).setY(gapM1,uncertM1);
+          double effM1 = jEM1/eventsM1;
+          double uncertM1 = sqrt(abs( ((1-2*effM1)*jEM1err+sqr(effM1)*eventsM1err) / sqr(eventsM1 )));
+          _h_gapFracMQ01->point(j).setY(1-effM1,uncertM1);
 	  std::pair <double, double> jetEventsM2 = integralRange2(_h_pTMQ02,j,17);
 	  double jEM2 = jetEventsM2.first + _h_pTMQ02->bin(17).sumW();
           double jEM2err = jetEventsM2.second + _h_pTMQ02->bin(17).sumW2();
-          double gapM2 = (eventsM2 - jEM2)/eventsM2;
-          double uncertM2 = sqrt(jEM2err+jEM2*eventsM2)/eventsM2;
-          _h_gapFracMQ02->point(j).setY(gapM2,uncertM2);
+          double effM2 = jEM2/eventsM2;
+          double uncertM2 = sqrt(abs( ((1-2*effM2)*jEM2err+sqr(effM2)*eventsM2err) / sqr(eventsM2 )));
+          _h_gapFracMQ02->point(j).setY(1-effM2,uncertM2);
 	  std::pair <double, double> jetEventsM3 = integralRange2(_h_pTMQ03,j,17);
 	  double jEM3 = jetEventsM3.first + _h_pTMQ03->bin(17).sumW();
           double jEM3err = jetEventsM3.second + _h_pTMQ03->bin(17).sumW2();
-          double gapM3 = (eventsM3 - jEM3)/eventsM3;
-          double uncertM3 = sqrt(jEM3err+jEM3*eventsM3)/eventsM3;
-          _h_gapFracMQ03->point(j).setY(gapM3,uncertM3);
+          double effM3 = jEM3/eventsM3;
+          double uncertM3 = sqrt(abs( ((1-2*effM3)*jEM3err+sqr(effM3)*eventsM3err) / sqr(eventsM3 )));
+          _h_gapFracMQ03->point(j).setY(1-effM3,uncertM3);
 	  std::pair <double, double> jetEventsM4 = integralRange2(_h_pTMQ04,j,17);
           double jEM4 = jetEventsM4.first + _h_pTMQ04->bin(17).sumW();
           double jEM4err = jetEventsM4.second + _h_pTMQ04->bin(17).sumW2();
-          double gapM4 = (eventsM4 - jEM4)/eventsM4;
-          double uncertM4 = sqrt(jEM4err+jEM4*eventsM4)/eventsM4;
-          _h_gapFracMQ04->point(j).setY(gapM4,uncertM4);
+          double effM4 = jEM4/eventsM4;
+          double uncertM4 = sqrt(abs( ((1-2*effM4)*jEM4err+sqr(effM4)*eventsM4err) / sqr(eventsM4 )));
+          _h_gapFracMQ04->point(j).setY(1-effM4,uncertM4);
         }
 	std::pair <double, double> jetEventsSum1 = integralRange2(_h_pTQsum1,j,21);
         double jESum1 = jetEventsSum1.first + _h_pTQsum1->bin(21).sumW();
         double jESum1err = jetEventsSum1.second + _h_pTQsum1->bin(21).sumW2();
-        double gapSum1 = (eventsAll - jESum1)/eventsAll;
-        double uncertSum1 = sqrt(jESum1err+jESum1*eventsAll)/eventsAll;
-        _h_gapFracQsum1->point(j).setY(gapSum1,uncertSum1);
+        double effSum1 = jESum1/eventsAll;
+        double uncertSum1 = sqrt(abs( ((1-2*effSum1)*jESum1err+sqr(effSum1)*eventsAllerr) / sqr(eventsAll )));
+        _h_gapFracQsum1->point(j).setY(1-effSum1,uncertSum1);
 	std::pair <double, double> jetEventsSum2 = integralRange2(_h_pTQsum2,j,21);
         double jESum2 = jetEventsSum2.first + _h_pTQsum2->bin(21).sumW();
         double jESum2err = jetEventsSum2.second + _h_pTQsum2->bin(21).sumW2();
-        double gapSum2 = (eventsAll - jESum2)/eventsAll;
-        double uncertSum2 = sqrt(jESum2err+jESum2*eventsAll)/eventsAll;
-        _h_gapFracQsum2->point(j).setY(gapSum2,uncertSum2);
+        double effSum2 = jESum2/eventsAll;
+        double uncertSum2 = sqrt(abs( ((1-2*effSum2)*jESum2err+sqr(effSum2)*eventsAllerr) / sqr(eventsAll )));
+        _h_gapFracQsum2->point(j).setY(1-effSum2,uncertSum2);
 	std::pair <double, double> jetEventsSum3 = integralRange2(_h_pTQsum3,j,21);
         double jESum3 = jetEventsSum3.first + _h_pTQsum3->bin(21).sumW();
         double jESum3err = jetEventsSum3.second + _h_pTQsum3->bin(21).sumW2();
-        double gapSum3 = (eventsAll - jESum3)/eventsAll;
-        double uncertSum3 = sqrt(jESum3err+jESum3*eventsAll)/eventsAll;
-        _h_gapFracQsum3->point(j).setY(gapSum3,uncertSum3);
+        double effSum3 = jESum3/eventsAll;
+        double uncertSum3 = sqrt(abs( ((1-2*effSum3)*jESum3err+sqr(effSum3)*eventsAllerr) / sqr(eventsAll )));
+        _h_gapFracQsum3->point(j).setY(1-effSum3,uncertSum3);
 	std::pair <double, double> jetEventsSum4 = integralRange2(_h_pTQsum4,j,21);
         double jESum4 = jetEventsSum4.first + _h_pTQsum4->bin(21).sumW();
         double jESum4err = jetEventsSum4.second + _h_pTQsum4->bin(21).sumW2();
-        double gapSum4 = (eventsAll - jESum4)/eventsAll;
-        double uncertSum4 = sqrt(jESum4err+jESum4*eventsAll)/eventsAll;
-        _h_gapFracQsum4->point(j).setY(gapSum4,uncertSum4);
+        double effSum4 = jESum4/eventsAll;
+        double uncertSum4 = sqrt(abs( ((1-2*effSum4)*jESum4err+sqr(effSum4)*eventsAllerr) / sqr(eventsAll )));
+        _h_gapFracQsum4->point(j).setY(1-effSum4,uncertSum4);
 
 	std::pair <double, double> jetEventsSumM1 = integralRange2(_h_pTMQsum1,j,21);
         double jESumM1 = jetEventsSumM1.first + _h_pTMQsum1->bin(21).sumW();
         double jESumM1err = jetEventsSumM1.second + _h_pTMQsum1->bin(21).sumW2();
-        double gapSumM1 = (eventsM1 - jESumM1)/eventsM1;
-        double uncertSumM1 = sqrt(jESumM1err+jESumM1*eventsM1)/eventsM1;
-        _h_gapFracMQsum1->point(j).setY(gapSumM1,uncertSumM1);
+        double effSumM1 = jESumM1/eventsM1;
+        double uncertSumM1 = sqrt(abs( ((1-2*effSumM1)*jESumM1err+sqr(effSumM1)*eventsM1err) / sqr(eventsM1 )));
+        _h_gapFracMQsum1->point(j).setY(1-effSumM1,uncertSumM1);
 	std::pair <double, double> jetEventsSumM2 = integralRange2(_h_pTMQsum2,j,21);
         double jESumM2 = jetEventsSumM2.first + _h_pTMQsum2->bin(21).sumW();
         double jESumM2err = jetEventsSumM2.second + _h_pTMQsum2->bin(21).sumW2();
-        double gapSumM2 = (eventsM2 - jESumM2)/eventsM2;
-        double uncertSumM2 = sqrt(jESumM2err+jESumM2*eventsM2)/eventsM2;
-        _h_gapFracMQsum2->point(j).setY(gapSumM2,uncertSumM2);
+        double effSumM2 = jESumM2/eventsM2;
+        double uncertSumM2 = sqrt(abs( ((1-2*effSumM2)*jESumM2err+sqr(effSumM2)*eventsM2err) / sqr(eventsM2 )));
+        _h_gapFracMQsum2->point(j).setY(1-effSumM2,uncertSumM2);
 	std::pair <double, double> jetEventsSumM3 = integralRange2(_h_pTMQsum3,j,21);
         double jESumM3 = jetEventsSumM3.first + _h_pTMQsum3->bin(21).sumW();
         double jESumM3err = jetEventsSumM3.second + _h_pTMQsum3->bin(21).sumW2();
-        double gapSumM3 = (eventsM3 - jESumM3)/eventsM3;
-        double uncertSumM3 = sqrt(jESumM3err+jESumM3*eventsM3)/eventsM3;
-        _h_gapFracMQsum3->point(j).setY(gapSumM3,uncertSumM3);
+        double effSumM3 = jESumM3/eventsM3;
+        double uncertSumM3 = sqrt(abs( ((1-2*effSumM3)*jESumM3err+sqr(effSumM3)*eventsM3err) / sqr(eventsM3 )));
+        _h_gapFracMQsum3->point(j).setY(1-effSumM3,uncertSumM3);
 	std::pair <double, double> jetEventsSumM4 = integralRange2(_h_pTMQsum4,j,21);
         double jESumM4 = jetEventsSumM4.first + _h_pTMQsum4->bin(21).sumW();
         double jESumM4err = jetEventsSumM4.second + _h_pTMQsum4->bin(21).sumW2();
-        double gapSumM4 = (eventsM4 - jESumM4)/eventsM4;
-        double uncertSumM4 = sqrt(jESumM4err+jESumM4*eventsM4)/eventsM4;
-        _h_gapFracMQsum4->point(j).setY(gapSumM4,uncertSumM4);
+        double effSumM4 = jESumM4/eventsM4;
+        double uncertSumM4 = sqrt(abs( ((1-2*effSumM4)*jESumM4err+sqr(effSumM4)*eventsM4err) / sqr(eventsM4 )));
+        _h_gapFracMQsum4->point(j).setY(1-effSumM4,uncertSumM4);
       }
     }
   private:
@@ -527,6 +532,11 @@ namespace Rivet {
     double eventsM2;
     double eventsM3;
     double eventsM4;
+    double eventsAllerr;
+    double eventsM1err;
+    double eventsM2err;
+    double eventsM3err;
+    double eventsM4err;
 
     // Cut flow check
     double eventsBefore;
