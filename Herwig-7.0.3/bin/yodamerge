@@ -381,48 +381,49 @@ for p, aos in analysisobjects_in.iteritems():
     analysisobjects_out[p] = ao_out
 
 ## For gap fractions, recalculate the values with their uncertainties
-for p, aos in analysisobjects_in.iteritems():
-
-    if aos[0].path.find("GapFrac")!=-1:
-	ao_out=aos[0].clone()
+for p, aos in analysisobjects_out.iteritems():
+    if aos.path.find("GapFrac")!=-1:
+	ao_out=aos.clone()
 	ao_out.rmAnnotation("yodamerge_scale")
 
 	acc=-1
 	tot=-1
 
 	## Find the corresponding Scatter2D for the accepted distribution
-	for j, ao_acc in ao_out:
-	  if ao_acc.path.find("jetEvents"+aos[0].path.split("GapFrac")[1]) != -1:
+	for j, ao_acc in analysisobjects_out.iteritems():
+	  if ao_acc.path.find("jetEvents"+aos.path.split("GapFrac")[1]) != -1:
 		acc = j	
 		break
 
 	## Find the corresponding Scatter2D for the total distribution
 	if ao_out.path.find("FracMQ") != -1:
-	  for j, ao_tot in ao_out:
-		if ao_acc.path.find("nevents"+aos[0].path.split("GapFrac")[1]) != -1:
+	  for j, ao_tot in analysisobjects_out.iteritems():
+		if ao_tot.path.find("nevents"+aos.path.split("GapFrac")[1]) != -1:
 		  tot = j
 		  break
 	elif ao_out.path.find("FracQsum") != -1:
-	  for j, ao_tot in ao_out:
-		if ao_acc.path.find("neventsQ0") != -1:
+	  for j, ao_tot in analysisobjects_out.iteritems():
+		if ao_tot.path.find("neventsQsum") != -1:
 		  tot = j
 		  break
-	else:
-	  for j, ao_tot in ao_out:
-		if ao_acc.path.find("neventsQsum"):
+	elif ao_out.path.find("FracQ0") != -1:
+	  for j, ao_tot in analysisobjects_out.iteritems():
+		if ao_tot.path.find("neventsQ0") != -1:
 		  tot = j
 		  break
-	
 
-	for i in len(ao_out.points()):
-	  if ao_out[tot].points.y != 0: 
-	    eff_i = ao_out[acc].points[i].y / ao_out[tot].points[i].y
-	    err_i = math.sqrt( abs( (1-2*eff_i)*ao_out[acc].points[i].yErrs[0]**2 + eff_i**2*ao_out[tot].points[i].yErrs[0]**2 ) / ao_out[tot].points[i].y**2 )
+
+	if tot == -1: sys.stderr.write("Tot partner to the GapFrac Scatter2D not found\n")	
+	if acc == -1: sys.stderr.write("Acc partner to the GapFrac Scatter2D not found\n")
+
+	for i in xrange(len(ao_out.points)):
+	  if analysisobjects_out[tot].points[i].y != 0: 
+	    eff_i = analysisobjects_out[acc].points[i].y / analysisobjects_out[tot].points[i].y
+	    err_i = math.sqrt( abs( (1-2*eff_i)*analysisobjects_out[acc].points[i].yErrs[0]**2 + eff_i**2*analysisobjects_out[tot].points[i].yErrs[0]**2 ) / analysisobjects_out[tot].points[i].y**2 )
 	 
-	    ao_out[p].points[i].y = 1 - eff_i
-	    ao_out[p].points[i].yErrs = (err_i, err_i)
+	    analysisobjects_out[p].points[i].y = 1 - eff_i
+	    analysisobjects_out[p].points[i].yErrs = (err_i, err_i)
 	
-	analysisobjects_out[p] = ao_out
 
 ## Write output
 yoda.writeYODA(analysisobjects_out, opts.OUTPUT_FILE)
