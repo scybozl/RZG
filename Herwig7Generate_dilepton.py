@@ -47,7 +47,7 @@ def initRun():
     os.system("./initRun.sh")
     
 
-def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
+def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight, PSplitLight):
 
     specStr          = '%03.0f' % (seed,)
 #    tmpFolder        = sampledPars+specStr+"/"
@@ -96,6 +96,8 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
+	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
+	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
 
 	if(InputFileNameGen.find("dipole")!=-1):
 	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
@@ -123,7 +125,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub "+ submitFileNameSH
+        cmd = "qsub -l h_rt=05:30:00 "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -151,10 +153,10 @@ for subdir in SubDirPath(pars):
 		  lambdaQCD=line.split()[1]
 		if 'Qmin' in line:
 		  Qmin=line.split()[1]
-		if 'Psplit' in line:
-		  pT0min=line.split()[1]
-		if 'Clpow' in line:
-		  b=line.split()[1]
+		if 'PSplitLight' in line:
+		  PSplitLight=line.split()[1]
+		if 'ClMaxLight' in line:
+		  ClMaxLight=line.split()[1]
 	
 	## Loop through all possible combinations
 
@@ -187,7 +189,7 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_dilepton_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_dilepton_"+alphaSMZ+"_"+ClMaxLight+"_"+PSplitLight
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
@@ -196,7 +198,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex or (alphaSMZ!="1.316667e-01"))
+	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -215,7 +217,7 @@ for subdir in SubDirPath(pars):
 	                          os.system("mkdir -p "+sampledPars+spec)
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
-	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
+	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index, ClMaxLight, PSplitLight)
 				if (i+1)%400==0:
 					while True:
 		                          os.system("qstat -u lscyboz > file")
