@@ -47,7 +47,7 @@ def initRun():
     os.system("./initRun.sh")
     
 
-def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
+def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight, PSplitLight):
 
     specStr          = '%03.0f' % (seed,)
 #    tmpFolder        = sampledPars+specStr+"/"
@@ -95,6 +95,8 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
 
 	if float(alphaSMZ)>=0.145:
 	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:Qmin 1.200' >> "+OutputFolder+SetupFileNameGen)
@@ -137,7 +139,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 ## Options file for systematic generation: the user should set the settings required for the different runs there
 
-optionsFile = open("option2OLD.in", 'r')
+optionsFile = open("options2.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
@@ -152,12 +154,12 @@ for subdir in SubDirPath(pars):
 		  alphaSMZ=line.split()[1]
 		if 'lambdaQCD' in line:
 		  lambdaQCD=line.split()[1]
-		if 'Qmin' in line:
-		  Qmin=line.split()[1]
-		if 'Psplit' in line:
-		  pT0min=line.split()[1]
-		if 'Clpow' in line:
-		  b=line.split()[1]
+		if 'pTmin' in line:
+		  pTmin=line.split()[1]
+		if 'ClMaxLight' in line:
+		  ClMaxLight=line.split()[1]
+		if 'PSplitLight' in line:
+		  PSplitLight=line.split()[1]
 	
 	## Loop through all possible combinations
 
@@ -190,7 +192,7 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ+"_"+ClMaxLight+"_"+PSplitLight
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
@@ -218,7 +220,7 @@ for subdir in SubDirPath(pars):
 	                          os.system("mkdir -p "+sampledPars+spec)
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
-	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
+	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index, ClMaxLight, PSplitLight)
 				if (i+1)%400==0:
 					while True:
 		                          os.system('qstat -u lscyboz > file')

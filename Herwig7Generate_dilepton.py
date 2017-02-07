@@ -99,6 +99,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
 	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
 
+
 	if(InputFileNameGen.find("dipole")!=-1):
 	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
@@ -151,8 +152,8 @@ for subdir in SubDirPath(pars):
 		  alphaSMZ=line.split()[1]
 		if 'lambdaQCD' in line:
 		  lambdaQCD=line.split()[1]
-		if 'Qmin' in line:
-		  Qmin=line.split()[1]
+		if 'pTmin' in line:
+		  pTmin=line.split()[1]
 		if 'PSplitLight' in line:
 		  PSplitLight=line.split()[1]
 		if 'ClMaxLight' in line:
