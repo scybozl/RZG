@@ -8,8 +8,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 10000
-nRuns = 1000
+nEvPerFile = 12000
+nRuns = 500
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -219,7 +219,7 @@ for subdir in SubDirPath(pars):
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
 	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index, ClMaxLight, PSplitLight)
-				if (i+1)%400==0:
+				if (i+1)%500==0:
 					while True:
 		                          os.system("qstat -u lscyboz > file")
                 		          strn=open("file", 'r').read()
