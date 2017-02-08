@@ -224,9 +224,9 @@ for subdir in SubDirPath(pars):
 				if (i+1)%500==0:
 					while True:
 		                          os.system('qstat -u lscyboz > file')
-                		          strn=open('file', 'r').read()
-           		                  if len(strn) <= 800: break
-                          #if sum(1 for line in strn)<402: break
+                		          strn=open('file', 'r')
+#           		                  if len(strn) <= 800: break
+                                          if sum(1 for line in strn)<502: break
                                           time.sleep(15)
                                           print "."
                                         print "\n"
@@ -234,9 +234,9 @@ for subdir in SubDirPath(pars):
 			## As long as there are processed jobs in the queue, wait
 	                while True:
 	                  os.system('qstat -u lscyboz > file')
-	                  strn=open('file', 'r').read()
-	                  if len(strn) <= 800: break
-	                  #if sum(1 for line in strn)<402: break
+	                  strn=open('file', 'r')
+#	                  if len(strn) <= 800: break
+	                  if sum(1 for line in strn)<502: break
 	                  time.sleep(15)
 	                  print "."
 	                print "\n"
