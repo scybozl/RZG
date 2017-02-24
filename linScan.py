@@ -24,9 +24,9 @@ for i in np.linspace(alphaSMZ[0], alphaSMZ[1], nsteps):
 	os.chdir(str(index))
 	parFile = open("params.dat", 'w')
 
-	parFile.write("alphaSMZ "+str(i)+"\n")
-	parFile.write("ClMaxLight "+str(j)+"\n")
-	parFile.write("PSplitLight "+str(k))
+	parFile.write("alphaSMZ\t"+str(i)+"\n")
+	parFile.write("ClMaxLight\t"+str(j)+"\n")
+	parFile.write("PSplitLight\t"+str(k))
 
 	parFile.close()
 
