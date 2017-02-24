@@ -26,7 +26,7 @@ for i in np.linspace(alphaSMZ[0], alphaSMZ[1], nsteps):
 
 	parFile.write("alphaSMZ "+str(i)+"\n")
 	parFile.write("ClMaxLight "+str(j)+"\n")
-	parFile.write("PSplitLIght "+str(k))
+	parFile.write("PSplitLight "+str(k))
 
 	parFile.close()
 
