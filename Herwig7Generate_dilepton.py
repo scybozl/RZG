@@ -9,7 +9,7 @@ import subprocess
 
 fUser = os.getenv("USER")
 nEvPerFile = 12000
-nRuns = 500
+nRuns = 1000
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -76,12 +76,14 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
         nE=float(string.split("\t")[2].split("\n")[0])
         if nE!=nEvents:
           redo = True
-      else: redo = True
+      else: 
+	redo = True
     os.chdir(OutputFolder)
     if len(glob.glob('*.yoda')) <= len(options[index+1].split("\t")):
         redo = True
 
     if not os.path.exists(OutputYoda+options[index+1].split("\t")[0]+".yoda") or redo==True:
+
 
         flag=True
 
@@ -120,13 +122,13 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
             submitfile2.write(codeLine+" \n")
 
 
-        submitfile2.write("rm "+ submitFileNameSH + " \n")
+#        submitfile2.write("rm "+ submitFileNameSH + " \n")
         submitfile2.write("rm -r "+ tmp + " \n")
         submitfile2.close()
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -l h_rt=05:30:00 "+ submitFileNameSH
+        cmd = "qsub -l h_rt=05:00:00 "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -199,7 +201,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)
+	                breakLoop = (alphaSMZ != "0.125") or ClMaxLight!="2.0" or  (PSplitLight != "3.5") 
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -222,9 +224,9 @@ for subdir in SubDirPath(pars):
 				if (i+1)%500==0:
 					while True:
 		                          os.system("qstat -u lscyboz > file")
-                		          strn=open("file", 'r').read()
-           		                  if len(strn) <= 800: break
-                          #if sum(1 for line in strn)<402: break
+                		          strn=open("file", 'r')
+           		                  #if len(strn) <= 800: break
+                          		  if sum(1 for line in strn)<502: break
                                           time.sleep(15)
                                           print "."
                                         print "\n"
@@ -232,9 +234,9 @@ for subdir in SubDirPath(pars):
 			## As long as there are processed jobs in the queue, wait
 	                while True:
 	                  os.system("qstat -u lscyboz > file")
-	                  strn=open("file", 'r').read()
-	                  if len(strn) <= 800: break
-	                  #if sum(1 for line in strn)<402: break
+	                  strn=open("file", 'r')
+	                  #if len(strn) <= 800: break
+	                  if sum(1 for line in strn)<502: break
 	                  time.sleep(15)
 	                  print "."
 	                print "\n"
