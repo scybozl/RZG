@@ -8,8 +8,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 12000
-nRuns = 500
+nEvPerFile = 10000
+nRuns = 1000
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -139,7 +139,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
 
 ## Options file for systematic generation: the user should set the settings required for the different runs there
 
-optionsFile = open("options2.in", 'r')
+optionsFile = open("options.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
@@ -201,7 +201,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = (newControl == True) and ((order==ControlIndex) or Ecm==EnergyIndex)# and alphaSMZ!="1.427778e-01"))
+	                breakLoop = False
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -221,12 +221,12 @@ for subdir in SubDirPath(pars):
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
 	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index, ClMaxLight, PSplitLight)
-				if (i+1)%500==0:
+				if (i+1)%100==0:
 					while True:
 		                          os.system('qstat -u lscyboz > file')
                 		          strn=open('file', 'r')
 #           		                  if len(strn) <= 800: break
-                                          if sum(1 for line in strn)<502: break
+                                          if sum(1 for line in strn)<495: break
                                           time.sleep(15)
                                           print "."
                                         print "\n"
@@ -236,7 +236,7 @@ for subdir in SubDirPath(pars):
 	                  os.system('qstat -u lscyboz > file')
 	                  strn=open('file', 'r')
 #	                  if len(strn) <= 800: break
-	                  if sum(1 for line in strn)<502: break
+	                  if sum(1 for line in strn)<495: break
 	                  time.sleep(15)
 	                  print "."
 	                print "\n"
