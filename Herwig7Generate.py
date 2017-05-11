@@ -95,8 +95,8 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(2000+seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
-        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
-        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
+#        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
+#        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
 
 
 	if float(alphaSMZ)>=0.145:
@@ -193,7 +193,8 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ+"_"+ClMaxLight+"_"+PSplitLight
+#	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ+"_"+ClMaxLight+"_"+PSplitLight
+			settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
@@ -215,7 +216,7 @@ for subdir in SubDirPath(pars):
 
 
 	                ## Submit the job to Herwig
-	                for i in range(99,100):
+	                for i in range(0,nRuns):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
