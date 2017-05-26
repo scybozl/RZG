@@ -1,4 +1,3 @@
-
 #! /usr/bin/python
 
 import os, time
@@ -20,7 +19,7 @@ SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 SetupFileNameGen    = "setupfile.in"
 WorkFolder        = "/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 
-pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/scan3/"
+pars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/scan/"
 
 flag=False
 
@@ -47,7 +46,7 @@ def initRun():
     os.system("./initRun.sh")
     
 
-def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight, PSplitLight):
+def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
     specStr          = '%03.0f' % (seed,)
 #    tmpFolder        = sampledPars+specStr+"/"
@@ -92,12 +91,9 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index, ClMaxLight
         codeLines2.append("cd "+InputFolder)
         codeLines2.append("mkdir -p "+tmp)
         codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
-        codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(2000+seed)+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
-#        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:ClMaxLight "+ClMaxLight+"' >> "+OutputFolder+SetupFileNameGen)
-#        codeLines2.append("echo 'set /Herwig/Hadronization/ClusterFissioner:PSplitLight "+PSplitLight+"' >> "+OutputFolder+SetupFileNameGen)
-
 
 	if float(alphaSMZ)>=0.145:
 	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:Qmin 1.200' >> "+OutputFolder+SetupFileNameGen)
@@ -193,8 +189,7 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-#	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ+"_"+ClMaxLight+"_"+PSplitLight
-			settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_"+alphaSMZ
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
@@ -203,7 +198,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = False or Ecm!="13000"
+	                breakLoop = False
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -216,13 +211,13 @@ for subdir in SubDirPath(pars):
 
 
 	                ## Submit the job to Herwig
-	                for i in range(0,nRuns):
+	                for i in range(nRuns):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
 	                        os.system("cp "+InputFolder+"Herwig_"+settings.split("_"+alphaSMZ)[0]+".in "+sampledPars)
 	                        if (i+1)%100==0: print "Processing run #"+str(i)
-	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index, ClMaxLight, PSplitLight)
+	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
 				if (i+1)%100==0:
 					while True:
 		                          os.system('qstat -u lscyboz > file')
@@ -253,4 +248,3 @@ for subdir in SubDirPath(pars):
 	                  os.system("yodamerge "+sampledPars+"*/*"+norms+".yoda -o "+sampledPars+"MC_Herwig_"+settings+"_unnorm.yoda")
 
 			os.system("cp "+sampledPars+"MC_Herwig_"+settings+"*.yoda "+subdir)
-
