@@ -12,7 +12,7 @@ sampledPars 		= "/afs/ipp-garching.mpg.de/home/l/lscyboz/mcMerge/"
 InputFileNameGen 	= "tT_matchbox_NLO.run"
 SettingsFolder    	= "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
 GenericInputFileLO 	= "tT_matchbox_LO.in"
-GenericInputFileNLO 	= "tT_matchbox_NLO.in"
+GenericInputFileNLO 	= "tT_matchbox_NLO_71.in"
 WorkFolder		="/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 SetupFileNameGen    	= "setupfile.in"
 
@@ -40,7 +40,7 @@ def initRun():
     os.system("chmod a+x initRun.sh")
     os.system("./initRun.sh")
     
-def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons):
+def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons, CFactor):
 
 
     if order=="LO":
@@ -93,7 +93,7 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
 
     if order=="NLO":
 
-      gosamFilename=WorkFolder+"Generic/gosamtTNLO"+topmass+".rc"
+      gosamFilename=WorkFolder+"Generic71/gosamtTNLO"+topmass+".rc"
       GenericGosamFile=open(GoSamNLO, 'r')
       gosamFile=open(gosamFilename, 'w')
 
@@ -103,8 +103,8 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
         else: gosamFile.write(line)
 
 
-      if dileptons==False: inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+".in"
-      else: inputFileName=WorkFolder+"Generic/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_dilepton.in"
+      if dileptons==False: inputFileName=WorkFolder+"Generic71/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+".in"
+      else: inputFileName=WorkFolder+"Generic71/"+"Herwig_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+"_dilepton.in"
 
       GenericfileNLO=open(SettingsFolder+GenericInputFileNLO,'r')
       fileNLO=open(inputFileName,'w')
@@ -117,7 +117,7 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
         if line.find("set EventHandler:LuminosityFunction")!=-1:
            fileNLO.write("set EventHandler:LuminosityFunction:Energy "+Ecm+"*GeV"+"\n")
         elif line.find("set Factory:ScaleChoice")!=-1:
-           if scale!="TopPairMassScale" and scale!="TopPairMTScale" and scale!="TopPairMTScaleHalf" and scale!="TopEtHalfScale":
+           if scale!="TopPairMassScale" and scale!="TopPairMTScale" and scale!="TopPairMTScaleHalf" and scale!="MyScale" and scale!="ETScale":
              fileNLO.write("set Factory:ScaleChoice Scales/FixedScale\n")
              fileNLO.write("set Scales/FixedScale:FixedScale "+scale+"*GeV"+"\n")
            elif scale=="TopPairMassScale" or scale=="TopPairMTScale":
@@ -125,10 +125,29 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
 	   elif scale=="TopPairMTScaleHalf":
 	     fileNLO.write("set Factory:ScaleChoice Scales/TopPairMTScale\n")
 	     fileNLO.write("read Matchbox/MuDown.in\n")
-	   elif scale=="TopEtHalfScale":
-	     fileNLO.write("library TopEtHalfScale.so\n");
-	     fileNLO.write("create Herwig::TopEtHalfScale TopEtHalfScale\n")
-	     fileNLO.write("set Factory:ScaleChoice TopEtHalfScale\n")
+	   elif scale=="MyScale":
+	     fileNLO.write("library MyScale.so\n");
+	     fileNLO.write("create Herwig::MyScale MyScale\n")
+	     fileNLO.write("set Factory:ScaleChoice MyScale\n")
+	   elif scale=="ETScale":
+             fileNLO.write("library ETScale.so\n");
+             fileNLO.write("create Herwig::MyScale ETScale\n")
+             fileNLO.write("set Factory:ScaleChoice ETScale\n")
+
+	elif line.find("read Matchbox/MuUp.in")!=-1:
+
+		fileNLO.write("cd /Herwig/MatrixElements/Matchbox\n")
+		fileNLO.write("set Factory:RenormalizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set Factory:FactorizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set MEMatching:RenormalizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set MEMatching:FactorizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/DipoleShower/DipoleShowerHandler:RenormalizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/DipoleShower/DipoleShowerHandler:FactorizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/Shower/ShowerHandler:RenormalizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/Shower/ShowerHandler:FactorizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/Shower/PowhegShowerHandler:RenormalizationScaleFactor "+str(CFactor)+"\n")
+		fileNLO.write("set /Herwig/Shower/PowhegShowerHandler:FactorizationScaleFactor "+str(CFactor)+"\n")
+
         elif line.find("set myPDFset:PDFName")!=-1:
  	  if PDF=="MSTW2008nnlo": 
  		fileNLO.write("set myPDFset:PDFName "+PDF+"68cl\n")
@@ -153,12 +172,6 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
            if order=="NLO" and shower=="default": 
  		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DefaultShower.in\n")
  		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DefaultShower.in\n")
- 		fileNLO.write("set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes\n")
-		fileNLO.write("set /Herwig/Shower/Evolver:MECorrMode 1\n")
-		fileNLO.write("set /Herwig/Shower/PartnerFinder:PartnerMethod Random\n")
-		fileNLO.write("set /Herwig/Shower/PartnerFinder:ScaleChoice Partner\n")
-		fileNLO.write("set /Herwig/Shower/ShowerHandler:RestrictPhasespace On\n")
-		fileNLO.write("set /Herwig/Shower/ShowerHandler:MaxPtIsMuF Yes\n")
            elif order=="NLO" and shower=="dipole":
  		if matching=="": fileNLO.write("read Matchbox/MCatNLO-DipoleShower.in\n")
  		elif matching=="POWHEG": fileNLO.write("read Matchbox/Powheg-DipoleShower.in\n")
@@ -172,8 +185,8 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
            fileNLO.write("set t:HardProcessMass "+topmass+"*GeV\n")
  	elif line.find("gosamtT")!=-1:
            fileNLO.write("set Amplitudes/GoSam:SetupInFilename gosamtTNLO"+topmass+".rc") 
-	elif line.find("saverun")!=-1 and dileptons==False: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+" EventGenerator")
-        elif line.find("saverun")!=-1 and dileptons==True: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_dilepton EventGenerator")
+	elif line.find("saverun")!=-1 and dileptons==False: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+" EventGenerator")
+        elif line.find("saverun")!=-1 and dileptons==True: fileNLO.write("saverun tT_matchbox_"+order+"_"+Ecm+"_"+scale+"_"+PDF+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+"_dilepton EventGenerator")
         else: fileNLO.write(line)
 
 def SubmitHerwigJob(inputfile):
@@ -188,7 +201,7 @@ def SubmitHerwigJob(inputfile):
         printSetupLinesInSubmitFileRivet(submitfile2)
 
         if outputfile.find("_LO")!=-1: InputFolder=WorkFolder+"GenericLO/"
-        elif outputfile.find("_NLO")!=-1: InputFolder=WorkFolder+"Generic/"
+        elif outputfile.find("_NLO")!=-1: InputFolder=WorkFolder+"Generic71/"
 
         codeLines2 = []
 #	codeLines2.append("mkdir -p "+tmpFolder)
@@ -204,18 +217,18 @@ def SubmitHerwigJob(inputfile):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub "+ submitFileNameSH
-        os.system(cmd)       
+#        cmd = "qsub "+ submitFileNameSH
+#        os.system(cmd)       
         return True
 
     else:
       return False
 
-optionsFile = open("options2.in", 'r')
+optionsFile = open("options.in", 'r')
 options = optionsFile.read().split("\n")
 
 os.system("cp "+GoSamLO+" "+WorkFolder+"GenericLO/")
-os.system("cp "+GoSamNLO+" "+WorkFolder+"Generic/")
+os.system("cp "+GoSamNLO+" "+WorkFolder+"Generic71/")
 
 for orders in options[0].split("\t"):
 
@@ -239,12 +252,19 @@ for orders in options[0].split("\t"):
 
 		  topmass=topmasses
 
-		  createInputFile(order, Ecm, scale, pdf, shower, matching, topmass, False)
-		  SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+".in")
+		  if scale=="ETScale":
+		    CFactors = [0.25, 0.5, 1.0, 2.0] 
 
-		  if Ecm=="13000":
-                    createInputFile(order, Ecm, scale, pdf, shower, matching, topmass, True)
-		    SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_dilepton.in")
+		  else: CFactors = [1.0]
+
+		  for CFactor in CFactors:
+
+		    createInputFile(order, Ecm, scale, pdf, shower, matching, topmass, False,CFactor)
+		    SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+".in")
+
+		    if Ecm=="13000":
+                      createInputFile(order, Ecm, scale, pdf, shower, matching, topmass, True,CFactor)
+		      SubmitHerwigJob("Herwig_"+order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+str(CFactor)+"_dilepton.in")
 
 #initRun()
 #for i in range(100):
