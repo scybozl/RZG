@@ -131,7 +131,7 @@ def createInputFile(order, Ecm, scale, PDF, shower, matching, topmass, dileptons
 	     fileNLO.write("set Factory:ScaleChoice MyScale\n")
 	   elif scale=="ETScale":
              fileNLO.write("library ETScale.so\n");
-             fileNLO.write("create Herwig::MyScale ETScale\n")
+             fileNLO.write("create Herwig::ETScale ETScale\n")
              fileNLO.write("set Factory:ScaleChoice ETScale\n")
 
 	elif line.find("read Matchbox/MuUp.in")!=-1:
