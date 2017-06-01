@@ -29,8 +29,8 @@ def printSetupLinesInSubmitFileRivet(file):
 #                  "asetup 20.8.2 \n"
 #                  ]
 
-    setupLines = ["source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/bin/activate\n",
-		  "source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.0.3/src/Rivet-2.4.0/rivetenv.sh\n",
+    setupLines = ["source /afs/ipp-garching.mpg.de/home/l/lscyboz/setup.sh\n",
+                  "source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.1.0/bin/activate\n",
 		  "export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH\n"]
 
     file.writelines(setupLines)
