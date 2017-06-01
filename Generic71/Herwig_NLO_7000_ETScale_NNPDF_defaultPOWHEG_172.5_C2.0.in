@@ -1,0 +1,316 @@
+# -*- ThePEG-repository -*-
+
+##################################################
+## Herwig/Matchbox example input file
+##################################################
+
+##################################################
+## Collider type
+##################################################
+
+read snippets/PPCollider.in
+read snippets/Matchbox.in
+
+read Matchbox/StandardModelLike.in
+read Matchbox/DiagonalCKM.in
+
+##################################################
+## Beam energy sqrt(s)
+##################################################
+
+cd /Herwig/EventHandlers
+set EventHandler:LuminosityFunction:Energy 7000*GeV
+
+##################################################
+## Process selection
+##################################################
+
+## Note that event generation may fail if no matching matrix element has
+## been found.  Coupling orders are with respect to the Born process,
+## i.e. NLO QCD does not require an additional power of alphas.
+
+## Set the order of the couplings
+cd /Herwig/MatrixElements/Matchbox
+set Factory:OrderInAlphaS 2
+set Factory:OrderInAlphaEW 0 
+
+## Select the process
+## You may use identifiers such as p, pbar, j, l, mu+, h0 etc.
+do Factory:Process p p -> t tbar 
+
+## Special settings required for on-shell production of unstable particles
+## enable for on-shell top production
+read Matchbox/OnShellTopProduction.in
+## enable for on-shell W, Z or h production
+# read Matchbox/OnShellWProduction.in
+# read Matchbox/OnShellZProduction.in
+# read Matchbox/OnShellHProduction.in
+# Special settings for the VBF approximation
+# read Matchbox/VBFDiagramsOnly.in
+
+##################################################
+## Matrix element library selection
+##################################################
+
+## Select a generic tree/loop combination or a
+## specialized NLO package
+
+read Matchbox/MadGraph-GoSam.in
+# read Matchbox/MadGraph-MadGraph.in
+# read Matchbox/MadGraph-NJet.in
+# read Matchbox/MadGraph-OpenLoops.in
+# read Matchbox/HJets.in
+# read Matchbox/VBFNLO.in
+
+## Uncomment this to use ggh effective couplings
+## currently only supported by MadGraph-GoSam
+
+# read Matchbox/HiggsEffective.in
+
+cd /Herwig/MatrixElements/Matchbox
+#clear Factory:Amplitudes
+# insert Factory:Amplitudes 0 Amplitudes/MadGraph
+#insert Factory:Amplitudes 0 Amplitudes/GoSam
+set Amplitudes/GoSam:SetupInFilename gosamtTNLO172.5.rc
+##################################################
+## Cut selection
+## See the documentation for more options
+##################################################
+
+#set /Herwig/Cuts/ChargedLeptonPairMassCut:MinMass 60*GeV
+#set /Herwig/Cuts/ChargedLeptonPairMassCut:MaxMass 120*GeV
+
+## cuts on additional jets
+
+# read Matchbox/DefaultPPJets.in
+
+# insert JetCuts:JetRegions 0 FirstJet
+# insert JetCuts:JetRegions 1 SecondJet
+# insert JetCuts:JetRegions 2 ThirdJet
+# insert JetCuts:JetRegions 3 FourthJet
+
+##################################################
+## Explicit diagram selection
+##################################################
+
+cd /Herwig/MatrixElements/Matchbox
+insert Factory:DiagramGenerator:ExcludeInternal 0 /Herwig/Particles/e-
+insert Factory:DiagramGenerator:ExcludeInternal 0 /Herwig/Particles/nu_ebar
+insert Factory:DiagramGenerator:ExcludeInternal 0 /Herwig/Particles/mu+
+insert Factory:DiagramGenerator:ExcludeInternal 0 /Herwig/Particles/nu_mu
+insert Factory:DiagramGenerator:ExcludeInternal 0 /Herwig/Particles/h0
+
+##################################################
+## Scale choice
+## See the documentation for more options
+##################################################
+
+cd /Herwig/MatrixElements/Matchbox
+library ETScale.so
+create Herwig::ETScale ETScale
+set Factory:ScaleChoice ETScale
+#set Scales/FixedScale:FixedScale 86*GeV
+
+##################################################
+###
+### BUGFIXES
+###
+###################################################
+
+#set /Herwig/Shower/GtoQQbarSplitFn:AngularOrdered Yes
+#set /Herwig/Shower/GammatoQQbarSplitFn:AngularOrdered Yes
+#set /Herwig/Shower/Evolver:MECorrMode 1
+#set /Herwig/Shower/PartnerFinder:PartnerMethod Random
+#set /Herwig/Shower/PartnerFinder:ScaleChoice Partner
+#set /Herwig/Shower/ShowerHandler:RestrictPhasespace On
+#set /Herwig/Shower/ShowerHandler:MaxPtIsMuF Yes
+#set /Herwig/Shower/GammatoQQbarSudakov:Alpha /Herwig/Shower/AlphaQED
+set /Herwig/Shower/QtoGammaQSudakov:Alpha /Herwig/Shower/AlphaQED
+
+##################################################
+## Matching and shower selection
+## Please also see flavour scheme settings
+## towards the end of the input file.
+##################################################
+
+# read Matchbox/MCatNLO-DefaultShower.in
+# read Matchbox/Powheg-DefaultShower.in
+## use for strict LO/NLO comparisons
+# read Matchbox/MCatLO-DefaultShower.in
+## use for improved LO showering
+read Matchbox/Powheg-DefaultShower.in
+
+# read Matchbox/MCatNLO-DipoleShower.in
+# read Matchbox/Powheg-DipoleShower.in
+## use for strict LO/NLO comparisons
+# read Matchbox/MCatLO-DipoleShower.in
+## use for improved LO showering
+# read Matchbox/LO-DipoleShower.in
+
+# read Matchbox/NLO-NoShower.in
+# read Matchbox/LO-NoShower.in
+
+##################################################
+## Model properties
+##################################################
+
+#cd /Herwig/Couplings
+
+#set NLOAlphaS:input_scale 91.1876*GeV
+#set NLOAlphaS:input_alpha_s 0.120179
+#set NLOAlphaS:QuarkMasses 0, 0, 0, 1.4, 4.75, 1e+10 
+#set NLOAlphaS:max_active_flavours 5
+
+#set /Herwig/Model:QCD/RunningAlphaS /Herwig/Couplings/NLOAlphaS
+
+cd /Herwig/Particles
+#set u:NominalMass 0.0*GeV
+#set u:HardProcessMass 0.0*GeV
+#set d:NominalMass 0.0*GeV
+#set d:HardProcessMass 0.0*GeV
+#set s:NominalMass 0.0*GeV
+#set s:HardProcessMass 0.0*GeV
+#set c:NominalMass 0.0*GeV
+#set c:HardProcessMass 0.0*GeV
+#set b:NominalMass 0.0*GeV
+#set b:HardProcessMass 0.0*GeV
+
+#set e+:NominalMass 0.0*GeV
+#set e+:HardProcessMass 0.0*GeV
+#set mu-:NominalMass 0.0*GeV
+#set mu-:HardProcessMass 0.0*GeV
+
+set t:NominalMass 172.5*GeV
+set t:HardProcessMass 172.5*GeV
+#set t:HardProcessMass 172.5*GeV
+set t:Width 1.3167*GeV
+#set t:HardProcessWidth 0*GeV
+set W+:NominalMass 80.399*GeV
+set W+:HardProcessMass 80.399*GeV
+set W+:Width 2.09974*GeV
+#set W+:HardProcessWidth 2.09974*GeV
+set Z0:NominalMass 91.1876*GeV
+set Z0:HardProcessMass 91.1876*GeV
+set Z0:Width 2.50966*GeV
+#set Z0:HardProcessWidth 2.50966*GeV
+
+#set h0:NominalMass 125.0*GeV
+#set h0:HardProcessMass 125.0*GeV
+#set h0:Width 4.07e-03*GeV
+#set h0:HardProcessWidth 4.07e-03*GeV
+
+#set /Herwig/Model:EW/Scheme GMuScheme
+#set /Herwig/Model:EW/FermiConstant 1.16637e-05
+#set /Herwig/Model:EW/RecalculateEW On
+#set /Herwig/MatrixElements/Matchbox/Factory:FixedQEDCouplings On
+
+##################################################
+## PDF selection
+##################################################
+
+cd /Herwig/Partons
+create ThePEG::LHAPDF myPDFset ThePEGLHAPDF.so
+set myPDFset:RemnantHandler HadronRemnants
+set myPDFset:PDFName NNPDF30_nlo_as_0118
+cd /Herwig/Couplings
+set NLOAlphaS:input_scale 91.199997*GeV
+set NLOAlphaS:input_alpha_s 0.118
+set NLOAlphaS:QuarkMasses 0, 0, 0, 1.275, 4.18, 173.07
+set NLOAlphaS:max_active_flavours 5
+
+cd /Herwig/Partons
+set /Herwig/Particles/p+:PDF myPDFset
+set /Herwig/Particles/pbar-:PDF myPDFset
+
+set /Herwig/Partons/PPExtractor:FirstPDF myPDFset
+set /Herwig/Partons/PPExtractor:SecondPDF myPDFset
+
+#cd /Herwig/Couplings
+
+#set NLOAlphaS:input_scale 91.1876*GeV
+#set NLOAlphaS:input_alpha_s 0.135
+#set NLOAlphaS:QuarkMasses 0, 0, 0, 1.4, 4.75, 1e+10
+#set NLOAlphaS:max_active_flavours 5
+
+
+#set /Herwig/Partons/HardLOPDF:PDFName MSTW2008nlo68cl
+#set /Herwig/Partons/HardNLOPDF:PDFName MSTW2008nlo68cl
+
+#set /Herwig/Shower/ShowerHandler:PDFA ShowerNLOPDF
+#set /Herwig/Shower/ShowerHandler:PDFB ShowerNLOPDF
+
+#read Matchbox/MMHT2014.in
+
+##################################################
+## Integration sampler
+##################################################
+
+set /Herwig/EventHandlers/EventHandler:Sampler /Herwig/Samplers/Sampler
+set /Herwig/Samplers/Sampler:BinSampler /Herwig/Samplers/MonacoSampler
+set /Herwig/Samplers/MonacoSampler:InitialPoints 30500 
+set /Herwig/Samplers/MonacoSampler:NIterations 2
+
+##################################################
+## Scale uncertainties
+##################################################
+
+# read Matchbox/MuDown.in
+cd /Herwig/MatrixElements/Matchbox
+set Factory:RenormalizationScaleFactor 2.0
+set Factory:FactorizationScaleFactor 2.0
+set MEMatching:RenormalizationScaleFactor 2.0
+set MEMatching:FactorizationScaleFactor 2.0
+set /Herwig/DipoleShower/DipoleShowerHandler:RenormalizationScaleFactor 2.0
+set /Herwig/DipoleShower/DipoleShowerHandler:FactorizationScaleFactor 2.0
+set /Herwig/Shower/ShowerHandler:RenormalizationScaleFactor 2.0
+set /Herwig/Shower/ShowerHandler:FactorizationScaleFactor 2.0
+set /Herwig/Shower/PowhegShowerHandler:RenormalizationScaleFactor 2.0
+set /Herwig/Shower/PowhegShowerHandler:FactorizationScaleFactor 2.0
+
+##################################################
+## Shower scale uncertainties
+##################################################
+
+# read Matchbox/MuQDown.in
+# read Matchbox/MuQUp.in
+
+##################################################
+## PDF choice
+##################################################
+
+read Matchbox/FiveFlavourScheme.in
+## required for dipole shower and fixed order in five flavour scheme
+# read Matchbox/FiveFlavourNoBMassScheme.in
+# read Matchbox/MMHT2014.in
+
+##################################################
+## Analyses
+##################################################
+
+# cd /Herwig/Analysis
+# insert Rivet:Analyses 0 XXX_2015_ABC123
+# insert /Herwig/Generators/EventGenerator:AnalysisHandlers 0 Rivet
+# insert /Herwig/Generators/EventGenerator:AnalysisHandlers 0 HepMC
+
+cd /Herwig/Generators
+insert EventGenerator:AnalysisHandlers 0 /Herwig/Analysis/HepMCFile
+set /Herwig/Analysis/HepMCFile:PrintEvent 1000000
+set /Herwig/Analysis/HepMCFile:Format GenEvent
+set /Herwig/Analysis/HepMCFile:Units GeV_mm
+
+cd /Herwig/Analysis
+set Basics:CheckQuark No
+
+##################################################
+## Save the generator
+##################################################
+
+set /Herwig/EventHandlers/EventHandler:Weighted On
+
+read Matchbox/IncreaseVerbosity.in
+set /Herwig/Generators/EventGenerator:IntermediateOutput Yes
+
+do /Herwig/MatrixElements/Matchbox/Factory:ProductionMode
+
+cd /Herwig/Generators
+saverun tT_matchbox_NLO_7000_ETScale_NNPDF_defaultPOWHEG_172.5_C2.0 EventGenerator
