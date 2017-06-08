@@ -7,8 +7,8 @@ import glob
 import subprocess
 
 fUser = os.getenv("USER")
-nEvPerFile = 100
-nRuns = 10
+nEvPerFile = 50000
+nRuns = 500
 newMerge = True
 newControl = True
 ControlIndex = ""
@@ -17,8 +17,8 @@ EnergyIndex = ""
 fUser = os.getenv("USER")
 WorkFolder        = "/afs/ipp-garching.mpg.de/home/l/lscyboz/"
 SettingsFolder    = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Settings/"
-SetupFileNameGen    = "setupfile.in"
-sampledPars	  = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Draco/Output/"
+SetupFileNameGen    = "setupfiledipole.in"
+sampledPars	  = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Draco/Output_dipole/"
 InputFolder	  = "/afs/ipp-garching.mpg.de/home/l/lscyboz/Draco/"
 
 flag=False
@@ -77,6 +77,7 @@ def SubmitHerwigJob(nEvents, seed, InputFileNameGen):
         codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
+	codeLines2.append("echo 'set /Herwig/EventHandlers/EventHandler:HadronizationHandler NULL' >> "+OutputFolder+SetupFileNameGen)
 
         codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
         codeLines2.append("rivet -a MC_MARKUS13TEV_inclusive "+tmp+OutputFile+" -H "+OutputYoda+"unnorm.yoda")
@@ -90,7 +91,7 @@ def SubmitHerwigJob(nEvents, seed, InputFileNameGen):
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
         cmd = "qsub -l h_rt=05:30:00 "+ submitFileNameSH
-#        os.system(cmd)
+ #       os.system(cmd)
 
         return True
 
@@ -105,10 +106,10 @@ redo=True
 ## Name tag for the run
 
 ## Submit the job to Herwig
-for i in range(nRuns):
+for i in range(500,500+nRuns):
    spec='%03.0f' % (i,)
    if not os.path.exists(sampledPars+spec):
       os.system("mkdir -p "+sampledPars+spec)
-   os.system("cp "+InputFolder+"tTShower_minimal.in "+sampledPars)
+   os.system("cp "+InputFolder+"tTShower_dipole.in "+sampledPars)
    if (i+1)%100==0: print "Processing run #"+str(i)
-   SubmitHerwigJob(nEvPerFile, i, "tTShower_minimal.run")
+   SubmitHerwigJob(nEvPerFile, i, "tTShower_dipole.run")

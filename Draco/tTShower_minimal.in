@@ -227,6 +227,8 @@ set /Herwig/Particles/pbar-:PDF myPDFset
 set /Herwig/Partons/PPExtractor:FirstPDF myPDFset
 set /Herwig/Partons/PPExtractor:SecondPDF myPDFset
 
+set /Herwig/EventHandlers/EventHandler:HadronizationHandler NULL
+
 #cd /Herwig/Couplings
 
 #set NLOAlphaS:input_scale 91.1876*GeV

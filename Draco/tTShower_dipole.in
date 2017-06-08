@@ -309,4 +309,4 @@ set /Herwig/Generators/EventGenerator:IntermediateOutput Yes
 do /Herwig/MatrixElements/Matchbox/Factory:ProductionMode
 
 cd /Herwig/Generators
-saverun tTShower_minimal EventGenerator
+saverun tTShower_dipole EventGenerator
