@@ -1,0 +1,42 @@
+CONTENT OF THE MINIMAL SETUP
+
+Generic/		contains the runcard, amplitudes and event generator run by Herwig
+Settings/		contains a setupfile where you can change parameters unrelated to the hard scattering
+			(shower parameters, hadronization...)
+scan/			contains the tuning parameter space points, values to which are given in the params.dat
+			file (like in Professor)
+linscan.py		Helper script to create the scan/ directory
+options.in		Options (c.o.m energy, PDFs, scale choices, routines...) separated by a tab
+default_params.dat	The default parameters for alpha(shower), ClMaxLight and PSplitLight
+Herwig7Generate.py	Head script: create the job options files automatically and submit them
+
+
+-------------------------------------------------------------------------------------
+
+To produce the files and generate the events on the cluster, do the following:
+
+1) Move to Generic/ and modifiy the runcard "MC_Herwig_..._.in" to your liking. The name must be of the type
+
+	MC_Herwig_"ORDER"_"Ecm"_"SCALE"_"PDF"_"SHOWER""MATCHING"_"TOPMASS".in
+	tT_matchbox_"ORDER"_"Ecm"_"SCALE"_"PDF"_"SHOWER""MATCHING"_"TOPMASS"
+
+for the run card and the event generator's name (last line in the runcard), respectively.
+
+2) If you've modified anything related to the hard scattering, you have to re-integrate the generated amplitudes.
+   Run "Herwig read MC_Herwig_..._.in" to create the event generator (which ends in .run).
+
+3) If you've chosen parameters for the tune, generate the scan/ directory by running the linScan.py script.
+   Note that if you don't use the same parameters as in the linScan.py and Herwig7Generate.py scripts, you have
+   to add them there (that is if you want to tune another parameter than alpha_s(shower), ClMaxLight and PSplitLight).
+
+Note: if you want the default parameters (for example if you only want to change the PDF or the scale, but not scan
+      the parameter space), you can simply use the default_params.dat file and put it in
+
+	scan/0/params.dat
+
+4) Modify the options.in script to your liking. The analyses IDs and the cross-sections must NOT change lines.
+
+5) Modify the first lines in Herwig7Generate.py to your Herwig installation path, and custom analyses path. Change
+   the number of events per job and the number of jobs.
+
+6) python Herwig7Generate.py
