@@ -9,8 +9,8 @@ import subprocess
 fUser = os.getenv("USER")
 nEvPerFile = 10000
 nRuns = 1000
-newMerge = True
-newControl = True
+newMerge = False
+newControl = False
 ControlIndex = ""
 EnergyIndex = ""
 
@@ -90,10 +90,9 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 #       codeLines2.append("mkdir -p "+tmpFolder)
         codeLines2.append("cd "+InputFolder)
         codeLines2.append("mkdir -p "+tmp)
-        codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
+	codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
         codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
-	codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
 	if float(alphaSMZ)>=0.145:
 	  codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:Qmin 1.200' >> "+OutputFolder+SetupFileNameGen)
@@ -102,6 +101,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 	if(InputFileNameGen.find("dipole")!=-1):
 	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
+	else codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
         codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
 
@@ -136,7 +136,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 ## Options file for systematic generation: the user should set the settings required for the different runs there
 
-optionsFile = open("options.in", 'r')
+optionsFile = open("options_dilep.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
 
@@ -188,7 +188,9 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_"+alphaSMZ
+#	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_dilepton_"+alphaSMZ
+
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
 	                ## To choose the Rivet routine according to the cm-energy, look into the
@@ -197,7 +199,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = False or Ecm!="7000" or alphaSMZ!="0.132" or CFactor!="1.0"
+	                breakLoop = False or alphaSMZ!="0.132" or CFactor!="0.5" or (matching == "POWHEG" and shower == "default") 
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -210,7 +212,7 @@ for subdir in SubDirPath(pars):
 
 
 	                ## Submit the job to Herwig
-	                for i in range(4000,4000+nRuns):
+	                for i in range(1000,1000+nRuns):
 	                        spec='%03.0f' % (i,)
 	                        if not os.path.exists(sampledPars+spec):
 	                          os.system("mkdir -p "+sampledPars+spec)
