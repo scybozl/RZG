@@ -34,7 +34,19 @@ def printSetupLinesInSubmitFileRivet(file):
 #                  "asetup 20.8.2 \n"
 #                  ]
 
-    setupLines = ["source /afs/ipp-garching.mpg.de/home/l/lscyboz/setup.sh\n",
+    setupLines = ["#!/bin/bash -l\n",
+		  "# Standard output and error:\n",
+		  "#SBATCH -o ./tjob.out.%j\n",
+		  "#SBATCH -e ./tjob.err.%j\n",
+		  "# Initial working directory:\n",
+		  "#SBATCH -D ./\n",
+		  "# Job Name:\n",
+		  "#SBATCH -J test_slurm\n",
+	 	  "# Queue (Partition):\n",
+		  "#SBATCH --partition=standard\n",
+#		  "#SBATCH --nodes=1\n",
+#		  "#SBATCH --ntasks-per-node=32\n",
+		  "source /afs/ipp-garching.mpg.de/home/l/lscyboz/setup.sh\n",
 		  "source /afs/ipp-garching.mpg.de/home/l/lscyboz/Herwig-7.1.0/bin/activate\n",
 		  "export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH\n"]
 
@@ -91,7 +103,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
         codeLines2.append("cd "+InputFolder)
         codeLines2.append("mkdir -p "+tmp)
 	codeLines2.append("cp "+SettingsFolder+SetupFileNameGen+" "+OutputFolder)
-        codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(seed)+"' >> "+OutputFolder+SetupFileNameGen)
+        codeLines2.append("echo 'set /Herwig/Generators/EventGenerator:RandomNumberGenerator:Seed "+str(5000+seed)+"' >> "+OutputFolder+SetupFileNameGen)
         codeLines2.append("echo \"set /Herwig/Analysis/HepMCFile:Filename "+tmp+OutputFile+"\" >> "+OutputFolder+SetupFileNameGen)
 
 	if float(alphaSMZ)>=0.145:
@@ -101,7 +113,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 	if(InputFileNameGen.find("dipole")!=-1):
 	  codeLines2.append("echo 'set /Herwig/DipoleShower/NLOAlphaS:input_alpha_s "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
-	else codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
+	else: codeLines2.append("echo 'set /Herwig/Shower/AlphaQCD:AlphaMZ "+alphaSMZ+"' >> "+OutputFolder+SetupFileNameGen)
 
         codeLines2.append("Herwig run "+InputFileNameGen+" -N "+str(nEvents)+" -x "+OutputFolder+SetupFileNameGen)
 
@@ -125,7 +137,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
         cmd = "chmod a+x " + submitFileNameSH
         os.system(cmd)
-        cmd = "qsub -l h_rt=05:30:00 "+ submitFileNameSH
+        cmd = "sbatch "+ submitFileNameSH
         os.system(cmd)
 
         return True
@@ -199,7 +211,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = False or alphaSMZ!="0.132" or CFactor!="0.5" or (matching == "POWHEG" and shower == "default") 
+	                breakLoop = False or Ecm!="13000" or alphaSMZ!="0.132" or CFactor!="0.5"# or shower!="dipole" 
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -221,7 +233,7 @@ for subdir in SubDirPath(pars):
 	                        SubmitHerwigJob(nEvPerFile, i, alphaSMZ, "tT_matchbox_"+settings.split("_"+alphaSMZ)[0]+".run", index)
 				if (i+1)%100==0:
 					while True:
-		                          os.system('qstat -u lscyboz > file')
+		                          os.system('squeue -u lscyboz > file')
                 		          strn=open('file', 'r')
 #           		                  if len(strn) <= 800: break
                                           if sum(1 for line in strn)<495: break
@@ -231,7 +243,7 @@ for subdir in SubDirPath(pars):
 
 			## As long as there are processed jobs in the queue, wait
 	                while True:
-	                  os.system('qstat -u lscyboz > file')
+	                  os.system('squeue -u lscyboz > file')
 	                  strn=open('file', 'r')
 #	                  if len(strn) <= 800: break
 	                  if sum(1 for line in strn)<495: break
