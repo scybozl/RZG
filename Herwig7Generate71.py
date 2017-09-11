@@ -43,7 +43,7 @@ def printSetupLinesInSubmitFileRivet(file):
 		  "# Job Name:\n",
 		  "#SBATCH -J herwig_nlo\n",
 	 	  "# Queue (Partition):\n",
-		  "#SBATCH --partition=long\n",
+		  "#SBATCH --partition=standard\n",
 		  "#SBATCH -n 1\n",
 		  "#SBATCH --mem-per-cpu=1500\n",
 #		  "#SBATCH --nodes=1\n",
@@ -150,7 +150,7 @@ def SubmitHerwigJob(nEvents, seed, alphaSMZ, InputFileNameGen, index):
 
 ## Options file for systematic generation: the user should set the settings required for the different runs there
 
-optionsFile = open("options_dilep.in", 'r')
+optionsFile = open("options.in", 'r')
 options = optionsFile.read().split("\n")
 os.system("export RIVET_ANALYSIS_PATH=/afs/ipp-garching.mpg.de/home/l/lscyboz/RivetCustomAnalyses/:$RIVET_ANALYSIS_PATH")
 
@@ -202,8 +202,8 @@ for subdir in SubDirPath(pars):
 			
 			topmass=topmasses
 	                ## Name tag for the run
-#	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_"+alphaSMZ
-	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_dilepton_"+alphaSMZ
+	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_"+alphaSMZ
+#	                settings=order+"_"+Ecm+"_"+scale+"_"+pdf+"_"+shower+matching+"_"+topmass+"_C"+CFactor+"_dilepton_"+alphaSMZ
 
 	                sampledPars = "/afs/ipp-garching.mpg.de/home/l/lscyboz/MC_Herwig_"+settings+"/"
 
@@ -213,7 +213,7 @@ for subdir in SubDirPath(pars):
 
 	                ## If no control (number of runs, right number of events...)
 	                ## is needed, just control if one of the final yoda files exists.
-	                breakLoop = False or Ecm!="13000" or alphaSMZ!="0.132" or CFactor!="0.5"# or shower!="dipole" 
+	                breakLoop = False or Ecm!="13000" or alphaSMZ!="0.132" or CFactor!="0.5" or shower!="default" or matching!="POWHEG"
 	                if os.path.exists(sampledPars+"MC_Herwig_"+settings+"_"+options[index+1].split("\t")[0]+".yoda") and newControl == False or breakLoop: break
 	                if order=="LO":
 	                          InputFolder="/afs/ipp-garching.mpg.de/home/l/lscyboz/GenericLO/"
@@ -238,7 +238,7 @@ for subdir in SubDirPath(pars):
 		                          os.system('squeue -u lscyboz > file')
                 		          strn=open('file', 'r')
 #           		                  if len(strn) <= 800: break
-                                          if sum(1 for line in strn)<495: break
+                                          if sum(1 for line in strn)<295: break
                                           time.sleep(15)
                                           print "."
                                         print "\n"
@@ -248,7 +248,7 @@ for subdir in SubDirPath(pars):
 	                  os.system('squeue -u lscyboz > file')
 	                  strn=open('file', 'r')
 #	                  if len(strn) <= 800: break
-	                  if sum(1 for line in strn)<495: break
+	                  if sum(1 for line in strn)<295: break
 	                  time.sleep(15)
 	                  print "."
 	                print "\n"
